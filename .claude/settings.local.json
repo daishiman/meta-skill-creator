@@ -3,7 +3,8 @@
     "allow": [
       "Bash(git checkout:*)",
       "Bash(git add:*)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\nfix: marketplace.jsonを追加してGitHubからのインストールに対応\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfix: marketplace.jsonを追加してGitHubからのインストールに対応\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfix: marketplace.jsonのスキーマを修正\n\n- $schema を追加\n- owner をオブジェクト形式に修正\n- plugins.source を正しい形式に修正\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }

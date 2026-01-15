@@ -1,12 +1,146 @@
 {
-  "name": "meta-skill-creator-marketplace",
-  "description": "Meta Skill Creator - スキル作成・更新・プロンプト改善のためのメタスキル",
-  "version": "1.0.0",
-  "plugins": [
-    {
-      "name": "meta-skill-creator",
-      "path": ".",
-      "description": "スキルを作成・更新・プロンプト改善するためのメタスキル"
+  "name": "skill-creator",
+  "version": "5.2.1",
+  "description": "スキルを作成・更新・プロンプト改善するためのメタスキル。ユーザーと対話しながら共創し、抽象的なアイデアから具体的な実装まで柔軟に対応。Claude Code / Codex連携による実行エンジン選択も可能。",
+  "owner": {
+    "name": "daishiman",
+    "email": "daishimanju@gmail.com"
+  },
+  "language": "ja-JP",
+  "plugin": "skill-creator-plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daishiman/skill"
+  },
+  "keywords": [
+    "skill",
+    "agent",
+    "automation",
+    "workflow",
+    "claude",
+    "meta-skill",
+    "codex",
+    "collaborative"
+  ],
+  "features": [
+    "collaborative-mode",
+    "orchestrate-mode",
+    "multi-agent-support",
+    "script-generation",
+    "self-improvement",
+    "template-system",
+    "interactive-configuration",
+    "codex-integration"
+  ],
+  "activation": {
+    "keywords": [
+      "スキル作成",
+      "スキル更新",
+      "プロンプト改善",
+      "skill creation",
+      "skill update",
+      "create skill",
+      "improve prompt",
+      "新しいスキルを作って",
+      "スキルを作りたい",
+      "ワークフロー自動化",
+      "エージェント作成",
+      "Codexに任せて",
+      "Codexで実行",
+      "実行モード選択",
+      "どのAIを使う",
+      "毎日やっている作業を",
+      "繰り返しタスクを自動化"
+    ],
+    "patterns": [
+      "(?i)(作成|作って|作りたい|create|build|make)\\s*(スキル|skill|agent|エージェント)",
+      "(?i)(スキル|skill)\\s*(を)?(作成|更新|改善|update|improve)",
+      "(?i)(automate|automation|自動化)\\s*(this\\s+)?(workflow|process|task|ワークフロー|タスク)",
+      "(?i)(Codex|コーデックス)\\s*(に|で|を)?(任せ|実行|委譲)",
+      "(?i)(毎日|毎回|繰り返し)\\s*(やっている|している|の)?(作業|タスク)"
+    ]
+  },
+  "modes": {
+    "collaborative": {
+      "description": "ユーザー対話型スキル共創（推奨）",
+      "trigger": "インタビュー形式で要件を明確化"
+    },
+    "orchestrate": {
+      "description": "実行エンジン選択（Claude/Codex/連携）",
+      "trigger": "タスクに応じて最適なAIを選択"
+    },
+    "create": {
+      "description": "要件が明確な場合の新規作成",
+      "trigger": "直接スキル生成"
+    },
+    "update": {
+      "description": "既存スキル更新",
+      "trigger": "既存スキルの修正"
+    },
+    "improve-prompt": {
+      "description": "プロンプト改善",
+      "trigger": "既存プロンプトの最適化"
     }
-  ]
+  },
+  "capabilities": {
+    "single_skill_creation": true,
+    "multi_agent_suite": true,
+    "script_generation": true,
+    "template_based": true,
+    "interactive_mode": true,
+    "self_improvement": true,
+    "codex_integration": true,
+    "progressive_disclosure": true
+  },
+  "scriptTypes": [
+    "api-client",
+    "webhook",
+    "scraper",
+    "notification",
+    "parser",
+    "transformer",
+    "aggregator",
+    "file-processor",
+    "database",
+    "cache",
+    "queue",
+    "git-ops",
+    "test-runner",
+    "linter",
+    "formatter",
+    "builder",
+    "deployer",
+    "docker",
+    "cloud",
+    "monitor",
+    "ai-tool",
+    "mcp-bridge",
+    "shell",
+    "universal"
+  ],
+  "abstractionLevels": {
+    "L1": {
+      "name": "Concept",
+      "description": "アイデア・課題レベル",
+      "example": "開発効率を上げたい"
+    },
+    "L2": {
+      "name": "Capability",
+      "description": "機能・能力レベル",
+      "example": "PRを自動作成したい"
+    },
+    "L3": {
+      "name": "Implementation",
+      "description": "実装・詳細レベル",
+      "example": "GitHub APIでPR作成"
+    }
+  },
+  "requirements": {
+    "claudeCode": ">=1.0.0",
+    "node": ">=18.0.0"
+  },
+  "installation": {
+    "command": "/plugin marketplace add your-username/skill-creator",
+    "alternativeCommand": "cd .claude/skills/skill-creator && /plugin marketplace add ./"
+  }
 }
