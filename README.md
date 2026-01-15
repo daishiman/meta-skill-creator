@@ -151,7 +151,11 @@ Claude Code プラグインの仕様：
   "description": "マーケットプレイスの説明",
   "owner": { "name": "daishiman" },
   "plugins": [
-    { "name": "skill-creator", "source": "./" }
+    {
+      "name": "skill-creator",
+      "source": "./",
+      "skills": ["./skills/skill-creator"]
+    }
   ]
 }
 ```

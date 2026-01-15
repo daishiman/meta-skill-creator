@@ -17,7 +17,8 @@
       "author": {
         "name": "daishiman"
       },
-      "repository": "https://github.com/daishiman/meta-skill-creator"
+      "repository": "https://github.com/daishiman/meta-skill-creator",
+      "skills": ["./skills/skill-creator"]
     }
   ]
 }
