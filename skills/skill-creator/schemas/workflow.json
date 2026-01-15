@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Workflow Definition",
+  "description": "ワークフロー設計スキーマ",
+  "type": "object",
+  "required": ["skillName", "pattern", "tasks", "phases"],
+  "properties": {
+    "skillName": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "pattern": {
+      "type": "string",
+      "enum": ["sequential", "parallel", "conditional", "loop", "phase-based", "combined"],
+      "description": "主要なワークフローパターン"
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "responsibility", "executionPattern"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["llm", "script"],
+            "description": "LLMタスクかスクリプトタスクか"
+          },
+          "responsibility": {
+            "type": "string",
+            "description": "単一責務の説明"
+          },
+          "executionPattern": {
+            "type": "string",
+            "enum": ["seq", "par", "cond", "loop", "agg"],
+            "description": "実行パターン"
+          },
+          "dependsOn": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "依存するタスク名"
+          },
+          "input": {
+            "type": "string",
+            "description": "入力の説明"
+          },
+          "output": {
+            "type": "string",
+            "description": "出力の説明"
+          },
+          "validationScript": {
+            "type": "string",
+            "description": "出力検証スクリプト（スクリプトタスクのみ）"
+          }
+        }
+      }
+    },
+    "phases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "tasks", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "tasks": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "type": {
+            "type": "string",
+            "enum": ["llm", "script", "mixed"]
+          }
+        }
+      }
+    },
+    "parallelGroups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "tasks", "syncPoint"],
+        "properties": {
+          "name": { "type": "string" },
+          "tasks": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "syncPoint": { "type": "string" }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

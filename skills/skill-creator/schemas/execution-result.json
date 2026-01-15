@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Execution Result",
+  "description": "スクリプト実行結果の標準形式スキーマ",
+  "type": "object",
+  "required": ["success", "timestamp"],
+  "properties": {
+    "success": {
+      "type": "boolean",
+      "description": "実行成功かどうか"
+    },
+    "exitCode": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 255,
+      "description": "終了コード"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "実行日時（ISO 8601）"
+    },
+    "duration": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "実行時間（ミリ秒）"
+    },
+    "script": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "runtime": { "type": "string" },
+        "path": { "type": "string" }
+      },
+      "description": "実行したスクリプト情報"
+    },
+    "input": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "コマンドライン引数"
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "使用した環境変数（機密情報はマスク）"
+        },
+        "files": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "入力ファイル"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "stdout": {
+          "type": "string",
+          "description": "標準出力"
+        },
+        "stderr": {
+          "type": "string",
+          "description": "標準エラー出力"
+        },
+        "data": {
+          "description": "構造化された出力データ"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": { "type": "string" },
+              "action": { "type": "string", "enum": ["created", "modified", "deleted"] },
+              "size": { "type": "integer" }
+            }
+          },
+          "description": "出力ファイル"
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "エラーメッセージ"
+        },
+        "code": {
+          "type": "string",
+          "description": "エラーコード"
+        },
+        "stack": {
+          "type": "string",
+          "description": "スタックトレース"
+        },
+        "recoverable": {
+          "type": "boolean",
+          "description": "回復可能なエラーか"
+        },
+        "suggestion": {
+          "type": "string",
+          "description": "修正提案"
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "memoryUsage": {
+          "type": "integer",
+          "description": "メモリ使用量（バイト）"
+        },
+        "cpuTime": {
+          "type": "integer",
+          "description": "CPU時間（ミリ秒）"
+        },
+        "networkCalls": {
+          "type": "integer",
+          "description": "ネットワーク呼び出し回数"
+        },
+        "fileOperations": {
+          "type": "integer",
+          "description": "ファイル操作回数"
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "skillName": { "type": "string" },
+        "phase": { "type": "string" },
+        "task": { "type": "string" },
+        "sessionId": { "type": "string" }
+      },
+      "description": "実行コンテキスト"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Script Type Specification",
+  "description": "スクリプトタイプ別の必須フィールドと推奨設定",
+  "type": "object",
+  "required": ["type", "category", "supportedRuntimes"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "スクリプトタイプ名"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "api-communication",
+        "data-processing",
+        "database",
+        "development-tools",
+        "infrastructure",
+        "ai-automation",
+        "utility"
+      ],
+      "description": "カテゴリ"
+    },
+    "description": {
+      "type": "string",
+      "description": "タイプの説明"
+    },
+    "supportedRuntimes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["node", "python", "bash", "deno"]
+      },
+      "minItems": 1,
+      "description": "サポートするランタイム"
+    },
+    "primaryRuntime": {
+      "type": "string",
+      "enum": ["node", "python", "bash", "deno"],
+      "description": "推奨ランタイム"
+    },
+    "requiredFields": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "このタイプで必須のフィールド"
+    },
+    "recommendedFields": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "推奨フィールド"
+    },
+    "commonDependencies": {
+      "type": "object",
+      "properties": {
+        "node": { "type": "array", "items": { "type": "string" } },
+        "python": { "type": "array", "items": { "type": "string" } },
+        "bash": { "type": "array", "items": { "type": "string" } }
+      },
+      "description": "よく使われる依存関係"
+    },
+    "commonEnvironment": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "よく使われる環境変数"
+    },
+    "templatePath": {
+      "type": "object",
+      "properties": {
+        "node": { "type": "string" },
+        "python": { "type": "string" },
+        "bash": { "type": "string" },
+        "deno": { "type": "string" }
+      },
+      "description": "テンプレートファイルパス"
+    },
+    "examples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "command": { "type": "string" }
+        }
+      },
+      "description": "使用例"
+    }
+  },
+  "additionalProperties": false
+}

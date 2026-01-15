@@ -1,0 +1,67 @@
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-*
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Temporary files
+*.tmp
+**/.tmp/
+*.log
+tmp/
+temp/
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+
+# Build output
+dist/
+build/
+out/
+
+# Cache
+.cache/
+*.cache
+.eslintcache
+.stylelintcache
+
+# Claude Code / MCP
+.playwright-mcp/
+.mcp-cache/
+
+# Runtime generated (optional - uncomment if you don't want to track)
+# skills/**/LOGS.md
+# skills/**/EVALS.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+.venv/
+
+# Test coverage
+coverage/
+.nyc_output/

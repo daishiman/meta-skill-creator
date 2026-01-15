@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Anchors Definition",
+  "description": "知識圧縮アンカー定義スキーマ",
+  "type": "object",
+  "required": ["skillName", "anchors"],
+  "properties": {
+    "skillName": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "anchors": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["name", "application", "purpose"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "書籍名またはドキュメント名"
+          },
+          "application": {
+            "type": "string",
+            "description": "適用範囲"
+          },
+          "purpose": {
+            "type": "string",
+            "description": "目的"
+          }
+        }
+      },
+      "description": "知識圧縮アンカーのリスト"
+    }
+  },
+  "additionalProperties": false
+}

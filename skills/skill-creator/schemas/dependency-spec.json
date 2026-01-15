@@ -1,0 +1,156 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dependency Specification",
+  "description": "依存関係の定義スキーマ",
+  "type": "object",
+  "properties": {
+    "npm": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/npmPackage"
+      },
+      "description": "npm依存関係"
+    },
+    "pip": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/pipPackage"
+      },
+      "description": "pip依存関係"
+    },
+    "system": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/systemDependency"
+      },
+      "description": "システム依存関係（CLI、ライブラリ）"
+    },
+    "mcp": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/mcpServer"
+      },
+      "description": "MCPサーバー依存関係"
+    },
+    "internal": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "内部スクリプト依存関係"
+    }
+  },
+  "definitions": {
+    "npmPackage": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "パッケージ名"
+        },
+        "version": {
+          "type": "string",
+          "description": "バージョン指定（semver）"
+        },
+        "dev": {
+          "type": "boolean",
+          "default": false,
+          "description": "devDependencyかどうか"
+        },
+        "optional": {
+          "type": "boolean",
+          "default": false,
+          "description": "オプションかどうか"
+        },
+        "purpose": {
+          "type": "string",
+          "description": "使用目的"
+        }
+      }
+    },
+    "pipPackage": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "パッケージ名"
+        },
+        "version": {
+          "type": "string",
+          "description": "バージョン指定"
+        },
+        "extras": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "extras_require"
+        },
+        "optional": {
+          "type": "boolean",
+          "default": false
+        },
+        "purpose": {
+          "type": "string"
+        }
+      }
+    },
+    "systemDependency": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "依存名"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["cli", "library", "service", "runtime"],
+          "description": "依存タイプ"
+        },
+        "version": {
+          "type": "string",
+          "description": "バージョン要件"
+        },
+        "checkCommand": {
+          "type": "string",
+          "description": "存在確認コマンド（例: git --version）"
+        },
+        "installHint": {
+          "type": "string",
+          "description": "インストール方法のヒント"
+        },
+        "optional": {
+          "type": "boolean",
+          "default": false
+        },
+        "purpose": {
+          "type": "string"
+        }
+      }
+    },
+    "mcpServer": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "MCPサーバー名"
+        },
+        "package": {
+          "type": "string",
+          "description": "パッケージ名（npm or pip）"
+        },
+        "tools": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "使用するツール"
+        },
+        "purpose": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Execution Mode",
+  "description": "タスク実行モードの選択結果",
+  "type": "object",
+  "required": ["mode", "task", "userConfirmed"],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": ["claude", "codex", "claude-to-codex"],
+      "description": "実行モード: claude=Claude Code単独, codex=Codex単独, claude-to-codex=連携"
+    },
+    "task": {
+      "type": "string",
+      "minLength": 1,
+      "description": "実行するタスクの内容"
+    },
+    "context": {
+      "type": "string",
+      "description": "共有すべきコンテキスト（オプション）"
+    },
+    "contextFile": {
+      "type": "string",
+      "description": "コンテキストファイルのパス（オプション）"
+    },
+    "reason": {
+      "type": "string",
+      "description": "このモードを選択した理由"
+    },
+    "userConfirmed": {
+      "type": "boolean",
+      "description": "ユーザーが選択を確認したか"
+    },
+    "recommendedMode": {
+      "type": "string",
+      "enum": ["claude", "codex", "claude-to-codex"],
+      "description": "システムが推奨したモード（ユーザー選択と異なる場合に記録）"
+    },
+    "taskAnalysis": {
+      "type": "object",
+      "description": "タスク分析結果",
+      "properties": {
+        "requiresFileEdit": {
+          "type": "boolean",
+          "description": "ファイル編集が必要か"
+        },
+        "requiresGitOps": {
+          "type": "boolean",
+          "description": "Git操作が必要か"
+        },
+        "requiresDeepCodebaseKnowledge": {
+          "type": "boolean",
+          "description": "コードベースの深い理解が必要か"
+        },
+        "isIndependent": {
+          "type": "boolean",
+          "description": "独立したタスクか"
+        },
+        "needsContext": {
+          "type": "boolean",
+          "description": "コンテキスト共有が必要か"
+        }
+      }
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "選択日時"
+    }
+  }
+}

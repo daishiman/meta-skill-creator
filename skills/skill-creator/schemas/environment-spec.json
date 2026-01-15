@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Environment Specification",
+  "description": "環境変数の定義スキーマ",
+  "type": "object",
+  "properties": {
+    "variables": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/envVariable"
+      },
+      "description": "環境変数リスト"
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/envGroup"
+      },
+      "description": "環境変数グループ"
+    },
+    "dotenvSupport": {
+      "type": "boolean",
+      "default": true,
+      "description": ".envファイルサポート"
+    },
+    "dotenvPaths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": [".env", ".env.local"],
+      "description": ".envファイルの検索パス"
+    }
+  },
+  "definitions": {
+    "envVariable": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "環境変数名（SCREAMING_SNAKE_CASE）"
+        },
+        "description": {
+          "type": "string",
+          "description": "説明"
+        },
+        "required": {
+          "type": "boolean",
+          "default": false,
+          "description": "必須かどうか"
+        },
+        "default": {
+          "type": "string",
+          "description": "デフォルト値"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["string", "number", "boolean", "url", "path", "json", "secret"],
+          "default": "string",
+          "description": "値の型"
+        },
+        "sensitive": {
+          "type": "boolean",
+          "default": false,
+          "description": "機密情報かどうか（ログ出力時にマスク）"
+        },
+        "pattern": {
+          "type": "string",
+          "description": "値の正規表現パターン"
+        },
+        "enum": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "許可される値のリスト"
+        },
+        "example": {
+          "type": "string",
+          "description": "値の例"
+        },
+        "source": {
+          "type": "string",
+          "enum": ["user", "system", "service", "computed"],
+          "description": "値のソース"
+        },
+        "group": {
+          "type": "string",
+          "description": "所属グループ"
+        }
+      }
+    },
+    "envGroup": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "グループ名"
+        },
+        "description": {
+          "type": "string",
+          "description": "グループの説明"
+        },
+        "prefix": {
+          "type": "string",
+          "description": "変数名のプレフィックス"
+        },
+        "required": {
+          "type": "boolean",
+          "default": false,
+          "description": "グループ全体が必須か"
+        },
+        "condition": {
+          "type": "string",
+          "description": "このグループが必要になる条件"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

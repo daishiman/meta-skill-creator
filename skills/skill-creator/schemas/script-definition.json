@@ -1,0 +1,186 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Script Definition",
+  "description": "スクリプト定義の基本構造スキーマ",
+  "type": "object",
+  "required": ["name", "type", "runtime", "responsibility"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "maxLength": 64,
+      "description": "スクリプト名（ハイフンケース）"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "api-client",
+        "webhook",
+        "scraper",
+        "parser",
+        "transformer",
+        "aggregator",
+        "file-processor",
+        "database",
+        "cache",
+        "queue",
+        "git-ops",
+        "test-runner",
+        "linter",
+        "formatter",
+        "builder",
+        "deployer",
+        "docker",
+        "cloud",
+        "monitor",
+        "ai-tool",
+        "mcp-bridge",
+        "notification",
+        "shell",
+        "universal"
+      ],
+      "description": "スクリプトタイプ"
+    },
+    "runtime": {
+      "type": "string",
+      "enum": ["node", "python", "bash", "bun", "deno"],
+      "description": "実行ランタイム"
+    },
+    "responsibility": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 200,
+      "description": "単一責務の説明"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "スクリプトの詳細説明"
+    },
+    "command": {
+      "type": "string",
+      "description": "実行コマンド（例: node scripts/fetch.js）"
+    },
+    "args": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/argument"
+      },
+      "description": "コマンドライン引数"
+    },
+    "dependencies": {
+      "$ref": "#/definitions/dependencies"
+    },
+    "environment": {
+      "$ref": "#/definitions/environment"
+    },
+    "variables": {
+      "$ref": "#/definitions/variables"
+    },
+    "exitCodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/exitCode"
+      },
+      "description": "終了コード定義"
+    },
+    "input": {
+      "$ref": "#/definitions/ioSpec"
+    },
+    "output": {
+      "$ref": "#/definitions/ioSpec"
+    }
+  },
+  "definitions": {
+    "argument": {
+      "type": "object",
+      "required": ["name", "description"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^--[a-z]+(-[a-z]+)*$"
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "description": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["string", "number", "boolean", "path", "json"],
+          "default": "string"
+        },
+        "default": {
+          "type": ["string", "number", "boolean", "null"]
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "properties": {
+        "npm": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "pip": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "system": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "environment": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "required": { "type": "boolean", "default": false },
+          "description": { "type": "string" },
+          "default": { "type": "string" }
+        }
+      }
+    },
+    "variables": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["string", "number", "boolean", "array", "object", "any"]
+          },
+          "description": { "type": "string" },
+          "default": {},
+          "required": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "exitCode": {
+      "type": "object",
+      "required": ["code", "meaning"],
+      "properties": {
+        "code": { "type": "integer", "minimum": 0, "maximum": 255 },
+        "meaning": { "type": "string" }
+      }
+    },
+    "ioSpec": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["json", "text", "file", "stream", "none"]
+        },
+        "schema": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

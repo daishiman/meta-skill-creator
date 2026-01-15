@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Boundary Definition",
+  "description": "スキルの機能境界定義スキーマ",
+  "type": "object",
+  "required": ["skillName", "includes", "excludes"],
+  "properties": {
+    "skillName": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "includes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["feature", "description"],
+        "properties": {
+          "feature": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "description": "スキルが提供する機能"
+    },
+    "excludes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["feature", "reason"],
+        "properties": {
+          "feature": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      },
+      "description": "スキルが提供しない機能と理由"
+    }
+  },
+  "additionalProperties": false
+}

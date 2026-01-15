@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Codex Result",
+  "description": "Codex実行結果",
+  "type": "object",
+  "required": ["success", "timestamp"],
+  "properties": {
+    "success": {
+      "type": "boolean",
+      "description": "実行成功フラグ"
+    },
+    "task": {
+      "type": "string",
+      "description": "実行したタスク"
+    },
+    "model": {
+      "type": "string",
+      "description": "使用したモデル"
+    },
+    "outputDir": {
+      "type": "string",
+      "description": "出力ディレクトリ"
+    },
+    "files": {
+      "type": "object",
+      "description": "生成されたファイル",
+      "properties": {
+        "taskFile": {
+          "type": "string",
+          "description": "タスクファイルパス"
+        },
+        "responseFile": {
+          "type": "string",
+          "description": "Codex応答ファイルパス"
+        },
+        "resultMd": {
+          "type": "string",
+          "description": "結果Markdownファイルパス"
+        },
+        "resultJson": {
+          "type": "string",
+          "description": "結果JSONファイルパス"
+        }
+      }
+    },
+    "response": {
+      "type": "object",
+      "description": "Codex応答の詳細",
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "応答内容"
+        },
+        "truncated": {
+          "type": "boolean",
+          "description": "応答が切り詰められたか"
+        },
+        "length": {
+          "type": "integer",
+          "description": "応答の長さ（文字数）"
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "description": "実行情報",
+      "properties": {
+        "startTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "durationMs": {
+          "type": "integer",
+          "description": "実行時間（ミリ秒）"
+        },
+        "exitCode": {
+          "type": "integer",
+          "description": "終了コード"
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "description": "エラー情報（失敗時）",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "details": {
+          "type": "string"
+        }
+      }
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "結果生成日時"
+    }
+  }
+}

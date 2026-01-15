@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Trigger Definition",
+  "description": "スキル発動条件定義スキーマ",
+  "type": "object",
+  "required": ["skillName", "description", "keywords"],
+  "properties": {
+    "skillName": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 500,
+      "description": "発動条件の説明（日本語）"
+    },
+    "keywords": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 10,
+      "items": {
+        "type": "string"
+      },
+      "description": "発動キーワード"
+    }
+  },
+  "additionalProperties": false
+}

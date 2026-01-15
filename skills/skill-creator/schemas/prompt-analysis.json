@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Prompt Analysis",
+  "description": "プロンプト分析結果スキーマ",
+  "type": "object",
+  "required": ["timestamp", "summary", "results"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "summary": {
+      "type": "object",
+      "required": ["totalFiles", "averageScores", "totalImprovements", "highPriorityCount"],
+      "properties": {
+        "totalFiles": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "分析ファイル数"
+        },
+        "averageScores": {
+          "type": "object",
+          "properties": {
+            "structure": { "type": "number", "minimum": 0, "maximum": 5 },
+            "clarity": { "type": "number", "minimum": 0, "maximum": 5 },
+            "reproducibility": { "type": "number", "minimum": 0, "maximum": 5 },
+            "efficiency": { "type": "number", "minimum": 0, "maximum": 5 },
+            "overall": { "type": "number", "minimum": 0, "maximum": 5 }
+          }
+        },
+        "totalImprovements": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "総改善提案数"
+        },
+        "highPriorityCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "高優先度の改善提案数"
+        }
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file", "path", "scores", "improvements"],
+        "properties": {
+          "file": {
+            "type": "string",
+            "description": "ファイル名"
+          },
+          "path": {
+            "type": "string",
+            "description": "ファイルパス"
+          },
+          "scores": {
+            "type": "object",
+            "properties": {
+              "structure": { "type": "integer", "minimum": 1, "maximum": 5 },
+              "clarity": { "type": "integer", "minimum": 1, "maximum": 5 },
+              "reproducibility": { "type": "integer", "minimum": 1, "maximum": 5 },
+              "efficiency": { "type": "integer", "minimum": 1, "maximum": 5 },
+              "overall": { "type": "integer", "minimum": 1, "maximum": 5 }
+            }
+          },
+          "analysis": {
+            "type": "object",
+            "description": "詳細分析結果"
+          },
+          "improvements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["type", "priority", "suggestion"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["structure", "clarity", "reproducibility", "efficiency"]
+                },
+                "priority": {
+                  "type": "string",
+                  "enum": ["high", "medium", "low"]
+                },
+                "suggestion": {
+                  "type": "string",
+                  "minLength": 5
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

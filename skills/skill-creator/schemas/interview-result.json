@@ -1,0 +1,180 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "interview-result.json",
+  "title": "Interview Result",
+  "description": "ユーザーインタビューの結果を格納するスキーマ",
+  "type": "object",
+  "required": ["abstractionLevel", "goal", "features", "structure"],
+  "properties": {
+    "abstractionLevel": {
+      "type": "string",
+      "enum": ["L1", "L2", "L3"],
+      "description": "抽象度レベル（L1: Concept, L2: Capability, L3: Implementation）"
+    },
+    "goal": {
+      "type": "string",
+      "description": "ユーザーが達成したいこと"
+    },
+    "domain": {
+      "type": "string",
+      "description": "対象領域・コンテキスト"
+    },
+    "frequency": {
+      "type": "string",
+      "enum": ["daily", "weekly", "monthly", "on-demand"],
+      "description": "使用頻度"
+    },
+    "scale": {
+      "type": "string",
+      "enum": ["personal", "team", "organization"],
+      "description": "使用規模"
+    },
+    "features": {
+      "type": "array",
+      "description": "必要な機能リスト",
+      "items": {
+        "type": "object",
+        "required": ["name", "description", "priority"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "機能名"
+          },
+          "description": {
+            "type": "string",
+            "description": "機能の説明"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["must", "should", "could"],
+            "description": "優先度（MoSCoW）"
+          }
+        }
+      }
+    },
+    "integrations": {
+      "type": "array",
+      "description": "外部連携リスト",
+      "items": {
+        "type": "object",
+        "required": ["service", "purpose"],
+        "properties": {
+          "service": {
+            "type": "string",
+            "description": "サービス名"
+          },
+          "purpose": {
+            "type": "string",
+            "description": "連携目的"
+          },
+          "authType": {
+            "type": "string",
+            "enum": ["api-key", "oauth", "basic", "token", "none"],
+            "description": "認証方式"
+          }
+        }
+      }
+    },
+    "scripts": {
+      "type": "array",
+      "description": "必要なスクリプトリスト",
+      "items": {
+        "type": "object",
+        "required": ["purpose"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "スクリプトタイプ（24タイプまたはcustom）"
+          },
+          "purpose": {
+            "type": "string",
+            "description": "スクリプトの目的"
+          },
+          "runtime": {
+            "type": "string",
+            "enum": ["node", "python", "bash", "bun", "deno"],
+            "description": "実行ランタイム"
+          },
+          "isCustom": {
+            "type": "boolean",
+            "description": "カスタムスクリプトかどうか",
+            "default": false
+          }
+        }
+      }
+    },
+    "structure": {
+      "type": "string",
+      "enum": ["simple", "standard", "full", "custom"],
+      "description": "スキルの構成タイプ"
+    },
+    "priorities": {
+      "type": "array",
+      "description": "設計の優先事項",
+      "items": {
+        "type": "string",
+        "enum": ["speed", "maintainability", "extensibility", "simplicity"]
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "description": "制約条件リスト",
+      "items": {
+        "type": "string"
+      }
+    },
+    "additionalNotes": {
+      "type": "string",
+      "description": "その他の要望・補足"
+    },
+    "suggestedSkillName": {
+      "type": "string",
+      "description": "推奨スキル名",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "interviewTimestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "インタビュー実施日時"
+    }
+  },
+  "examples": [
+    {
+      "abstractionLevel": "L2",
+      "goal": "PRを自動作成したい",
+      "domain": "開発ワークフロー",
+      "frequency": "daily",
+      "scale": "team",
+      "features": [
+        {
+          "name": "差分分析",
+          "description": "コミット差分を分析してPR本文を生成",
+          "priority": "must"
+        },
+        {
+          "name": "品質チェック",
+          "description": "lint/typecheck/testを実行",
+          "priority": "should"
+        }
+      ],
+      "integrations": [
+        {
+          "service": "GitHub",
+          "purpose": "PR作成、ブランチ操作",
+          "authType": "token"
+        }
+      ],
+      "scripts": [
+        {
+          "type": "git-ops",
+          "purpose": "ブランチ作成、コミット",
+          "runtime": "bash"
+        }
+      ],
+      "structure": "standard",
+      "priorities": ["speed", "maintainability"],
+      "constraints": ["Node.js 18以上", "pnpmを使用"],
+      "suggestedSkillName": "pr-creator"
+    }
+  ]
+}

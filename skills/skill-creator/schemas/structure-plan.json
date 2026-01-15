@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Structure Plan",
+  "description": "スキル構造計画スキーマ",
+  "type": "object",
+  "required": ["skillName", "directories", "files"],
+  "properties": {
+    "skillName": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "directories": {
+      "type": "object",
+      "properties": {
+        "agents": {
+          "type": "object",
+          "required": ["required", "reason"],
+          "properties": {
+            "required": { "type": "boolean" },
+            "reason": { "type": "string" }
+          }
+        },
+        "scripts": {
+          "type": "object",
+          "required": ["required", "reason"],
+          "properties": {
+            "required": { "type": "boolean" },
+            "reason": { "type": "string" }
+          }
+        },
+        "references": {
+          "type": "object",
+          "required": ["required", "reason"],
+          "properties": {
+            "required": { "type": "boolean" },
+            "reason": { "type": "string" }
+          }
+        },
+        "assets": {
+          "type": "object",
+          "required": ["required", "reason"],
+          "properties": {
+            "required": { "type": "boolean" },
+            "reason": { "type": "string" }
+          }
+        },
+        "schemas": {
+          "type": "object",
+          "required": ["required", "reason"],
+          "properties": {
+            "required": { "type": "boolean" },
+            "reason": { "type": "string" }
+          }
+        }
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "type", "responsibility"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "相対パス"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["skill-md", "agent", "script", "reference", "asset", "schema"]
+          },
+          "responsibility": {
+            "type": "string",
+            "description": "単一責務の説明"
+          },
+          "executionPattern": {
+            "type": "string",
+            "enum": ["seq", "par", "cond", "loop", "agg"],
+            "description": "実行パターン（agentのみ）"
+          },
+          "template": {
+            "type": "string",
+            "description": "使用するテンプレート"
+          }
+        }
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "description": "ワークフロー設計のサマリ"
+    }
+  },
+  "additionalProperties": false
+}

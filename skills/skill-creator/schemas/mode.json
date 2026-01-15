@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mode Detection",
+  "description": "スキルクリエイターのモード判定結果スキーマ",
+  "type": "object",
+  "required": ["mode", "confidence", "request"],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": ["create", "update", "improve-prompt"],
+      "description": "検出されたモード"
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["high", "medium", "low"],
+      "description": "判定の信頼度"
+    },
+    "request": {
+      "type": "string",
+      "minLength": 1,
+      "description": "ユーザー要求文"
+    },
+    "skillPath": {
+      "type": ["string", "null"],
+      "description": "対象スキルのパス（update/improve時）"
+    },
+    "skillExists": {
+      "type": "boolean",
+      "description": "スキルパスが存在するか"
+    },
+    "skillName": {
+      "type": ["string", "null"],
+      "description": "スキル名"
+    },
+    "detection": {
+      "type": "object",
+      "properties": {
+        "scores": {
+          "type": "object",
+          "properties": {
+            "create": { "type": "integer", "minimum": 0 },
+            "update": { "type": "integer", "minimum": 0 },
+            "improve-prompt": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "matchedKeywords": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

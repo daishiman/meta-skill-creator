@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Prompt Improvement",
+  "description": "プロンプト改善計画スキーマ",
+  "type": "object",
+  "required": ["skillName", "targetAgent", "analysisResults", "improvements"],
+  "properties": {
+    "skillName": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "maxLength": 64,
+      "description": "スキル名"
+    },
+    "targetAgent": {
+      "type": "string",
+      "pattern": "^agents/[a-z0-9-]+\\.md$",
+      "description": "改善対象のagentファイルパス"
+    },
+    "analysisResults": {
+      "type": "object",
+      "required": ["structureScore", "clarityScore", "reproducibilityScore", "efficiencyScore"],
+      "properties": {
+        "structureScore": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "構造スコア（1-5）"
+        },
+        "clarityScore": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "明確性スコア（1-5）"
+        },
+        "reproducibilityScore": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "再現性スコア（1-5）"
+        },
+        "efficiencyScore": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "効率性スコア（1-5）"
+        }
+      },
+      "additionalProperties": false
+    },
+    "improvements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["section", "issue", "pattern", "before", "after"],
+        "properties": {
+          "section": {
+            "type": "string",
+            "description": "改善対象のセクション名"
+          },
+          "issue": {
+            "type": "string",
+            "minLength": 5,
+            "description": "問題点"
+          },
+          "pattern": {
+            "type": "string",
+            "enum": [
+              "ambiguous-verb",
+              "abstract-condition",
+              "missing-example",
+              "verbose-explanation",
+              "unclear-output",
+              "missing-section",
+              "inconsistent-format"
+            ],
+            "description": "改善パターン"
+          },
+          "before": {
+            "type": "string",
+            "description": "改善前の記述"
+          },
+          "after": {
+            "type": "string",
+            "description": "改善後の記述"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "improvedContent": {
+      "type": "string",
+      "minLength": 100,
+      "description": "改善後の全文"
+    }
+  },
+  "additionalProperties": false
+}

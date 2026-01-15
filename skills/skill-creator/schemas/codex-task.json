@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Codex Task",
+  "description": "Codexに委譲するタスクの定義",
+  "type": "object",
+  "required": ["task", "timestamp"],
+  "properties": {
+    "task": {
+      "type": "string",
+      "minLength": 1,
+      "description": "実行するタスクの内容"
+    },
+    "context": {
+      "type": "string",
+      "description": "タスクに必要なコンテキスト情報"
+    },
+    "contextFile": {
+      "type": "string",
+      "description": "コンテキストファイルのパス"
+    },
+    "model": {
+      "type": "string",
+      "default": "gpt-5.2",
+      "description": "使用するモデル"
+    },
+    "timeout": {
+      "type": "integer",
+      "default": 1200,
+      "minimum": 60,
+      "maximum": 3600,
+      "description": "タイムアウト（秒）"
+    },
+    "outputDir": {
+      "type": "string",
+      "description": "出力ディレクトリ"
+    },
+    "executionMode": {
+      "type": "string",
+      "enum": ["codex", "claude-to-codex"],
+      "description": "実行モード"
+    },
+    "sourceMode": {
+      "type": "object",
+      "description": "元のexecution-mode選択情報",
+      "properties": {
+        "mode": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "タスク作成日時"
+    }
+  }
+}

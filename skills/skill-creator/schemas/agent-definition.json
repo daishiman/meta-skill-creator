@@ -1,0 +1,238 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Definition",
+  "description": "Task仕様書形式のエージェント生成用定義",
+  "type": "object",
+  "required": [
+    "TASK_TITLE",
+    "FILE_NAME",
+    "LOAD_CONDITION",
+    "PERSONA_NAME",
+    "EXPERTISE",
+    "BACKGROUND",
+    "PURPOSE",
+    "RESPONSIBILITIES",
+    "REFERENCES",
+    "STEPS",
+    "CHECKLIST",
+    "CONSTRAINTS",
+    "INPUTS",
+    "OUTPUTS"
+  ],
+  "properties": {
+    "TASK_TITLE": {
+      "type": "string",
+      "description": "タスクのタイトル（例: 要求分析、ワークフロー設計）",
+      "minLength": 2,
+      "maxLength": 50
+    },
+    "FILE_NAME": {
+      "type": "string",
+      "description": "ファイル名（拡張子なし、ハイフンケース）",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "LOAD_CONDITION": {
+      "type": "string",
+      "description": "読み込み条件（例: createモード開始時、ワークフロー設計時）",
+      "minLength": 5,
+      "maxLength": 100
+    },
+    "PERSONA_NAME": {
+      "type": "string",
+      "description": "思考様式の参照ラベル（例: Jeff Patton, Kent Beck）",
+      "minLength": 2,
+      "maxLength": 50
+    },
+    "EXPERTISE": {
+      "type": "string",
+      "description": "専門領域（例: 要求分析・ユーザーストーリー）",
+      "minLength": 5,
+      "maxLength": 100
+    },
+    "BACKGROUND": {
+      "type": "string",
+      "description": "背景説明（何をするエージェントか）",
+      "minLength": 20,
+      "maxLength": 500
+    },
+    "PURPOSE": {
+      "type": "string",
+      "description": "目的（具体的に何を達成するか）",
+      "minLength": 20,
+      "maxLength": 300
+    },
+    "RESPONSIBILITIES": {
+      "type": "array",
+      "description": "責務と成果物のペア",
+      "minItems": 1,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["task", "output"],
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "責務の内容"
+          },
+          "output": {
+            "type": "string",
+            "description": "成果物の名前"
+          }
+        }
+      }
+    },
+    "REFERENCES": {
+      "type": "array",
+      "description": "参考文献リスト",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": ["name", "application"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "書籍/ドキュメント名"
+          },
+          "application": {
+            "type": "string",
+            "description": "適用方法"
+          }
+        }
+      }
+    },
+    "STEPS": {
+      "type": "array",
+      "description": "思考プロセスのステップ",
+      "minItems": 3,
+      "maxItems": 15,
+      "items": {
+        "type": "object",
+        "required": ["step", "action", "owner"],
+        "properties": {
+          "step": {
+            "type": ["integer", "string"],
+            "description": "ステップ番号"
+          },
+          "action": {
+            "type": "string",
+            "description": "アクションの内容"
+          },
+          "owner": {
+            "type": "string",
+            "description": "担当（LLM, Script, AskUserQuestion）",
+            "enum": ["LLM", "Script", "AskUserQuestion", "Script→LLM", "LLM→Script"]
+          }
+        }
+      }
+    },
+    "CHECKLIST": {
+      "type": "array",
+      "description": "チェックリスト項目",
+      "minItems": 2,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": ["item", "criteria"],
+        "properties": {
+          "item": {
+            "type": "string",
+            "description": "チェック項目"
+          },
+          "criteria": {
+            "type": "string",
+            "description": "基準"
+          }
+        }
+      }
+    },
+    "CONSTRAINTS": {
+      "type": "array",
+      "description": "ビジネスルール・制約",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "制約の名前"
+          },
+          "description": {
+            "type": "string",
+            "description": "制約の説明"
+          }
+        }
+      }
+    },
+    "INPUTS": {
+      "type": "array",
+      "description": "入力データ定義",
+      "minItems": 1,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["name", "source", "validation", "fallback"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "データ名"
+          },
+          "source": {
+            "type": "string",
+            "description": "提供元"
+          },
+          "validation": {
+            "type": "string",
+            "description": "検証ルール"
+          },
+          "fallback": {
+            "type": "string",
+            "description": "欠損時処理"
+          }
+        }
+      }
+    },
+    "OUTPUTS": {
+      "type": "array",
+      "description": "出力データ定義",
+      "minItems": 1,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["name", "destination", "content"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "成果物名"
+          },
+          "destination": {
+            "type": "string",
+            "description": "受領先"
+          },
+          "content": {
+            "type": "string",
+            "description": "内容"
+          }
+        }
+      }
+    },
+    "OUTPUT_SCHEMA": {
+      "type": "string",
+      "description": "出力のJSONスキーマ（オプション）"
+    },
+    "PRE_PROCESS": {
+      "type": "string",
+      "description": "前処理スクリプト（オプション）"
+    },
+    "POST_PROCESS": {
+      "type": "string",
+      "description": "後続処理スクリプト（オプション）"
+    },
+    "APPENDIX": {
+      "type": "string",
+      "description": "補足情報（オプション）"
+    }
+  }
+}

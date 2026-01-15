@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Variable Definition",
+  "description": "テンプレート変数の定義スキーマ",
+  "type": "object",
+  "required": ["variables"],
+  "properties": {
+    "variables": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/variableSpec"
+      },
+      "description": "変数定義のマップ"
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/variableGroup"
+      },
+      "description": "変数グループ（関連する変数のまとまり）"
+    },
+    "validation": {
+      "type": "object",
+      "properties": {
+        "strict": {
+          "type": "boolean",
+          "default": true,
+          "description": "未定義変数をエラーにするか"
+        },
+        "allowUndefined": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "未定義を許可する変数パターン"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "variableSpec": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["string", "number", "boolean", "array", "object", "any", "path", "url", "email", "json"],
+          "description": "変数の型"
+        },
+        "description": {
+          "type": "string",
+          "description": "変数の説明"
+        },
+        "required": {
+          "type": "boolean",
+          "default": false,
+          "description": "必須かどうか"
+        },
+        "default": {
+          "description": "デフォルト値"
+        },
+        "enum": {
+          "type": "array",
+          "description": "許可される値のリスト"
+        },
+        "pattern": {
+          "type": "string",
+          "description": "正規表現パターン（string型のみ）"
+        },
+        "minLength": {
+          "type": "integer",
+          "description": "最小文字数（string型のみ）"
+        },
+        "maxLength": {
+          "type": "integer",
+          "description": "最大文字数（string型のみ）"
+        },
+        "minimum": {
+          "type": "number",
+          "description": "最小値（number型のみ）"
+        },
+        "maximum": {
+          "type": "number",
+          "description": "最大値（number型のみ）"
+        },
+        "items": {
+          "$ref": "#/definitions/variableSpec",
+          "description": "配列要素の型定義（array型のみ）"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/variableSpec"
+          },
+          "description": "オブジェクトプロパティ定義（object型のみ）"
+        },
+        "transform": {
+          "type": "string",
+          "enum": ["uppercase", "lowercase", "trim", "slug", "camelCase", "pascalCase", "snakeCase", "kebabCase"],
+          "description": "値の変換処理"
+        },
+        "source": {
+          "type": "string",
+          "enum": ["user", "computed", "environment", "config", "runtime"],
+          "description": "値のソース"
+        },
+        "example": {
+          "description": "値の例"
+        }
+      }
+    },
+    "variableGroup": {
+      "type": "object",
+      "required": ["name", "variables"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "グループ名"
+        },
+        "description": {
+          "type": "string",
+          "description": "グループの説明"
+        },
+        "variables": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "グループに含まれる変数名"
+        },
+        "condition": {
+          "type": "string",
+          "description": "このグループが有効になる条件"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

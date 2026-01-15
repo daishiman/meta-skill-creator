@@ -1,0 +1,125 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Runtime Configuration",
+  "description": "ランタイム設定スキーマ",
+  "type": "object",
+  "required": ["runtime"],
+  "properties": {
+    "runtime": {
+      "type": "string",
+      "enum": ["node", "python", "bash", "deno"],
+      "description": "実行ランタイム"
+    },
+    "version": {
+      "type": "string",
+      "description": "ランタイムバージョン要件（例: >=18.0.0）"
+    },
+    "interpreter": {
+      "type": "string",
+      "description": "インタープリタパス（例: /usr/bin/env node）"
+    },
+    "moduleSystem": {
+      "type": "string",
+      "enum": ["esm", "commonjs", "script"],
+      "description": "モジュールシステム（Node.jsのみ）"
+    },
+    "fileExtension": {
+      "type": "string",
+      "enum": [".js", ".cjs", ".js", ".py", ".sh", ".ts"],
+      "description": "ファイル拡張子"
+    },
+    "shebang": {
+      "type": "string",
+      "description": "シェバン行"
+    },
+    "encoding": {
+      "type": "string",
+      "default": "utf-8",
+      "description": "ファイルエンコーディング"
+    },
+    "imports": {
+      "type": "object",
+      "properties": {
+        "standard": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "標準ライブラリのインポート"
+        },
+        "external": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "外部パッケージのインポート"
+        }
+      }
+    },
+    "executionOptions": {
+      "type": "object",
+      "properties": {
+        "timeout": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 600000,
+          "default": 30000,
+          "description": "タイムアウト（ミリ秒）"
+        },
+        "cwd": {
+          "type": "string",
+          "description": "作業ディレクトリ"
+        },
+        "shell": {
+          "type": "boolean",
+          "default": false,
+          "description": "シェル経由で実行"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "runtime": { "const": "node" } }
+      },
+      "then": {
+        "properties": {
+          "shebang": { "default": "#!/usr/bin/env node" },
+          "fileExtension": { "default": ".js" },
+          "moduleSystem": { "default": "esm" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "runtime": { "const": "python" } }
+      },
+      "then": {
+        "properties": {
+          "shebang": { "default": "#!/usr/bin/env python3" },
+          "fileExtension": { "default": ".py" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "runtime": { "const": "bash" } }
+      },
+      "then": {
+        "properties": {
+          "shebang": { "default": "#!/usr/bin/env bash" },
+          "fileExtension": { "default": ".sh" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "runtime": { "const": "deno" } }
+      },
+      "then": {
+        "properties": {
+          "shebang": { "default": "#!/usr/bin/env -S deno run --allow-all" },
+          "fileExtension": { "default": ".ts" }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}
