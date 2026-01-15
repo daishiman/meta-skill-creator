@@ -1,6 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "marketplace": "meta-skill-creator",
+  "name": "meta-skill-creator",
+  "description": "スキル作成・更新・プロンプト改善のためのメタスキルを提供するマーケットプレイス",
   "owner": {
     "name": "daishiman",
     "email": "daishimanju@gmail.com"

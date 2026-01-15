@@ -140,14 +140,15 @@ Claude Code プラグインの仕様：
 
 | ファイル | 役割 | 必須項目 |
 |----------|------|----------|
-| **marketplace.json** | 配布用レジストリ定義 | `marketplace`, `owner`, `plugins[]` |
+| **marketplace.json** | 配布用レジストリ定義 | `name`, `description`, `owner`, `plugins[]` |
 | **plugin.json** | プラグインマニフェスト | `name`, `version`, `description`, `author`, `components` |
 
 **marketplace.json** - `/plugin marketplace add` で使用：
 ```json
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "marketplace": "meta-skill-creator",
+  "name": "meta-skill-creator",
+  "description": "マーケットプレイスの説明",
   "owner": { "name": "daishiman" },
   "plugins": [
     { "name": "skill-creator", "source": "./" }
