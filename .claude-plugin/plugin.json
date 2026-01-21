@@ -1,5 +1,5 @@
 {
-  "name": "skill-creator",
+  "name": "daishiman-skill-creator",
   "description": "スキルを作成・更新・プロンプト改善するためのメタスキル。ユーザーと対話しながら共創し、抽象的なアイデアから具体的な実装まで柔軟に対応。",
   "author": {
     "name": "daishiman",
