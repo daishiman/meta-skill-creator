@@ -15,24 +15,35 @@ Meta Skill Creatorをインストールして使い始めるための詳細ガ�
 
 ## インストール方法
 
-### 方法1: プラグインインストール（推奨）
+### 方法1: GitHubマーケットプレイス経由（推奨）
 
 ```bash
-/plugin install daishiman/meta-skill-creator
-```
-
-### 方法2: マーケットプレイス経由
-
-```bash
+# Step 1: マーケットプレイスを追加
 /plugin marketplace add daishiman/meta-skill-creator
+
+# Step 2: プラグインをインストール
+/plugin install daishi-skill-creator@meta-skill-creator
+
+# Step 3: Claude Code を再起動
 ```
 
-### 方法3: ローカルインストール
+### 方法2: ローカル開発用
+
+開発者向けのローカルインストール方法：
 
 ```bash
+# リポジトリをクローン
 git clone https://github.com/daishiman/meta-skill-creator.git
 cd meta-skill-creator
-/plugin install ./
+
+# シンボリックリンクを作成
+ln -sf $(pwd) ~/.claude/plugins/marketplaces/meta-skill-creator
+
+# known_marketplaces.json に追加（手動）
+# ~/.claude/plugins/known_marketplaces.json を編集
+
+# settings.json で有効化（手動）
+# ~/.claude/settings.json の enabledPlugins に追加
 ```
 
 ---
@@ -84,7 +95,7 @@ skills/skill-creator/
 ## アップデート
 
 ```bash
-/plugin update meta-skill-creator
+/plugin update daishi-skill-creator@meta-skill-creator
 ```
 
 ---
@@ -92,7 +103,7 @@ skills/skill-creator/
 ## アンインストール
 
 ```bash
-/plugin uninstall meta-skill-creator
+/plugin uninstall daishi-skill-creator@meta-skill-creator
 ```
 
 ---
