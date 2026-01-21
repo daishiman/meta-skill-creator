@@ -8,16 +8,9 @@
   },
   "plugins": [
     {
-      "name": "daishi-skill-creator",
+      "name": "skill-creator",
       "source": "./",
       "description": "スキルを作成・更新・プロンプト改善するためのメタスキル。ユーザーと対話しながら共創し、抽象的なアイデアから具体的な実装まで柔軟に対応。",
-      "version": "5.2.1",
-      "category": "development",
-      "keywords": ["skill", "agent", "automation", "workflow", "meta-skill"],
-      "author": {
-        "name": "daishiman"
-      },
-      "repository": "https://github.com/daishiman/meta-skill-creator",
       "skills": ["./skills/skill-creator"]
     }
   ]
