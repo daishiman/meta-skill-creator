@@ -11,13 +11,15 @@
 ## インストール
 
 ```bash
-# Step 1: マーケットプレイスを追加
+# Step 1: Claude Code を起動
+
+# Step 2: マーケットプレイスを追加
 /plugin marketplace add daishiman/meta-skill-creator
 
-# Step 2: プラグインをインストール
+# Step 3: プラグインをインストール
 /plugin install skill-creator
 
-# Step 3: Claude Code を再起動
+# Step 4: Claude Code を再起動
 ```
 
 ---
