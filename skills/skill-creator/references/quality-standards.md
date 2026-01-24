@@ -11,7 +11,7 @@
 | チェック項目                                      | 検証方法                                         |
 | ------------------------------------------------- | ------------------------------------------------ |
 | SKILL.md が 500 行以内                            | `wc -l SKILL.md`                                 |
-| YAML frontmatter が有効                           | quick_validate.js                               |
+| YAML frontmatter が有効                           | quick_validate.js                                |
 | name がハイフンケース（最大64文字）               | 正規表現で検証                                   |
 | description が 1024 文字以内                      | 文字数カウント                                   |
 | description に Anchors と Trigger が含まれる      | 文字列検索                                       |
@@ -133,6 +133,6 @@ node scripts/quick_validate.js .claude/skills/<skill-name> --verbose
 
 ## 関連リソース
 
-- **作成プロセス**: See [creation-update-process.md](creation-update-process.md) - §6
+- **作成プロセス**: See [creation-process.md](creation-process.md) / [update-process.md](update-process.md)
 - **フィードバック**: See [feedback-loop.md](feedback-loop.md) - §7
 - **命名規則**: See [naming-conventions.md](naming-conventions.md) - §9-10

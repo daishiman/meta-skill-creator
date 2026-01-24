@@ -123,6 +123,90 @@
         "type": "string"
       }
     },
+    "orchestration": {
+      "type": "object",
+      "description": "オーケストレーション設定",
+      "properties": {
+        "pattern": {
+          "type": "string",
+          "enum": ["chain", "parallel", "conditional", "single"],
+          "description": "実行パターン（chain: 順次実行, parallel: 並列実行, conditional: 条件分岐, single: 単一処理）"
+        },
+        "chainOrder": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "チェーン実行時の処理順序"
+        },
+        "parallelTasks": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "並列実行するタスク一覧"
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "if": { "type": "string" },
+              "then": { "type": "string" },
+              "else": { "type": "string" }
+            }
+          },
+          "description": "条件分岐ルール"
+        }
+      }
+    },
+    "scheduling": {
+      "type": "object",
+      "description": "スケジュール・トリガー設定",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["manual", "cron", "event-driven", "manual-and-schedule"],
+          "description": "実行タイミング"
+        },
+        "cronExpression": {
+          "type": "string",
+          "description": "cron式（cron/manual-and-schedule時）",
+          "pattern": "^[0-9*,/-]+ [0-9*,/-]+ [0-9*,/-]+ [0-9*,/-]+ [0-9*,/-]+$"
+        },
+        "triggerType": {
+          "type": "string",
+          "enum": ["webhook", "file-watch", "git", "none"],
+          "description": "イベントトリガータイプ（event-driven時）"
+        },
+        "triggerConfig": {
+          "type": "object",
+          "description": "トリガー固有の設定"
+        }
+      }
+    },
+    "documentation": {
+      "type": "object",
+      "description": "ドキュメント生成設定",
+      "properties": {
+        "needsApiGuide": {
+          "type": "boolean",
+          "description": "API連携セットアップガイドが必要か",
+          "default": false
+        },
+        "needsEnvGuide": {
+          "type": "boolean",
+          "description": "環境構築ガイドが必要か",
+          "default": false
+        },
+        "apiServices": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "APIセットアップが必要なサービス一覧"
+        },
+        "envVariables": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "必要な環境変数一覧"
+        }
+      }
+    },
     "additionalNotes": {
       "type": "string",
       "description": "その他の要望・補足"
@@ -174,6 +258,20 @@
       "structure": "standard",
       "priorities": ["speed", "maintainability"],
       "constraints": ["Node.js 18以上", "pnpmを使用"],
+      "orchestration": {
+        "pattern": "chain",
+        "chainOrder": ["品質チェック", "差分分析", "PR作成"]
+      },
+      "scheduling": {
+        "type": "manual",
+        "triggerType": "none"
+      },
+      "documentation": {
+        "needsApiGuide": true,
+        "needsEnvGuide": true,
+        "apiServices": ["GitHub"],
+        "envVariables": ["GITHUB_TOKEN"]
+      },
       "suggestedSkillName": "pr-creator"
     }
   ]

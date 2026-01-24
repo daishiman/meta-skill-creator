@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Resource Selection",
+  "description": "interview-result.jsonから選択されたリソースリスト",
+  "type": "object",
+  "required": [
+    "createdAt",
+    "basedOn",
+    "agents",
+    "scripts",
+    "schemas",
+    "assets",
+    "references",
+    "summary"
+  ],
+  "properties": {
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "選択実行日時"
+    },
+    "basedOn": {
+      "type": "string",
+      "description": "ベースとなったinterview-result.jsonのパス"
+    },
+    "agents": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/resourceEntry" },
+      "description": "使用するエージェントリスト"
+    },
+    "scripts": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/resourceEntry" },
+      "description": "使用するスクリプトリスト"
+    },
+    "schemas": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/resourceEntry" },
+      "description": "使用するスキーマリスト"
+    },
+    "assets": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/resourceEntry" },
+      "description": "使用するアセットリスト"
+    },
+    "references": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/resourceEntry" },
+      "description": "参照するリファレンスリスト"
+    },
+    "summary": {
+      "type": "object",
+      "required": ["totalResources", "byCategory"],
+      "properties": {
+        "totalResources": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "選択されたリソース総数"
+        },
+        "byCategory": {
+          "type": "object",
+          "properties": {
+            "agents": { "type": "integer" },
+            "scripts": { "type": "integer" },
+            "schemas": { "type": "integer" },
+            "assets": { "type": "integer" },
+            "references": { "type": "integer" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "resourceEntry": {
+      "type": "object",
+      "required": ["path", "phase", "reason"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "リソースの相対パス"
+        },
+        "phase": {
+          "type": "string",
+          "description": "使用するPhase（Phase 1, Phase 2, etc.）"
+        },
+        "reason": {
+          "type": "string",
+          "description": "このリソースを選択した理由"
+        }
+      }
+    }
+  }
+}

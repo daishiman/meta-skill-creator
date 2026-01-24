@@ -1,0 +1,88 @@
+# 並列実行テンプレート
+# 用途: 複数スキルの同時実行と結果集約
+
+# 基本情報
+name: "{{parallel_name}}"
+version: "1.0.0"
+description: "{{parallel_description}}"
+
+# 並列実行タスク定義
+tasks:
+  # タスク1
+  - id: task-a
+    skill: "{{task_a_skill}}"
+    args:
+      input: "{{trigger.data}}"
+    priority: 50
+    timeout: 30
+    required: true
+
+  # タスク2
+  - id: task-b
+    skill: "{{task_b_skill}}"
+    args:
+      input: "{{trigger.data}}"
+    priority: 50
+    timeout: 30
+    required: true
+
+  # タスク3（オプショナル）
+  - id: task-c
+    skill: "{{task_c_skill}}"
+    args:
+      input: "{{trigger.data}}"
+    priority: 30
+    timeout: 60
+    required: false  # 失敗しても全体は続行
+
+# 実行設定
+config:
+  # 最大同時実行数
+  max_concurrency: 3
+
+  # 1つ失敗で全停止するか
+  fail_fast: false
+
+  # 全体タイムアウト（秒）
+  timeout: 120
+
+  # リトライ設定
+  retry:
+    enabled: true
+    max_attempts: 2
+    delay: 5000  # ms
+
+# 結果集約設定
+aggregation:
+  # 集約戦略: all | any | first | merge | custom
+  strategy: merge
+
+  # merge時のマージ方法: shallow | deep | array
+  merge_strategy: shallow
+
+  # 失敗結果も含めるか
+  include_failed: false
+
+# 入力定義
+input:
+  schema:
+    type: object
+    properties:
+      data:
+        type: object
+
+# 出力定義
+output:
+  # 集約後の出力形式
+  # strategy: all → 配列
+  # strategy: merge → オブジェクト
+  schema:
+    type: object
+
+# メタデータ
+metadata:
+  created_at: "{{$timestamp}}"
+  created_by: "skill-creator"
+  tags:
+    - parallel
+    - "{{category}}"

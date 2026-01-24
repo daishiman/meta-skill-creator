@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "parallel-execution.json",
+  "title": "Parallel Execution Definition",
+  "description": "並列実行の定義スキーマ",
+  "type": "object",
+  "required": ["name", "tasks"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "並列実行グループ名"
+    },
+    "description": {
+      "type": "string"
+    },
+    "tasks": {
+      "type": "array",
+      "description": "並列実行するタスク",
+      "items": {
+        "$ref": "#/definitions/task"
+      },
+      "minItems": 2
+    },
+    "config": {
+      "$ref": "#/definitions/config"
+    },
+    "aggregation": {
+      "$ref": "#/definitions/aggregation"
+    }
+  },
+  "definitions": {
+    "task": {
+      "type": "object",
+      "required": ["id", "skill"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "タスクID"
+        },
+        "skill": {
+          "type": "string",
+          "description": "実行するスキル"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "priority": {
+          "type": "integer",
+          "description": "優先度（高いほど先に実行）",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 50
+        },
+        "timeout": {
+          "type": "integer",
+          "description": "タスクタイムアウト（秒）"
+        },
+        "required": {
+          "type": "boolean",
+          "description": "必須タスクか（falseなら失敗しても全体は続行）",
+          "default": true
+        }
+      }
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "max_concurrency": {
+          "type": "integer",
+          "description": "最大同時実行数",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        },
+        "fail_fast": {
+          "type": "boolean",
+          "description": "1つ失敗で全停止",
+          "default": false
+        },
+        "timeout": {
+          "type": "integer",
+          "description": "全体タイムアウト（秒）"
+        },
+        "retry": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "max_attempts": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5,
+              "default": 3
+            },
+            "delay": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1000
+            }
+          }
+        }
+      }
+    },
+    "aggregation": {
+      "type": "object",
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": ["all", "any", "first", "merge", "custom"],
+          "description": "結果集約戦略",
+          "default": "all"
+        },
+        "merge_strategy": {
+          "type": "string",
+          "enum": ["shallow", "deep", "array"],
+          "description": "mergeの場合のマージ方法",
+          "default": "shallow"
+        },
+        "custom_aggregator": {
+          "type": "string",
+          "description": "カスタム集約関数（JavaScript）"
+        },
+        "include_failed": {
+          "type": "boolean",
+          "description": "失敗したタスクも結果に含める",
+          "default": false
+        }
+      }
+    }
+  }
+}

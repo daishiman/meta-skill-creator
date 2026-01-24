@@ -156,5 +156,5 @@ node scripts/log_usage.js \
 
 ## 関連リソース
 
-- **作成プロセス**: See [creation-update-process.md](creation-update-process.md) - §6
+- **作成プロセス**: See [creation-process.md](creation-process.md) / [update-process.md](update-process.md)
 - **品質基準**: See [quality-standards.md](quality-standards.md) - §8

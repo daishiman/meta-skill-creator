@@ -38,27 +38,27 @@
 
 ### 9.2 ファイル名
 
-| ファイル種別 | 命名規則                                                  |
-| ------------ | --------------------------------------------------------- |
+| ファイル種別 | 命名規則                                                 |
+| ------------ | -------------------------------------------------------- |
 | スクリプト   | `{{verb}}_{{target}}.py` または `{{verb}}_{{target}}.js` |
-| 参照資料     | `{{topic}}.md` または `{{domain}}.md`                     |
-| アセット     | `{{purpose}}.{{ext}}` または `{{asset-name}}/`            |
+| 参照資料     | `{{topic}}.md` または `{{domain}}.md`                    |
+| アセット     | `{{purpose}}.{{ext}}` または `{{asset-name}}/`           |
 
 **スクリプト例**:
 
 | ファイル名              | 説明               |
 | ----------------------- | ------------------ |
-| `init_skill.js`        | 初期化スクリプト   |
+| `init_skill.js`         | 初期化スクリプト   |
 | `validate_structure.py` | 構造検証スクリプト |
-| `log_usage.js`         | 使用記録スクリプト |
+| `log_usage.js`          | 使用記録スクリプト |
 
 **参照資料例**:
 
 | ファイル名             | 説明                 |
 | ---------------------- | -------------------- |
-| `spec-overview.md`     | 仕様概要             |
+| `core-principles.md`   | 設計原則             |
 | `workflow-patterns.md` | ワークフローパターン |
-| `database-schema.md`   | データベーススキーマ |
+| `skill-structure.md`   | スキル構造           |
 
 **アセット例**:
 
@@ -78,7 +78,7 @@
 
 | 参照対象   | パス形式                 |
 | ---------- | ------------------------ |
-| スクリプト | `scripts/{{file}}.js`   |
+| スクリプト | `scripts/{{file}}.js`    |
 | 参照資料   | `references/{{file}}.md` |
 | アセット   | `assets/{{file}}`        |
 | Task仕様書 | `agents/{{file}}.md`     |
@@ -132,7 +132,7 @@ See ../other-skill/references/shared.md
 ```markdown
 <!-- ✓ 相対パス -->
 
-See [references/spec-overview.md](references/spec-overview.md)
+See [references/skill-structure.md](references/skill-structure.md)
 
 <!-- ✓ 同一スキル内の参照 -->
 

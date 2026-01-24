@@ -1,0 +1,302 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "setup-guide.json",
+  "title": "Setup Guide Definition",
+  "description": "セットアップガイドの定義スキーマ",
+  "type": "object",
+  "required": ["title", "goal", "steps"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "ガイドタイトル"
+    },
+    "goal": {
+      "type": "string",
+      "description": "このガイドを完了すると何ができるようになるか"
+    },
+    "estimated_time": {
+      "type": "string",
+      "description": "想定所要時間",
+      "examples": ["10分", "30分", "1時間"]
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["beginner", "intermediate", "advanced"],
+      "description": "難易度"
+    },
+    "prerequisites": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "type": "array",
+          "description": "必要なアカウント",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "signup_url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "tools": {
+          "type": "array",
+          "description": "必要なツール",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              },
+              "install_url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "check_command": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "permissions": {
+          "type": "array",
+          "description": "必要な権限",
+          "items": {
+            "type": "string"
+          }
+        },
+        "knowledge": {
+          "type": "array",
+          "description": "前提知識",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/step"
+      },
+      "minItems": 1
+    },
+    "configuration_summary": {
+      "type": "object",
+      "description": "設定値サマリー",
+      "properties": {
+        "table": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "value_placeholder": {
+                "type": "string"
+              },
+              "obtained_at": {
+                "type": "string",
+                "description": "どのステップで取得するか"
+              },
+              "usage": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "verification": {
+      "$ref": "#/definitions/verification"
+    },
+    "next_steps": {
+      "type": "array",
+      "description": "次に行うこと",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    "references": {
+      "type": "array",
+      "description": "参照ドキュメント",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "last_verified": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "step": {
+      "type": "object",
+      "required": ["number", "title", "purpose", "actions"],
+      "properties": {
+        "number": {
+          "type": "integer",
+          "description": "ステップ番号"
+        },
+        "title": {
+          "type": "string",
+          "description": "ステップタイトル"
+        },
+        "purpose": {
+          "type": "string",
+          "description": "このステップの目的（なぜ必要か）"
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["browser", "terminal", "editor", "app"]
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "navigation_path": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "actions": {
+          "type": "array",
+          "description": "具体的な操作",
+          "items": {
+            "type": "object",
+            "properties": {
+              "instruction": {
+                "type": "string"
+              },
+              "detail": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              },
+              "screenshot_ref": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "expected_result": {
+          "type": "string",
+          "description": "期待される結果"
+        },
+        "verification": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "type": "string",
+              "description": "確認方法"
+            },
+            "success_indicator": {
+              "type": "string",
+              "description": "成功の指標"
+            }
+          }
+        },
+        "troubleshooting": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "symptom": {
+                "type": "string"
+              },
+              "cause": {
+                "type": "string"
+              },
+              "solution": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "tips": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "default": "動作確認"
+        },
+        "description": {
+          "type": "string"
+        },
+        "tests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "command": {
+                "type": "string"
+              },
+              "expected_output": {
+                "type": "string"
+              },
+              "success_criteria": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

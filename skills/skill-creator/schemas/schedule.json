@@ -1,0 +1,182 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "schedule.json",
+  "title": "Schedule Definition",
+  "description": "スケジュール実行の定義スキーマ",
+  "type": "object",
+  "required": ["name", "skill", "schedule"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "スケジュール名",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "description": {
+      "type": "string"
+    },
+    "skill": {
+      "type": "string",
+      "description": "実行するスキル名"
+    },
+    "args": {
+      "type": "object",
+      "description": "スキルに渡す引数",
+      "additionalProperties": true
+    },
+    "schedule": {
+      "$ref": "#/definitions/scheduleConfig"
+    },
+    "execution": {
+      "$ref": "#/definitions/executionConfig"
+    },
+    "notification": {
+      "$ref": "#/definitions/notificationConfig"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "definitions": {
+    "scheduleConfig": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["cron", "interval", "once"],
+          "default": "cron"
+        },
+        "cron": {
+          "type": "string",
+          "description": "cron式（分 時 日 月 曜日）",
+          "examples": [
+            "0 9 * * *",
+            "0 0 * * 0",
+            "*/15 * * * *"
+          ]
+        },
+        "interval": {
+          "type": "object",
+          "description": "interval型の場合",
+          "properties": {
+            "value": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "unit": {
+              "type": "string",
+              "enum": ["seconds", "minutes", "hours", "days"]
+            }
+          }
+        },
+        "at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "once型の場合の実行日時"
+        },
+        "timezone": {
+          "type": "string",
+          "description": "タイムゾーン",
+          "default": "Asia/Tokyo",
+          "examples": ["Asia/Tokyo", "UTC", "America/New_York"]
+        },
+        "start_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "スケジュール開始日時"
+        },
+        "end_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "スケジュール終了日時"
+        }
+      }
+    },
+    "executionConfig": {
+      "type": "object",
+      "properties": {
+        "timeout": {
+          "type": "integer",
+          "description": "実行タイムアウト（秒）",
+          "minimum": 1,
+          "default": 3600
+        },
+        "retry": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "max_attempts": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10,
+              "default": 3
+            },
+            "delay": {
+              "type": "integer",
+              "description": "リトライ間隔（秒）",
+              "minimum": 1,
+              "default": 60
+            }
+          }
+        },
+        "concurrency": {
+          "type": "string",
+          "enum": ["allow", "skip", "queue"],
+          "description": "前回実行が終わっていない場合の動作",
+          "default": "skip"
+        },
+        "working_directory": {
+          "type": "string",
+          "description": "実行時のカレントディレクトリ"
+        },
+        "environment": {
+          "type": "object",
+          "description": "環境変数",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "notificationConfig": {
+      "type": "object",
+      "properties": {
+        "on_success": {
+          "type": "boolean",
+          "default": false
+        },
+        "on_failure": {
+          "type": "boolean",
+          "default": true
+        },
+        "on_start": {
+          "type": "boolean",
+          "default": false
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/notificationChannel"
+          }
+        }
+      }
+    },
+    "notificationChannel": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["slack", "email", "webhook", "desktop"]
+        },
+        "config": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}

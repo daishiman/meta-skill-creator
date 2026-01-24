@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "conditional-flow.json",
+  "title": "Conditional Flow Definition",
+  "description": "条件分岐フローの定義スキーマ",
+  "type": "object",
+  "required": ["name", "conditions"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "条件フロー名"
+    },
+    "description": {
+      "type": "string"
+    },
+    "input": {
+      "type": "object",
+      "description": "条件評価に使用する入力",
+      "additionalProperties": true
+    },
+    "conditions": {
+      "type": "array",
+      "description": "条件分岐定義",
+      "items": {
+        "$ref": "#/definitions/conditionBranch"
+      },
+      "minItems": 1
+    },
+    "default": {
+      "$ref": "#/definitions/action",
+      "description": "どの条件にも一致しない場合のアクション"
+    }
+  },
+  "definitions": {
+    "conditionBranch": {
+      "type": "object",
+      "required": ["condition", "action"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "分岐ID"
+        },
+        "condition": {
+          "$ref": "#/definitions/conditionExpression"
+        },
+        "action": {
+          "$ref": "#/definitions/action"
+        }
+      }
+    },
+    "conditionExpression": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "単純な式（例: {{status}} == 'success'）"
+        },
+        {
+          "type": "object",
+          "description": "複合条件",
+          "properties": {
+            "operator": {
+              "type": "string",
+              "enum": ["and", "or", "not"]
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/conditionExpression"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "description": "比較条件",
+          "properties": {
+            "left": {
+              "type": "string",
+              "description": "左辺（変数参照）"
+            },
+            "operator": {
+              "type": "string",
+              "enum": ["==", "!=", ">", "<", ">=", "<=", "contains", "startsWith", "endsWith", "matches", "in"]
+            },
+            "right": {
+              "description": "右辺（値または変数参照）"
+            }
+          },
+          "required": ["left", "operator", "right"]
+        }
+      ]
+    },
+    "action": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["execute_skill", "goto_step", "return", "abort", "retry", "notify"]
+        },
+        "skill": {
+          "type": "string",
+          "description": "execute_skillの場合のスキル名"
+        },
+        "args": {
+          "type": "object",
+          "description": "スキルに渡す引数",
+          "additionalProperties": true
+        },
+        "step_id": {
+          "type": "string",
+          "description": "goto_stepの場合のステップID"
+        },
+        "return_value": {
+          "description": "returnの場合の戻り値"
+        },
+        "message": {
+          "type": "string",
+          "description": "notifyの場合のメッセージ"
+        }
+      }
+    }
+  }
+}

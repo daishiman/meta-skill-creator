@@ -1,0 +1,192 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "custom-script-design.json",
+  "title": "Custom Script Design",
+  "description": "カスタムスクリプト設計の構造化データスキーマ",
+  "type": "object",
+  "required": ["name", "purpose", "runtime", "inputs", "outputs", "structure"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "スクリプト名（snake_case）",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "purpose": {
+      "type": "string",
+      "description": "スクリプトの目的"
+    },
+    "runtime": {
+      "type": "string",
+      "enum": ["node", "python", "bash", "bun", "deno"],
+      "description": "実行ランタイム"
+    },
+    "inputs": {
+      "type": "array",
+      "description": "入力パラメータ",
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "description"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "入力名"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["string", "number", "boolean", "array", "object", "file"],
+            "description": "入力の型"
+          },
+          "description": {
+            "type": "string",
+            "description": "入力の説明"
+          },
+          "required": {
+            "type": "boolean",
+            "default": true,
+            "description": "必須かどうか"
+          },
+          "default": {
+            "description": "デフォルト値"
+          }
+        }
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "description": "出力",
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "description"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "出力名"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["string", "number", "boolean", "array", "object", "file"],
+            "description": "出力の型"
+          },
+          "description": {
+            "type": "string",
+            "description": "出力の説明"
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "description": "依存パッケージ",
+      "items": {
+        "type": "object",
+        "required": ["name", "version"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "パッケージ名"
+          },
+          "version": {
+            "type": "string",
+            "description": "バージョン"
+          },
+          "purpose": {
+            "type": "string",
+            "description": "使用目的"
+          }
+        }
+      }
+    },
+    "structure": {
+      "type": "object",
+      "description": "コード構造",
+      "required": ["functions", "mainFlow"],
+      "properties": {
+        "functions": {
+          "type": "array",
+          "description": "関数定義",
+          "items": {
+            "type": "object",
+            "required": ["name", "purpose"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "関数名"
+              },
+              "purpose": {
+                "type": "string",
+                "description": "関数の目的"
+              },
+              "params": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "パラメータ"
+              },
+              "returns": {
+                "type": "string",
+                "description": "戻り値の型"
+              }
+            }
+          }
+        },
+        "mainFlow": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "処理フローのステップ"
+        }
+      }
+    },
+    "errorHandling": {
+      "type": "object",
+      "description": "エラーハンドリング設定",
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": ["throw", "return", "log", "retry"],
+          "default": "throw",
+          "description": "エラー処理戦略"
+        },
+        "retryCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10,
+          "default": 0,
+          "description": "リトライ回数"
+        },
+        "fallback": {
+          "type": "string",
+          "description": "フォールバック処理"
+        }
+      }
+    },
+    "variables": {
+      "type": "array",
+      "description": "テンプレート変数",
+      "items": {
+        "type": "object",
+        "required": ["name", "placeholder", "type"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "変数名"
+          },
+          "placeholder": {
+            "type": "string",
+            "description": "プレースホルダー（例: {{変数名}}）"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["string", "number", "boolean"],
+            "description": "変数の型"
+          },
+          "description": {
+            "type": "string",
+            "description": "変数の説明"
+          },
+          "default": {
+            "description": "デフォルト値"
+          }
+        }
+      }
+    }
+  }
+}

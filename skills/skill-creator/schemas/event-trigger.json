@@ -1,0 +1,236 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "event-trigger.json",
+  "title": "Event Trigger Definition",
+  "description": "イベントトリガーの定義スキーマ",
+  "type": "object",
+  "required": ["name", "trigger", "skill"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "トリガー名",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "description": {
+      "type": "string"
+    },
+    "trigger": {
+      "$ref": "#/definitions/triggerConfig"
+    },
+    "skill": {
+      "type": "string",
+      "description": "トリガー時に実行するスキル"
+    },
+    "args_mapping": {
+      "type": "object",
+      "description": "トリガーデータからスキル引数へのマッピング",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "filter": {
+      "$ref": "#/definitions/filterConfig"
+    },
+    "throttle": {
+      "$ref": "#/definitions/throttleConfig"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "definitions": {
+    "triggerConfig": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["webhook", "file_watch", "git", "http_poll", "websocket", "manual"]
+        },
+        "webhook": {
+          "$ref": "#/definitions/webhookConfig"
+        },
+        "file_watch": {
+          "$ref": "#/definitions/fileWatchConfig"
+        },
+        "git": {
+          "$ref": "#/definitions/gitConfig"
+        },
+        "http_poll": {
+          "$ref": "#/definitions/httpPollConfig"
+        },
+        "websocket": {
+          "$ref": "#/definitions/websocketConfig"
+        }
+      }
+    },
+    "webhookConfig": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Webhookエンドポイントパス"
+        },
+        "method": {
+          "type": "string",
+          "enum": ["POST", "PUT", "PATCH"],
+          "default": "POST"
+        },
+        "secret": {
+          "type": "string",
+          "description": "Webhook署名検証用シークレット（環境変数参照）"
+        },
+        "headers": {
+          "type": "object",
+          "description": "必須ヘッダー",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "fileWatchConfig": {
+      "type": "object",
+      "required": ["paths"],
+      "properties": {
+        "paths": {
+          "type": "array",
+          "description": "監視パス（glob対応）",
+          "items": {
+            "type": "string"
+          }
+        },
+        "events": {
+          "type": "array",
+          "description": "監視イベント",
+          "items": {
+            "type": "string",
+            "enum": ["create", "modify", "delete", "rename", "all"]
+          },
+          "default": ["create", "modify"]
+        },
+        "ignore": {
+          "type": "array",
+          "description": "無視するパターン",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recursive": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "gitConfig": {
+      "type": "object",
+      "properties": {
+        "repository": {
+          "type": "string",
+          "description": "リポジトリパス"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["push", "pull_request", "issue", "release", "tag"]
+          }
+        },
+        "branches": {
+          "type": "array",
+          "description": "対象ブランチ（空なら全て）",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "httpPollConfig": {
+      "type": "object",
+      "required": ["url", "interval"],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "method": {
+          "type": "string",
+          "enum": ["GET", "POST"],
+          "default": "GET"
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "interval": {
+          "type": "integer",
+          "description": "ポーリング間隔（秒）",
+          "minimum": 10
+        },
+        "check_field": {
+          "type": "string",
+          "description": "変更検知用フィールド（JSONPath）"
+        }
+      }
+    },
+    "websocketConfig": {
+      "type": "object",
+      "required": ["url"],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "message_filter": {
+          "type": "string",
+          "description": "メッセージフィルター（JSONPath式）"
+        },
+        "reconnect": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "filterConfig": {
+      "type": "object",
+      "properties": {
+        "expression": {
+          "type": "string",
+          "description": "フィルター式（トリガーデータを評価）"
+        },
+        "fields": {
+          "type": "object",
+          "description": "フィールド単位のフィルター",
+          "additionalProperties": true
+        }
+      }
+    },
+    "throttleConfig": {
+      "type": "object",
+      "properties": {
+        "debounce": {
+          "type": "integer",
+          "description": "デバウンス時間（ミリ秒）",
+          "minimum": 0,
+          "default": 0
+        },
+        "rate_limit": {
+          "type": "object",
+          "properties": {
+            "max_executions": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "window": {
+              "type": "integer",
+              "description": "ウィンドウ期間（秒）"
+            }
+          }
+        }
+      }
+    }
+  }
+}

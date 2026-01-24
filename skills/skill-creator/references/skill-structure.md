@@ -240,6 +240,6 @@ description: |
 
 ## 関連リソース
 
-- **仕様概要**: See [spec-overview.md](spec-overview.md) - §1-2
+- **設計原則**: See [core-principles.md](core-principles.md)
 - **ワークフロー**: See [workflow-patterns.md](workflow-patterns.md) - §4
 - **命名規則**: See [naming-conventions.md](naming-conventions.md) - §9-10

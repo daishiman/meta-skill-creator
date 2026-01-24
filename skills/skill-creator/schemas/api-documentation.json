@@ -1,0 +1,329 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "api-documentation.json",
+  "title": "API Documentation Definition",
+  "description": "API連携ドキュメントの定義スキーマ",
+  "type": "object",
+  "required": ["name", "api_provider", "sections"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "ドキュメント名"
+    },
+    "api_provider": {
+      "type": "string",
+      "description": "APIプロバイダー名",
+      "examples": ["Google Cloud", "AWS", "Stripe", "OpenAI"]
+    },
+    "api_name": {
+      "type": "string",
+      "description": "API名",
+      "examples": ["Gmail API", "S3", "Payments API"]
+    },
+    "version": {
+      "type": "string",
+      "description": "ドキュメントバージョン"
+    },
+    "last_verified": {
+      "type": "string",
+      "format": "date",
+      "description": "最終検証日"
+    },
+    "official_docs_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "公式ドキュメントURL"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/section"
+      },
+      "minItems": 1
+    },
+    "credentials": {
+      "$ref": "#/definitions/credentials"
+    },
+    "environment_variables": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/envVar"
+      }
+    },
+    "verification": {
+      "$ref": "#/definitions/verification"
+    },
+    "troubleshooting": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/troubleshootingItem"
+      }
+    }
+  },
+  "definitions": {
+    "section": {
+      "type": "object",
+      "required": ["title", "purpose", "steps"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "セクションID"
+        },
+        "title": {
+          "type": "string",
+          "description": "セクションタイトル"
+        },
+        "purpose": {
+          "type": "string",
+          "description": "このセクションの目的（なぜこれが必要か）"
+        },
+        "prerequisites": {
+          "type": "array",
+          "description": "前提条件",
+          "items": {
+            "type": "string"
+          }
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/step"
+          },
+          "minItems": 1
+        },
+        "output": {
+          "type": "object",
+          "description": "このセクション完了後に得られるもの",
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "usage": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "required": ["number", "action", "location"],
+      "properties": {
+        "number": {
+          "type": "integer",
+          "description": "ステップ番号"
+        },
+        "action": {
+          "type": "string",
+          "description": "実行するアクション"
+        },
+        "purpose": {
+          "type": "string",
+          "description": "なぜこの操作が必要か"
+        },
+        "location": {
+          "type": "object",
+          "description": "操作を行う場所",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["url", "cli", "file", "ui"]
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "path": {
+              "type": "string"
+            },
+            "command": {
+              "type": "string"
+            },
+            "navigation": {
+              "type": "array",
+              "description": "UI内のナビゲーションパス",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "instructions": {
+          "type": "array",
+          "description": "詳細な操作手順",
+          "items": {
+            "type": "string"
+          }
+        },
+        "input_values": {
+          "type": "array",
+          "description": "入力する値",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "expected_result": {
+          "type": "string",
+          "description": "期待される結果"
+        },
+        "verification": {
+          "type": "string",
+          "description": "成功確認方法"
+        },
+        "screenshot_ref": {
+          "type": "string",
+          "description": "参照スクリーンショット"
+        },
+        "warning": {
+          "type": "string",
+          "description": "注意事項"
+        },
+        "tip": {
+          "type": "string",
+          "description": "便利なヒント"
+        }
+      }
+    },
+    "credentials": {
+      "type": "object",
+      "properties": {
+        "auth_type": {
+          "type": "string",
+          "enum": ["api_key", "oauth2", "service_account", "bearer_token", "basic_auth"],
+          "description": "認証タイプ"
+        },
+        "required_credentials": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "where_to_get": {
+                "type": "string"
+              },
+              "format": {
+                "type": "string"
+              },
+              "example": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "storage_recommendations": {
+          "type": "string",
+          "description": "認証情報の安全な保存方法"
+        }
+      }
+    },
+    "envVar": {
+      "type": "object",
+      "required": ["name", "description"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "環境変数名"
+        },
+        "description": {
+          "type": "string",
+          "description": "説明"
+        },
+        "required": {
+          "type": "boolean",
+          "default": true
+        },
+        "format": {
+          "type": "string",
+          "description": "値の形式"
+        },
+        "example": {
+          "type": "string",
+          "description": "例（実際の値は含めない）"
+        },
+        "where_to_get": {
+          "type": "string",
+          "description": "取得場所"
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "動作確認の説明"
+        },
+        "methods": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["curl", "sdk", "ui", "script"]
+              },
+              "command": {
+                "type": "string"
+              },
+              "expected_output": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "troubleshootingItem": {
+      "type": "object",
+      "required": ["problem", "cause", "solution"],
+      "properties": {
+        "problem": {
+          "type": "string",
+          "description": "問題の症状"
+        },
+        "cause": {
+          "type": "string",
+          "description": "原因"
+        },
+        "solution": {
+          "type": "string",
+          "description": "解決方法"
+        },
+        "prevention": {
+          "type": "string",
+          "description": "予防策"
+        }
+      }
+    }
+  }
+}

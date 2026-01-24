@@ -1,0 +1,133 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "skill-chain.json",
+  "title": "Skill Chain Definition",
+  "description": "スキルチェーン（連鎖実行）の定義スキーマ",
+  "type": "object",
+  "required": ["name", "steps"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "チェーン名",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "description": {
+      "type": "string",
+      "description": "チェーンの説明"
+    },
+    "steps": {
+      "type": "array",
+      "description": "実行ステップ",
+      "items": {
+        "$ref": "#/definitions/step"
+      },
+      "minItems": 2
+    },
+    "input": {
+      "$ref": "#/definitions/inputOutput"
+    },
+    "output": {
+      "$ref": "#/definitions/inputOutput"
+    },
+    "context": {
+      "type": "object",
+      "description": "チェーン全体で共有するコンテキスト",
+      "additionalProperties": true
+    },
+    "error_handling": {
+      "$ref": "#/definitions/errorHandling"
+    }
+  },
+  "definitions": {
+    "step": {
+      "type": "object",
+      "required": ["id", "skill"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ステップID（一意）"
+        },
+        "skill": {
+          "type": "string",
+          "description": "実行するスキル名"
+        },
+        "input_mapping": {
+          "type": "object",
+          "description": "入力マッピング（前ステップの出力を参照）",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "output_mapping": {
+          "type": "object",
+          "description": "出力マッピング（次ステップへ渡す）",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "condition": {
+          "$ref": "#/definitions/condition"
+        },
+        "transform": {
+          "type": "string",
+          "description": "出力変換式（jq式またはJavaScript式）"
+        }
+      }
+    },
+    "condition": {
+      "type": "object",
+      "properties": {
+        "expression": {
+          "type": "string",
+          "description": "条件式"
+        },
+        "on_true": {
+          "type": "string",
+          "description": "trueの場合の次ステップID"
+        },
+        "on_false": {
+          "type": "string",
+          "description": "falseの場合の次ステップID（省略時はスキップ）"
+        }
+      }
+    },
+    "inputOutput": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "type": "object",
+          "description": "JSON Schema"
+        },
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "defaults": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "errorHandling": {
+      "type": "object",
+      "properties": {
+        "on_step_error": {
+          "type": "string",
+          "enum": ["continue", "abort", "retry", "fallback"],
+          "default": "abort"
+        },
+        "max_retries": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        },
+        "fallback_step": {
+          "type": "string",
+          "description": "エラー時に実行するステップID"
+        }
+      }
+    }
+  }
+}

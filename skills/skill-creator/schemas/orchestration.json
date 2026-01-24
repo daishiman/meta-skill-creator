@@ -1,0 +1,281 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "orchestration.json",
+  "title": "Orchestration Definition",
+  "description": "スキルオーケストレーションの定義スキーマ",
+  "type": "object",
+  "required": ["name", "version", "flow"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "オーケストレーション名",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "version": {
+      "type": "string",
+      "description": "セマンティックバージョン",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string",
+      "description": "オーケストレーションの説明"
+    },
+    "flow": {
+      "type": "array",
+      "description": "実行フロー定義",
+      "items": {
+        "$ref": "#/definitions/flowStep"
+      },
+      "minItems": 1
+    },
+    "parallel": {
+      "type": "array",
+      "description": "並列実行グループ",
+      "items": {
+        "$ref": "#/definitions/parallelGroup"
+      }
+    },
+    "on_error": {
+      "$ref": "#/definitions/errorHandling"
+    },
+    "schedule": {
+      "$ref": "#/definitions/schedule"
+    },
+    "triggers": {
+      "type": "array",
+      "description": "イベントトリガー",
+      "items": {
+        "$ref": "#/definitions/trigger"
+      }
+    },
+    "context": {
+      "type": "object",
+      "description": "共有コンテキスト変数",
+      "additionalProperties": true
+    },
+    "timeout": {
+      "type": "integer",
+      "description": "全体タイムアウト（秒）",
+      "minimum": 1,
+      "default": 3600
+    }
+  },
+  "definitions": {
+    "flowStep": {
+      "type": "object",
+      "required": ["id", "skill"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ステップID",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "skill": {
+          "type": "string",
+          "description": "実行するスキル名"
+        },
+        "args": {
+          "type": "object",
+          "description": "スキルに渡す引数",
+          "additionalProperties": true
+        },
+        "depends_on": {
+          "type": "array",
+          "description": "依存するステップID",
+          "items": {
+            "type": "string"
+          }
+        },
+        "condition": {
+          "type": "string",
+          "description": "実行条件（式）"
+        },
+        "timeout": {
+          "type": "integer",
+          "description": "ステップタイムアウト（秒）",
+          "minimum": 1
+        },
+        "retry": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10,
+              "default": 0
+            },
+            "delay": {
+              "type": "integer",
+              "description": "リトライ間隔（秒）",
+              "minimum": 1,
+              "default": 5
+            },
+            "backoff": {
+              "type": "string",
+              "enum": ["fixed", "exponential"],
+              "default": "fixed"
+            }
+          }
+        },
+        "on_success": {
+          "type": "string",
+          "description": "成功時の次ステップID"
+        },
+        "on_failure": {
+          "type": "string",
+          "description": "失敗時の次ステップID"
+        }
+      }
+    },
+    "parallelGroup": {
+      "type": "object",
+      "required": ["id", "skills"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "並列グループID"
+        },
+        "skills": {
+          "type": "array",
+          "description": "並列実行するスキル",
+          "items": {
+            "type": "object",
+            "required": ["skill"],
+            "properties": {
+              "skill": {
+                "type": "string"
+              },
+              "args": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          },
+          "minItems": 2
+        },
+        "aggregate": {
+          "type": "string",
+          "enum": ["merge", "first", "all", "any"],
+          "description": "結果集約方法",
+          "default": "all"
+        },
+        "max_concurrency": {
+          "type": "integer",
+          "description": "最大同時実行数",
+          "minimum": 1,
+          "default": 10
+        },
+        "fail_fast": {
+          "type": "boolean",
+          "description": "1つ失敗したら全て停止",
+          "default": false
+        }
+      }
+    },
+    "errorHandling": {
+      "type": "object",
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": ["retry", "skip", "abort", "fallback"],
+          "default": "abort"
+        },
+        "retry_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10,
+          "default": 3
+        },
+        "retry_delay": {
+          "type": "integer",
+          "description": "リトライ間隔（秒）",
+          "minimum": 1,
+          "default": 5
+        },
+        "fallback_skill": {
+          "type": "string",
+          "description": "フォールバック用スキル"
+        },
+        "notify": {
+          "type": "object",
+          "properties": {
+            "on_error": {
+              "type": "boolean",
+              "default": true
+            },
+            "on_success": {
+              "type": "boolean",
+              "default": false
+            },
+            "channels": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["slack", "email", "webhook"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "schedule": {
+      "type": "object",
+      "properties": {
+        "cron": {
+          "type": "string",
+          "description": "cron式（分 時 日 月 曜日）"
+        },
+        "timezone": {
+          "type": "string",
+          "description": "タイムゾーン",
+          "default": "Asia/Tokyo"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "start_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "end_date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "trigger": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["webhook", "file_watch", "git_push", "manual", "api"]
+        },
+        "path": {
+          "type": "string",
+          "description": "Webhookパスまたは監視パス"
+        },
+        "events": {
+          "type": "array",
+          "description": "トリガーイベント",
+          "items": {
+            "type": "string",
+            "enum": ["create", "modify", "delete", "push", "pr", "issue"]
+          }
+        },
+        "filter": {
+          "type": "object",
+          "description": "フィルター条件",
+          "additionalProperties": true
+        },
+        "debounce": {
+          "type": "integer",
+          "description": "デバウンス時間（秒）",
+          "minimum": 0,
+          "default": 0
+        }
+      }
+    }
+  }
+}

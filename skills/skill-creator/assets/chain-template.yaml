@@ -1,0 +1,74 @@
+# スキルチェーンテンプレート
+# 用途: 複数スキルの連鎖実行（A→B→C）を定義
+
+# 基本情報
+name: "{{chain_name}}"
+version: "1.0.0"
+description: "{{chain_description}}"
+
+# 実行フロー定義
+steps:
+  # Step 1: データ取得
+  - id: step1
+    skill: "{{step1_skill}}"
+    args:
+      # トリガーデータを参照
+      input: "{{trigger.data}}"
+    timeout: 30
+
+  # Step 2: データ処理
+  - id: step2
+    skill: "{{step2_skill}}"
+    args:
+      # 前ステップの出力を参照
+      data: "{{step1.output}}"
+    depends_on: [step1]
+    timeout: 60
+
+  # Step 3: 結果出力
+  - id: step3
+    skill: "{{step3_skill}}"
+    args:
+      result: "{{step2.output}}"
+    depends_on: [step2]
+    timeout: 30
+
+# 入力定義
+input:
+  schema:
+    type: object
+    properties:
+      data:
+        type: object
+        description: "入力データ"
+    required: [data]
+
+# 出力定義
+output:
+  schema:
+    type: object
+    properties:
+      result:
+        type: object
+        description: "処理結果"
+
+# 共有コンテキスト
+context:
+  # チェーン全体で共有する変数
+  config:
+    timeout: 120
+    retry_enabled: true
+
+# エラーハンドリング
+error_handling:
+  on_step_error: abort  # abort | continue | retry | fallback
+  max_retries: 3
+  fallback_step: null
+
+# メタデータ
+metadata:
+  created_at: "{{$timestamp}}"
+  created_by: "skill-creator"
+  tags:
+    - chain
+    - "{{category}}"

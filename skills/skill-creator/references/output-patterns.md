@@ -164,4 +164,4 @@ SKILL.md での参照：
 ## 関連リソース
 
 - **ワークフロー**: See [workflow-patterns.md](workflow-patterns.md) - §4
-- **作成プロセス**: See [creation-update-process.md](creation-update-process.md) - §6
+- **作成プロセス**: See [creation-process.md](creation-process.md) / [update-process.md](update-process.md)
