@@ -56,7 +56,14 @@ ln -sf $(pwd) ~/.claude/plugins/marketplaces/meta-skill-creator
 「スキル作成」
 ```
 
-Meta Skill Creatorが応答すれば成功です。
+インタビューが開始されれば成功です。
+
+```
+Claude: 何を達成したいですか？
+        1. 日常タスクの自動化
+        2. 開発ワークフローの改善
+        ...
+```
 
 ---
 
@@ -79,15 +86,27 @@ Claude Codeでは、スキルの配置場所が用途によって異なります
 skills/skill-creator/
 ├── SKILL.md           # スキル定義（必須）
 ├── agents/            # サブエージェント定義
-├── assets/            # テンプレート・素材
+│   ├── interview-user.md
+│   ├── select-resources.md
+│   └── ...
 ├── references/        # 参照ドキュメント
+│   ├── resource-map.md
+│   ├── interview-guide.md
+│   └── ...
+├── scripts/           # 自動化スクリプト
+│   ├── validate_all.js
+│   ├── quick_validate.js
+│   └── ...
 ├── schemas/           # JSONスキーマ
-└── scripts/           # 自動化スクリプト
+│   ├── interview-result.json
+│   └── ...
+└── assets/            # テンプレート・素材
+    └── ...
 ```
 
 - `SKILL.md` - 唯一の必須ファイル。YAMLフロントマターとMarkdown指示で構成
-- `agents/` - サブタスク用のエージェント定義
-- `scripts/` - 決定論的処理を行う自動化スクリプト
+- `agents/` - インタビュー、分析、生成などのサブタスク用エージェント
+- `scripts/` - バリデーション、生成などの決定論的処理
 - `references/` - Progressive Disclosureで必要時に読み込む参照情報
 
 ---
@@ -108,6 +127,52 @@ skills/skill-creator/
 
 ---
 
+## インストール後の使い方
+
+インストールが完了したら、以下のように使用できます：
+
+### 基本的な流れ
+
+1. **スキル作成を依頼** - Claude Codeに話しかけるだけ
+2. **インタビューに回答** - 8段階の質問に答える（選択肢から選ぶだけ）
+3. **スキル生成** - 回答に基づいて最適なスキルが自動生成される
+
+### 使用例
+
+```
+「新しいスキルを作成したい」
+「GitHubのPRを自動でSlackに通知するスキルを作って」
+「毎日のレポート作成を自動化したい」
+```
+
+詳細な使い方は[USAGE.md](USAGE.md)を参照してください。
+
+---
+
 ## トラブルシューティング
 
 問題が発生した場合は、[TROUBLESHOOTING.md](TROUBLESHOOTING.md)を参照してください。
+
+### よくある問題
+
+**Q: プラグインが認識されない**
+
+```bash
+# プラグイン一覧を確認
+/plugin list
+
+# 再インストール
+/plugin uninstall daishiman-skill-creator
+/plugin install daishiman-skill-creator
+```
+
+**Q: Node.jsバージョンが古い**
+
+```bash
+# バージョン確認
+node --version
+
+# v18以上にアップデート
+nvm install 18
+nvm use 18
+```
