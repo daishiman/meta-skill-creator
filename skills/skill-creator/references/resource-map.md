@@ -24,7 +24,7 @@
 | [improve-prompt.md](.claude/skills/skill-creator/agents/improve-prompt.md)                         | improve-promptモード時         | プロンプト品質改善             |
 | [analyze-script-requirement.md](.claude/skills/skill-creator/agents/analyze-script-requirement.md) | スクリプト要件分析時           | スクリプト要件の抽出           |
 | [design-script.md](.claude/skills/skill-creator/agents/design-script.md)                           | スクリプト設計時               | スクリプト設計仕様作成         |
-| [design-custom-script.md](.claude/skills/skill-creator/agents/design-custom-script.md)             | カスタムスクリプト時           | 24タイプ外の独自スクリプト設計 |
+| [design-custom-script.md](.claude/skills/skill-creator/agents/design-custom-script.md)             | カスタムスクリプト時           | 定義済みタイプ外の独自スクリプト設計 |
 | [generate-code.md](.claude/skills/skill-creator/agents/generate-code.md)                           | コード生成時                   | テンプレートからコード生成     |
 | [design-variables.md](.claude/skills/skill-creator/agents/design-variables.md)                     | 変数設計時                     | テンプレート変数定義           |
 | [analyze-feedback.md](.claude/skills/skill-creator/agents/analyze-feedback.md)                     | 改善分析時                     | フィードバックデータ解釈       |
@@ -57,7 +57,8 @@
 | [codex-best-practices.md](.claude/skills/skill-creator/references/codex-best-practices.md)         | Codex利用時                | Codex活用ベストプラクティス      |
 | [creation-process.md](.claude/skills/skill-creator/references/creation-process.md)                 | createモード時             | スキル作成プロセス詳細           |
 | [update-process.md](.claude/skills/skill-creator/references/update-process.md)                     | updateモード時             | スキル更新プロセス詳細           |
-| [script-types-catalog.md](.claude/skills/skill-creator/references/script-types-catalog.md)         | スクリプトタイプ選択時     | 24タイプ詳細カタログ             |
+| [script-types-catalog.md](.claude/skills/skill-creator/references/script-types-catalog.md)         | スクリプトタイプ選択時     | スクリプトタイプ詳細カタログ     |
+| [script-llm-patterns.md](.claude/skills/skill-creator/references/script-llm-patterns.md)           | 処理役割分担設計時         | スクリプト/LLMパターンガイド     |
 | [runtime-guide.md](.claude/skills/skill-creator/references/runtime-guide.md)                       | ランタイム設定時           | node/python/bash別ガイド         |
 | [variable-template-guide.md](.claude/skills/skill-creator/references/variable-template-guide.md)   | 変数設計時                 | テンプレート構文ガイド           |
 | [api-integration-patterns.md](.claude/skills/skill-creator/references/api-integration-patterns.md) | API系スクリプト時          | API統合パターン集                |
@@ -156,7 +157,7 @@
 | [evals-template.json](.claude/skills/skill-creator/assets/evals-template.json)   | スキル作成時 | EVALS.jsonの初期テンプレート             |
 | [patterns-template.md](.claude/skills/skill-creator/assets/patterns-template.md) | スキル作成時 | references/patterns.mdの初期テンプレート |
 
-### タイプ別テンプレート（25タイプ）
+### タイプ別テンプレート
 
 スクリプトタイプ選択後、該当タイプのみ読み込む。
 
@@ -292,7 +293,7 @@ JSON Schema形式。[validate_schema.js](.claude/skills/skill-creator/scripts/va
 | Schema                                                                                      | 読み込み条件             | 用途                   |
 | ------------------------------------------------------------------------------------------- | ------------------------ | ---------------------- |
 | [script-definition.json](.claude/skills/skill-creator/schemas/script-definition.json)       | スクリプト設計時         | 定義の検証             |
-| [script-type.json](.claude/skills/skill-creator/schemas/script-type.json)                   | タイプ選択時             | 24タイプの検証         |
+| [script-type.json](.claude/skills/skill-creator/schemas/script-type.json)                   | タイプ選択時             | 定義済みタイプの検証   |
 | [custom-script-design.json](.claude/skills/skill-creator/schemas/custom-script-design.json) | カスタムスクリプト設計時 | カスタム設計の検証     |
 | [runtime-config.json](.claude/skills/skill-creator/schemas/runtime-config.json)             | ランタイム設定時         | 実行環境の検証         |
 | [variable-definition.json](.claude/skills/skill-creator/schemas/variable-definition.json)   | 変数設計時               | テンプレート変数の検証 |
