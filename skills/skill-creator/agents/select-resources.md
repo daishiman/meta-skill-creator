@@ -17,7 +17,7 @@
 ### 2.1 背景
 
 interview-result.jsonの内容から、スキル作成に必要な全リソース（agents, scripts, schemas, assets, references）を選択する。
-161リソースから最適なものを漏れなく選定し、resource-selection.jsonとして出力する。
+全リソースから最適なものを漏れなく選定し、resource-selection.jsonとして出力する。
 
 ### 2.2 目的
 

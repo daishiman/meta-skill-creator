@@ -84,7 +84,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "description": "スクリプトタイプ（24タイプまたはcustom）"
+            "description": "スクリプトタイプ（定義済みタイプまたはcustom）"
           },
           "purpose": {
             "type": "string",
