@@ -11,7 +11,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```
 meta-skill-creator/
 ├── .claude-plugin/
-│   └── plugin.json          # プラグインメタデータ（必須）
+│   ├── plugin.json          # プラグインメタデータ（必須）
+│   └── marketplace.json     # マーケットプレイス定義
 ├── skills/                  # スキル配置ディレクトリ
 │   └── skill-creator/       # メインスキル
 │       ├── SKILL.md         # スキル定義（必須）
@@ -53,7 +54,10 @@ node skills/skill-creator/scripts/detect_mode.js --request "新規スキル"
 
 | 原則 | 説明 |
 |------|------|
+| **Problem First** | 機能の前に本質的な問題を特定する |
 | **Collaborative First** | ユーザーとの対話を通じて要件を明確化 |
+| Domain-Driven Design | ドメイン構造を明確化し高精度な設計を導く |
+| Clean Architecture | 層分離と依存関係ルールで変更に強い構造 |
 | **Script First** | 決定論的処理はスクリプトで実行 |
 | **Progressive Disclosure** | 必要な時に必要なリソースのみ読み込み |
 
@@ -70,5 +74,9 @@ node skills/skill-creator/scripts/detect_mode.js --request "新規スキル"
 ## インストール
 
 ```bash
-/plugin install daishiman/meta-skill-creator
+# Step 1: マーケットプレイスを追加
+/plugin marketplace add daishiman/meta-skill-creator
+
+# Step 2: プラグインをインストール
+/plugin install daishiman-skill-creator
 ```
