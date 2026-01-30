@@ -1,0 +1,310 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "domain-model.json",
+  "title": "Domain Model",
+  "description": "Phase 0.5（ドメインモデリング）の成果物。DDD戦略的設計とClean Architecture層マッピングを格納する。",
+  "type": "object",
+  "required": [
+    "domainClassification",
+    "ubiquitousLanguage",
+    "boundedContext",
+    "architectureLayers"
+  ],
+  "properties": {
+    "domainClassification": {
+      "type": "object",
+      "description": "DDD戦略的設計によるドメイン分類",
+      "required": ["coreDomain"],
+      "properties": {
+        "coreDomain": {
+          "type": "object",
+          "description": "スキルの存在理由（最も注力すべき領域）",
+          "required": ["name", "description", "keyBehaviors"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "コアドメイン名"
+            },
+            "description": {
+              "type": "string",
+              "description": "存在理由の説明"
+            },
+            "keyBehaviors": {
+              "type": "array",
+              "description": "中核となる振る舞い",
+              "minItems": 1,
+              "items": { "type": "string" }
+            },
+            "invariants": {
+              "type": "array",
+              "description": "不変条件（常に成り立つべきルール）",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "supportingDomains": {
+          "type": "array",
+          "description": "Coreを支援する領域",
+          "items": {
+            "type": "object",
+            "required": ["name", "description"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "サポートドメイン名"
+              },
+              "description": {
+                "type": "string",
+                "description": "Coreを支える役割"
+              },
+              "canBeSimplified": {
+                "type": "boolean",
+                "description": "標準的な実装で簡略化可能か",
+                "default": false
+              }
+            }
+          }
+        },
+        "genericDomains": {
+          "type": "array",
+          "description": "汎用的な機能（既存資産を活用）",
+          "items": {
+            "type": "object",
+            "required": ["name", "reuseStrategy"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "汎用ドメイン名"
+              },
+              "reuseStrategy": {
+                "type": "string",
+                "description": "活用する既存資産の説明"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ubiquitousLanguage": {
+      "type": "array",
+      "description": "スキル内の統一用語集",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["userTerm", "technicalTerm", "definition"],
+        "properties": {
+          "userTerm": {
+            "type": "string",
+            "description": "ユーザーが使う言葉"
+          },
+          "technicalTerm": {
+            "type": "string",
+            "description": "技術的な用語"
+          },
+          "definition": {
+            "type": "string",
+            "description": "用語の定義"
+          },
+          "usageScope": {
+            "type": "string",
+            "description": "使用箇所（agents/, scripts/等）"
+          }
+        }
+      }
+    },
+    "boundedContext": {
+      "type": "object",
+      "description": "スキルの責務境界",
+      "required": ["name", "inScope", "outOfScope"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "コンテキスト名"
+        },
+        "inScope": {
+          "type": "array",
+          "description": "スキルが責任を持つ範囲",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "outOfScope": {
+          "type": "array",
+          "description": "スキルの範囲外",
+          "items": { "type": "string" }
+        },
+        "ports": {
+          "type": "object",
+          "description": "外部との入出力インターフェース",
+          "properties": {
+            "input": {
+              "type": "array",
+              "description": "入力インターフェース",
+              "items": { "type": "string" }
+            },
+            "output": {
+              "type": "array",
+              "description": "出力インターフェース",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "architectureLayers": {
+      "type": "object",
+      "description": "Clean Architecture 4層マッピング",
+      "required": ["entities", "useCases", "interfaceAdapters", "external"],
+      "properties": {
+        "entities": {
+          "type": "object",
+          "description": "不変のドメインルール（references/に配置）",
+          "required": ["description"],
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "この層の責務"
+            },
+            "artifacts": {
+              "type": "array",
+              "description": "配置するドメイン知識ファイル",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "useCases": {
+          "type": "object",
+          "description": "ユーザーが達成すべきこと（SKILL.mdのワークフロー）",
+          "required": ["description"],
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "この層の責務"
+            },
+            "workflows": {
+              "type": "array",
+              "description": "ワークフロー定義",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "interfaceAdapters": {
+          "type": "object",
+          "description": "入出力変換（agents/*.md, schemas/*.json）",
+          "required": ["description"],
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "この層の責務"
+            },
+            "agents": {
+              "type": "array",
+              "description": "エージェントファイル",
+              "items": { "type": "string" }
+            },
+            "schemas": {
+              "type": "array",
+              "description": "スキーマファイル",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "external": {
+          "type": "object",
+          "description": "外部世界との接続（scripts/*.js, assets/*）",
+          "required": ["description"],
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "この層の責務"
+            },
+            "scripts": {
+              "type": "array",
+              "description": "スクリプトファイル",
+              "items": { "type": "string" }
+            },
+            "assets": {
+              "type": "array",
+              "description": "テンプレートファイル",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "domainEvents": {
+      "type": "array",
+      "description": "スキルの重要な状態変化",
+      "items": {
+        "type": "object",
+        "required": ["name", "trigger", "phase"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "イベント名"
+          },
+          "trigger": {
+            "type": "string",
+            "description": "トリガー条件"
+          },
+          "phase": {
+            "type": "string",
+            "description": "対応Phase"
+          }
+        }
+      }
+    },
+    "contextRelations": {
+      "type": "array",
+      "description": "他スキル/システムとの関係",
+      "items": {
+        "type": "object",
+        "required": ["target", "pattern"],
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "関連スキル/システム名"
+          },
+          "pattern": {
+            "type": "string",
+            "enum": [
+              "upstream-downstream",
+              "shared-kernel",
+              "acl",
+              "published-language"
+            ],
+            "description": "関係パターン"
+          },
+          "description": {
+            "type": "string",
+            "description": "関係の説明"
+          }
+        }
+      }
+    },
+    "problemSolutionFit": {
+      "type": "object",
+      "description": "Problem-Solution Fit検証結果",
+      "required": ["rootCause", "designResponse", "fitConfidence"],
+      "properties": {
+        "rootCause": {
+          "type": "string",
+          "description": "根本原因（problem-definitionから引用）"
+        },
+        "designResponse": {
+          "type": "string",
+          "description": "この設計がどう対処するか"
+        },
+        "fitConfidence": {
+          "type": "string",
+          "enum": ["high", "medium", "low"],
+          "description": "適合度の確信度"
+        },
+        "gaps": {
+          "type": "array",
+          "description": "対処しきれない可能性のある点",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

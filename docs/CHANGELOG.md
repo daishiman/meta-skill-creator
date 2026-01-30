@@ -6,6 +6,58 @@
 
 ---
 
+## [8.1.0] - 2026-01-30
+
+### Changed
+- **構造リファクタリング**: schemas追加（`problem-definition.json`, `domain-model.json`）
+- **integration-patterns.md分割**: 1,171→70行（索引）+ 4サブファイル（REST/GraphQL/Webhook/IPC）
+- **resource-map.md更新**: 新規リソースの反映、成果物明確化セクション追加
+- `.tmp`ファイルクリーンアップ
+
+---
+
+## [8.0.0] - 2026-01-30
+
+### Added
+- **Problem First + DDD/Clean Architecture統合**:
+  - Phase 0-0: 問題発見フェーズ追加（`discover-problem.md`）
+  - Phase 0.5: ドメインモデリングフェーズ追加（`model-domain.md`）
+- 新規エージェント:
+  - `agents/discover-problem.md`: 5 Whys根本原因分析
+  - `agents/model-domain.md`: DDD戦略設計 + Clean Architecture
+- 新規リファレンス:
+  - `references/problem-discovery-framework.md`: 問題発見フレームワーク
+  - `references/domain-modeling-guide.md`: ドメインモデリングガイド
+  - `references/clean-architecture-for-skills.md`: Clean Architectureスキル適用
+- 新規スキーマ:
+  - `schemas/problem-definition.json`: 問題定義の構造化データ
+  - `schemas/domain-model.json`: ドメインモデルの構造化データ
+
+### Changed
+- **Anchors更新**: Clean Architecture (Robert C. Martin) 追加、DDD拡張（戦略的設計・Bounded Context）
+- **core-principles.md拡張**: Problem First（§2.5）、DDD（§2.6）、Clean Architecture（§2.7）追加
+- **interview-user.md更新**: problem-definition.json / domain-model.json を入力コンテキストとして参照
+- **SKILL.md**: ワークフロー概要にPhase 0-0 / 0.5を追加、機能別ガイドにProblem First/DDD/Clean Architecture参照追加
+- **設計原則テーブル**: Problem First、DDD、Clean Architectureを追加
+
+---
+
+## [7.2.0] - 2026-01-28
+
+### Added
+- **統合パターン集**: `references/integration-patterns.md`（REST/GraphQL/Webhook/IPC）
+- **Phase完了チェックリスト**: `references/phase-completion-checklist.md`
+
+### Changed
+- **interview-guide.md**: Phase 0-1〜0-8の8段階に整合
+- **README.md**: Claude Codeの起動が必要であることを明記
+- **INSTALLATION.md**: Claude Codeの説明とダウンロードリンクを追加
+- **USAGE.md**: インタビューフローの詳細説明を追加
+- **TROUBLESHOOTING.md**: インタビュー関連の問題と解決方法を追加
+- **resource-map.md更新**: 成果物明確化セクション追加、統合契約パターンリンク
+
+---
+
 ## [7.1.2] - 2026-01-28
 
 ### Changed

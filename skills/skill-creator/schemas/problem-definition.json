@@ -1,0 +1,183 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "problem-definition.json",
+  "title": "Problem Definition",
+  "description": "Phase 0-0（問題発見）の成果物。根本原因分析・影響度評価・Outcome定義を格納する。",
+  "type": "object",
+  "required": [
+    "problemStatement",
+    "problemType",
+    "rootCauseAnalysis",
+    "impactAssessment",
+    "outcomeGoals"
+  ],
+  "properties": {
+    "problemStatement": {
+      "type": "object",
+      "description": "問題ステートメント（WHO/CONTEXT/PROBLEM/IMPACT/ROOT CAUSE）",
+      "required": ["who", "context", "problem", "impact", "rootCause"],
+      "properties": {
+        "who": {
+          "type": "string",
+          "description": "誰が問題に直面しているか"
+        },
+        "context": {
+          "type": "string",
+          "description": "どの状況・コンテキストで"
+        },
+        "problem": {
+          "type": "string",
+          "description": "何に直面しているか"
+        },
+        "impact": {
+          "type": "string",
+          "description": "どんな影響があるか"
+        },
+        "rootCause": {
+          "type": "string",
+          "description": "根本原因は何か"
+        }
+      }
+    },
+    "problemType": {
+      "type": "string",
+      "enum": ["efficiency", "quality", "knowledge", "structure", "absence"],
+      "description": "問題の分類（効率/品質/知識/構造/不在）"
+    },
+    "rootCauseAnalysis": {
+      "type": "object",
+      "description": "5 Whysによる根本原因分析",
+      "required": ["surfaceProblem", "whyChain", "rootCause"],
+      "properties": {
+        "surfaceProblem": {
+          "type": "string",
+          "description": "表面的な問題"
+        },
+        "whyChain": {
+          "type": "array",
+          "description": "Whyの連鎖（最低3層）",
+          "minItems": 3,
+          "items": {
+            "type": "object",
+            "required": ["level", "why", "because"],
+            "properties": {
+              "level": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "深さレベル"
+              },
+              "why": {
+                "type": "string",
+                "description": "なぜ？の問い"
+              },
+              "because": {
+                "type": "string",
+                "description": "理由・回答"
+              }
+            }
+          }
+        },
+        "rootCause": {
+          "type": "string",
+          "description": "最終的な根本原因"
+        }
+      }
+    },
+    "impactAssessment": {
+      "type": "object",
+      "description": "影響度評価",
+      "required": ["frequency", "scope", "severity", "urgency"],
+      "properties": {
+        "frequency": {
+          "type": "string",
+          "enum": ["daily", "weekly", "monthly", "rarely"],
+          "description": "発生頻度"
+        },
+        "scope": {
+          "type": "string",
+          "enum": ["personal", "team", "organization"],
+          "description": "影響範囲"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["high", "medium", "low"],
+          "description": "深刻度"
+        },
+        "urgency": {
+          "type": "string",
+          "enum": ["immediate", "planned", "future"],
+          "description": "緊急度"
+        }
+      }
+    },
+    "outcomeGoals": {
+      "type": "object",
+      "description": "Outcome-Based Goals（成果ベースの目標）",
+      "required": ["primaryOutcome", "successCriteria"],
+      "properties": {
+        "primaryOutcome": {
+          "type": "string",
+          "description": "達成すべき状態変化"
+        },
+        "successCriteria": {
+          "type": "array",
+          "description": "具体的・計測可能な成功基準",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "nonGoals": {
+          "type": "array",
+          "description": "対処しないこと",
+          "items": { "type": "string" }
+        },
+        "assumptions": {
+          "type": "array",
+          "description": "前提条件",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "previousAttempts": {
+      "type": "array",
+      "description": "過去の対処試行",
+      "items": {
+        "type": "object",
+        "required": ["attempt", "result"],
+        "properties": {
+          "attempt": {
+            "type": "string",
+            "description": "試みた対処法"
+          },
+          "result": {
+            "type": "string",
+            "description": "結果"
+          },
+          "lesson": {
+            "type": "string",
+            "description": "学び"
+          }
+        }
+      }
+    },
+    "solutionHypothesis": {
+      "type": "object",
+      "description": "Problem-Solution Fit仮説",
+      "required": ["approach", "rationale"],
+      "properties": {
+        "approach": {
+          "type": "string",
+          "description": "推奨アプローチ"
+        },
+        "rationale": {
+          "type": "string",
+          "description": "なぜこのアプローチが根本原因に対処するか"
+        },
+        "risks": {
+          "type": "array",
+          "description": "リスク",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

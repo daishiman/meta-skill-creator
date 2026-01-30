@@ -4,18 +4,34 @@ Meta Skill Creatorをインストールして使い始めるための詳細ガ�
 
 ---
 
+## 重要: Claude Codeが必要です
+
+> **このプラグインはClaude Code上で動作します。**
+> ターミナルで直接実行するものではありません。
+
+### Claude Codeとは？
+
+Claude CodeはAnthropicが提供するAIアシスタントアプリケーションです。
+プラグインをインストールして機能を拡張できます。
+
+**ダウンロード**: https://claude.ai/download
+
+---
+
 ## 動作要件
 
-| 要件 | バージョン |
-|------|------------|
-| Claude Code | 1.0.0以上 |
-| Node.js | 18.0.0以上 |
+| 要件 | バージョン | 備考 |
+|------|------------|------|
+| Claude Code | 1.0.0以上 | **必須** - アプリケーションをインストール |
+| Node.js | 18.0.0以上 | スクリプト実行に必要 |
 
 ---
 
 ## インストール方法
 
 ### 方法1: GitHubマーケットプレイス経由（推奨）
+
+**前提**: Claude Codeを起動した状態で実行してください。
 
 ```bash
 # Step 1: マーケットプレイスを追加
@@ -56,10 +72,11 @@ ln -sf $(pwd) ~/.claude/plugins/marketplaces/meta-skill-creator
 「スキル作成」
 ```
 
-インタビューが開始されれば成功です。
+問題発見フェーズが開始されれば成功です。
 
 ```
-Claude: 何を達成したいですか？
+Claude: まず、解決したい問題を特定させてください。
+        なぜこのスキルが必要ですか？
         1. 日常タスクの自動化
         2. 開発ワークフローの改善
         ...
@@ -86,27 +103,36 @@ Claude Codeでは、スキルの配置場所が用途によって異なります
 skills/skill-creator/
 ├── SKILL.md           # スキル定義（必須）
 ├── agents/            # サブエージェント定義
-│   ├── interview-user.md
-│   ├── select-resources.md
+│   ├── discover-problem.md   # 問題発見（Phase 0-0）
+│   ├── model-domain.md       # ドメインモデリング（Phase 0.5）
+│   ├── interview-user.md     # インタビュー（Phase 0-1〜0-8）
+│   ├── select-resources.md   # リソース自動選択
 │   └── ...
 ├── references/        # 参照ドキュメント
-│   ├── resource-map.md
-│   ├── interview-guide.md
+│   ├── resource-map.md                    # リソース一覧
+│   ├── core-principles.md                 # コア原則
+│   ├── problem-discovery-framework.md     # 問題発見フレームワーク
+│   ├── domain-modeling-guide.md           # ドメインモデリングガイド
+│   ├── clean-architecture-for-skills.md   # Clean Architecture
+│   ├── integration-patterns.md            # 統合パターン（索引）
 │   └── ...
 ├── scripts/           # 自動化スクリプト
 │   ├── validate_all.js
 │   ├── quick_validate.js
 │   └── ...
 ├── schemas/           # JSONスキーマ
-│   ├── interview-result.json
+│   ├── problem-definition.json   # 問題定義
+│   ├── domain-model.json         # ドメインモデル
+│   ├── interview-result.json     # インタビュー結果
 │   └── ...
 └── assets/            # テンプレート・素材
     └── ...
 ```
 
 - `SKILL.md` - 唯一の必須ファイル。YAMLフロントマターとMarkdown指示で構成
-- `agents/` - インタビュー、分析、生成などのサブタスク用エージェント
+- `agents/` - 問題発見、ドメインモデリング、インタビュー、分析、生成などのサブタスク用エージェント
 - `scripts/` - バリデーション、生成などの決定論的処理
+- `schemas/` - problem-definition、domain-model、interview-result等の構造化データ定義
 - `references/` - Progressive Disclosureで必要時に読み込む参照情報
 
 ---
@@ -134,8 +160,10 @@ skills/skill-creator/
 ### 基本的な流れ
 
 1. **スキル作成を依頼** - Claude Codeに話しかけるだけ
-2. **インタビューに回答** - 8段階の質問に答える（選択肢から選ぶだけ）
-3. **スキル生成** - 回答に基づいて最適なスキルが自動生成される
+2. **問題発見** - 5 Whysで根本原因を分析（Phase 0-0）
+3. **ドメインモデリング** - DDD戦略設計でスキル構造を設計（Phase 0.5）
+4. **インタビューに回答** - 8段階の質問に答える（選択肢から選ぶだけ）
+5. **スキル生成** - 回答に基づいて最適なスキルが自動生成される
 
 ### 使用例
 

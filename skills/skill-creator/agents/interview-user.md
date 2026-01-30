@@ -48,22 +48,37 @@ AskUserQuestionツールを活用し、段階的にヒアリングを行い、�
 
 ## 4. 実行仕様
 
-### 4.1 思考プロセス
+### 4.1 前提: 問題発見とドメインモデリング
 
-| ステップ | アクション                                  | 担当            |
-| -------- | ------------------------------------------- | --------------- |
-| 1        | ユーザーの初期要求を受け取る                | LLM             |
-| 2        | 抽象度レベル（L1/L2/L3）を判定              | LLM             |
-| 3        | Phase 0-1: 初期ヒアリング（ゴール特定）     | AskUserQuestion |
-| 4        | Phase 0-2: 機能ヒアリング                   | AskUserQuestion |
-| 5        | Phase 0-3: 外部連携ヒアリング               | AskUserQuestion |
-| 6        | Phase 0-4: スクリプトヒアリング             | AskUserQuestion |
-| 7        | Phase 0-5: オーケストレーションヒアリング   | AskUserQuestion |
-| 8        | Phase 0-6: スケジュール・トリガーヒアリング | AskUserQuestion |
-| 9        | Phase 0-7: ドキュメントヒアリング           | AskUserQuestion |
-| 10       | Phase 0-8: 構成・優先事項ヒアリング         | AskUserQuestion |
-| 11       | 収集情報をinterview-result.jsonに構造化     | LLM             |
-| 12       | ユーザーに確認・承認を求める                | LLM             |
+**このタスクの前に、以下の2つのPhaseが完了していることが前提:**
+
+| 前提Phase | Agent            | 成果物                  | 目的                 |
+| --------- | ---------------- | ----------------------- | -------------------- |
+| Phase 0-0 | discover-problem | problem-definition.json | 根本原因と目標の特定 |
+| Phase 0.5 | model-domain     | domain-model.json       | ドメイン構造の設計   |
+
+これらの成果物を活用して、より精度の高い機能ヒアリングを行う。
+問題定義が明確であれば、機能要件の質問もユーザーの本質的な課題に焦点を合わせられる。
+
+### 4.2 思考プロセス
+
+| ステップ | アクション                                               | 担当            |
+| -------- | -------------------------------------------------------- | --------------- |
+| 1        | ユーザーの初期要求を受け取る                             | LLM             |
+| 2        | 抽象度レベル（L1/L2/L3）を判定                           | LLM             |
+| 2.5      | problem-definition.jsonの根本原因とgoalsを参照する       | LLM             |
+| 2.6      | domain-model.jsonのCore Domainとユビキタス言語を参照する | LLM             |
+| 3        | Phase 0-1: 初期ヒアリング（ゴール特定・問題定義の確認）  | AskUserQuestion |
+| 4        | Phase 0-2: 機能ヒアリング（Core Domain中心に）           | AskUserQuestion |
+| 5        | Phase 0-3: 外部連携ヒアリング                            | AskUserQuestion |
+| 6        | Phase 0-4: スクリプトヒアリング                          | AskUserQuestion |
+| 7        | Phase 0-5: オーケストレーションヒアリング                | AskUserQuestion |
+| 8        | Phase 0-6: スケジュール・トリガーヒアリング              | AskUserQuestion |
+| 9        | Phase 0-7: ドキュメントヒアリング                        | AskUserQuestion |
+| 10       | Phase 0-8: 構成・優先事項ヒアリング                      | AskUserQuestion |
+| 11       | 収集情報をinterview-result.jsonに構造化                  | LLM             |
+| 11.5     | Problem-Solution Fit検証: 機能が根本原因に対処しているか | LLM             |
+| 12       | ユーザーに確認・承認を求める                             | LLM             |
 
 ### 4.2 抽象度レベル判定基準
 

@@ -6,82 +6,143 @@
 
 ## agents/
 
-| Agent                                                                                              | 読み込み条件                   | 責務                           |
-| -------------------------------------------------------------------------------------------------- | ------------------------------ | ------------------------------ |
-| [interview-user.md](.claude/skills/skill-creator/agents/interview-user.md)                         | collaborativeモード時          | 要件ヒアリング・抽象度判定     |
-| [recommend-integrations.md](.claude/skills/skill-creator/agents/recommend-integrations.md)         | Phase 0-3（外部連携）時        | 目的からAPI/サービスを推薦     |
-| [select-resources.md](.claude/skills/skill-creator/agents/select-resources.md)                     | interview-result.json生成後    | 最適リソース自動選択           |
-| [interview-execution-mode.md](.claude/skills/skill-creator/agents/interview-execution-mode.md)     | orchestrateモード時            | 実行モード選択ヒアリング       |
-| [delegate-to-codex.md](.claude/skills/skill-creator/agents/delegate-to-codex.md)                   | Codex委譲時                    | Codexへのタスク委譲手順        |
-| [analyze-request.md](.claude/skills/skill-creator/agents/analyze-request.md)                       | createモード時                 | ユーザー要求の分析             |
-| [extract-purpose.md](.claude/skills/skill-creator/agents/extract-purpose.md)                       | 要求分析後                     | スキル目的の抽出               |
-| [define-boundary.md](.claude/skills/skill-creator/agents/define-boundary.md)                       | 目的定義後                     | スコープ・境界の定義           |
-| [define-trigger.md](.claude/skills/skill-creator/agents/define-trigger.md)                         | 目的定義後                     | 発動条件の定義                 |
-| [select-anchors.md](.claude/skills/skill-creator/agents/select-anchors.md)                         | 目的定義後                     | 参考文献・アンカーの選定       |
-| [design-workflow.md](.claude/skills/skill-creator/agents/design-workflow.md)                       | ワークフロー設計時             | Phase構成・フロー設計          |
-| [plan-structure.md](.claude/skills/skill-creator/agents/plan-structure.md)                         | 構造計画時                     | ディレクトリ・ファイル構成計画 |
-| [design-update.md](.claude/skills/skill-creator/agents/design-update.md)                           | updateモード時                 | 既存スキル更新計画             |
-| [improve-prompt.md](.claude/skills/skill-creator/agents/improve-prompt.md)                         | improve-promptモード時         | プロンプト品質改善             |
-| [analyze-script-requirement.md](.claude/skills/skill-creator/agents/analyze-script-requirement.md) | スクリプト要件分析時           | スクリプト要件の抽出           |
-| [design-script.md](.claude/skills/skill-creator/agents/design-script.md)                           | スクリプト設計時               | スクリプト設計仕様作成         |
-| [design-custom-script.md](.claude/skills/skill-creator/agents/design-custom-script.md)             | カスタムスクリプト時           | 定義済みタイプ外の独自スクリプト設計 |
-| [generate-code.md](.claude/skills/skill-creator/agents/generate-code.md)                           | コード生成時                   | テンプレートからコード生成     |
-| [design-variables.md](.claude/skills/skill-creator/agents/design-variables.md)                     | 変数設計時                     | テンプレート変数定義           |
-| [analyze-feedback.md](.claude/skills/skill-creator/agents/analyze-feedback.md)                     | 改善分析時                     | フィードバックデータ解釈       |
-| [design-self-improvement.md](.claude/skills/skill-creator/agents/design-self-improvement.md)       | 改善計画時                     | 改善提案の設計                 |
-| [save-patterns.md](.claude/skills/skill-creator/agents/save-patterns.md)                           | パターン保存時                 | patterns.mdへのパターン記録    |
-| **オーケストレーション**                                                                           |                                |                                |
-| [design-orchestration.md](.claude/skills/skill-creator/agents/design-orchestration.md)             | オーケストレーション全体設計時 | ワークフロー構成設計           |
-| [design-skill-chain.md](.claude/skills/skill-creator/agents/design-skill-chain.md)                 | スキルチェーン設計時           | A→B→C連鎖実行設計              |
-| [design-parallel-execution.md](.claude/skills/skill-creator/agents/design-parallel-execution.md)   | 並列実行設計時                 | 同時実行・結果集約設計         |
-| [design-conditional-flow.md](.claude/skills/skill-creator/agents/design-conditional-flow.md)       | 条件分岐設計時                 | 条件による処理分岐設計         |
-| [design-scheduler.md](.claude/skills/skill-creator/agents/design-scheduler.md)                     | スケジューリング設計時         | cron/定期実行設計              |
-| [design-event-trigger.md](.claude/skills/skill-creator/agents/design-event-trigger.md)             | イベントトリガー設計時         | Webhook/ファイル監視設計       |
-| **ドキュメント生成**                                                                               |                                |                                |
-| [generate-api-docs.md](.claude/skills/skill-creator/agents/generate-api-docs.md)                   | APIドキュメント生成時          | APIセットアップガイド生成      |
-| [fetch-official-docs.md](.claude/skills/skill-creator/agents/fetch-official-docs.md)               | 公式ドキュメント参照時         | 最新公式情報の取得・解析       |
-| [generate-setup-guide.md](.claude/skills/skill-creator/agents/generate-setup-guide.md)             | セットアップガイド生成時       | 実行可能なガイド生成           |
+| Agent                                                                                              | 読み込み条件                       | 責務                                     |
+| -------------------------------------------------------------------------------------------------- | ---------------------------------- | ---------------------------------------- |
+| **問題発見・ドメイン分析**                                                                         |                                    |                                          |
+| [discover-problem.md](.claude/skills/skill-creator/agents/discover-problem.md)                     | collaborativeモード時（Phase 0-0） | 根本原因分析・問題定義                   |
+| [model-domain.md](.claude/skills/skill-creator/agents/model-domain.md)                             | collaborativeモード時（Phase 0.5） | DDD/Clean Architectureドメインモデリング |
+| **ユーザーインタラクション**                                                                       |                                    |                                          |
+| [interview-user.md](.claude/skills/skill-creator/agents/interview-user.md)                         | collaborativeモード時              | 要件ヒアリング・抽象度判定               |
+| [recommend-integrations.md](.claude/skills/skill-creator/agents/recommend-integrations.md)         | Phase 0-3（外部連携）時            | 目的からAPI/サービスを推薦               |
+| [select-resources.md](.claude/skills/skill-creator/agents/select-resources.md)                     | interview-result.json生成後        | 最適リソース自動選択                     |
+| [interview-execution-mode.md](.claude/skills/skill-creator/agents/interview-execution-mode.md)     | orchestrateモード時                | 実行モード選択ヒアリング                 |
+| [delegate-to-codex.md](.claude/skills/skill-creator/agents/delegate-to-codex.md)                   | Codex委譲時                        | Codexへのタスク委譲手順                  |
+| [analyze-request.md](.claude/skills/skill-creator/agents/analyze-request.md)                       | createモード時                     | ユーザー要求の分析                       |
+| [extract-purpose.md](.claude/skills/skill-creator/agents/extract-purpose.md)                       | 要求分析後                         | スキル目的の抽出                         |
+| [define-boundary.md](.claude/skills/skill-creator/agents/define-boundary.md)                       | 目的定義後                         | スコープ・境界の定義                     |
+| [define-trigger.md](.claude/skills/skill-creator/agents/define-trigger.md)                         | 目的定義後                         | 発動条件の定義                           |
+| [select-anchors.md](.claude/skills/skill-creator/agents/select-anchors.md)                         | 目的定義後                         | 参考文献・アンカーの選定                 |
+| [design-workflow.md](.claude/skills/skill-creator/agents/design-workflow.md)                       | ワークフロー設計時                 | Phase構成・フロー設計                    |
+| [plan-structure.md](.claude/skills/skill-creator/agents/plan-structure.md)                         | 構造計画時                         | ディレクトリ・ファイル構成計画           |
+| [design-update.md](.claude/skills/skill-creator/agents/design-update.md)                           | updateモード時                     | 既存スキル更新計画                       |
+| [improve-prompt.md](.claude/skills/skill-creator/agents/improve-prompt.md)                         | improve-promptモード時             | プロンプト品質改善                       |
+| [analyze-script-requirement.md](.claude/skills/skill-creator/agents/analyze-script-requirement.md) | スクリプト要件分析時               | スクリプト要件の抽出                     |
+| [design-script.md](.claude/skills/skill-creator/agents/design-script.md)                           | スクリプト設計時                   | スクリプト設計仕様作成                   |
+| [design-custom-script.md](.claude/skills/skill-creator/agents/design-custom-script.md)             | カスタムスクリプト時               | 定義済みタイプ外の独自スクリプト設計     |
+| [generate-code.md](.claude/skills/skill-creator/agents/generate-code.md)                           | コード生成時                       | テンプレートからコード生成               |
+| [design-variables.md](.claude/skills/skill-creator/agents/design-variables.md)                     | 変数設計時                         | テンプレート変数定義                     |
+| [analyze-feedback.md](.claude/skills/skill-creator/agents/analyze-feedback.md)                     | 改善分析時                         | フィードバックデータ解釈                 |
+| [design-self-improvement.md](.claude/skills/skill-creator/agents/design-self-improvement.md)       | 改善計画時                         | 改善提案の設計                           |
+| [save-patterns.md](.claude/skills/skill-creator/agents/save-patterns.md)                           | パターン保存時                     | patterns.mdへのパターン記録              |
+| **オーケストレーション**                                                                           |                                    |                                          |
+| [design-orchestration.md](.claude/skills/skill-creator/agents/design-orchestration.md)             | オーケストレーション全体設計時     | ワークフロー構成設計                     |
+| [design-skill-chain.md](.claude/skills/skill-creator/agents/design-skill-chain.md)                 | スキルチェーン設計時               | A→B→C連鎖実行設計                        |
+| [design-parallel-execution.md](.claude/skills/skill-creator/agents/design-parallel-execution.md)   | 並列実行設計時                     | 同時実行・結果集約設計                   |
+| [design-conditional-flow.md](.claude/skills/skill-creator/agents/design-conditional-flow.md)       | 条件分岐設計時                     | 条件による処理分岐設計                   |
+| [design-scheduler.md](.claude/skills/skill-creator/agents/design-scheduler.md)                     | スケジューリング設計時             | cron/定期実行設計                        |
+| [design-event-trigger.md](.claude/skills/skill-creator/agents/design-event-trigger.md)             | イベントトリガー設計時             | Webhook/ファイル監視設計                 |
+| **ドキュメント生成**                                                                               |                                    |                                          |
+| [generate-api-docs.md](.claude/skills/skill-creator/agents/generate-api-docs.md)                   | APIドキュメント生成時              | APIセットアップガイド生成                |
+| [fetch-official-docs.md](.claude/skills/skill-creator/agents/fetch-official-docs.md)               | 公式ドキュメント参照時             | 最新公式情報の取得・解析                 |
+| [generate-setup-guide.md](.claude/skills/skill-creator/agents/generate-setup-guide.md)             | セットアップガイド生成時           | 実行可能なガイド生成                     |
 
 ---
 
 ## references/
 
-| Reference                                                                                          | 読み込み条件               | 内容                             |
-| -------------------------------------------------------------------------------------------------- | -------------------------- | -------------------------------- |
-| [overview.md](.claude/skills/skill-creator/references/overview.md)                                 | 初回/概要確認時            | skill-creator全体概要            |
-| [core-principles.md](.claude/skills/skill-creator/references/core-principles.md)                   | 設計判断時                 | 設計原則・哲学                   |
-| [interview-guide.md](.claude/skills/skill-creator/references/interview-guide.md)                   | collaborativeモード時      | ユーザーインタビュー手法         |
-| [goal-to-api-mapping.md](.claude/skills/skill-creator/references/goal-to-api-mapping.md)           | Phase 0-3（API推薦）時     | 目的→API/サービスマッピング表    |
-| [abstraction-levels.md](.claude/skills/skill-creator/references/abstraction-levels.md)             | 抽象度判定時               | L1-L3レベル詳細                  |
-| [execution-mode-guide.md](.claude/skills/skill-creator/references/execution-mode-guide.md)         | orchestrateモード時        | モード選択フローチャート         |
-| [codex-best-practices.md](.claude/skills/skill-creator/references/codex-best-practices.md)         | Codex利用時                | Codex活用ベストプラクティス      |
-| [creation-process.md](.claude/skills/skill-creator/references/creation-process.md)                 | createモード時             | スキル作成プロセス詳細           |
-| [update-process.md](.claude/skills/skill-creator/references/update-process.md)                     | updateモード時             | スキル更新プロセス詳細           |
-| [script-types-catalog.md](.claude/skills/skill-creator/references/script-types-catalog.md)         | スクリプトタイプ選択時     | スクリプトタイプ詳細カタログ     |
-| [script-llm-patterns.md](.claude/skills/skill-creator/references/script-llm-patterns.md)           | 処理役割分担設計時         | スクリプト/LLMパターンガイド     |
-| [runtime-guide.md](.claude/skills/skill-creator/references/runtime-guide.md)                       | ランタイム設定時           | node/python/bash別ガイド         |
-| [variable-template-guide.md](.claude/skills/skill-creator/references/variable-template-guide.md)   | 変数設計時                 | テンプレート構文ガイド           |
-| [api-integration-patterns.md](.claude/skills/skill-creator/references/api-integration-patterns.md) | API系スクリプト時          | API統合パターン集                |
-| [workflow-patterns.md](.claude/skills/skill-creator/references/workflow-patterns.md)               | ワークフロー設計時         | 実行パターン・分岐               |
-| [skill-structure.md](.claude/skills/skill-creator/references/skill-structure.md)                   | 構造計画時                 | ディレクトリ構造仕様             |
-| [naming-conventions.md](.claude/skills/skill-creator/references/naming-conventions.md)             | ファイル命名時             | 命名規則・形式                   |
-| [output-patterns.md](.claude/skills/skill-creator/references/output-patterns.md)                   | 出力設計時                 | 出力形式・パターン               |
-| [quality-standards.md](.claude/skills/skill-creator/references/quality-standards.md)               | 品質検証時                 | 品質基準・チェック項目           |
-| [feedback-loop.md](.claude/skills/skill-creator/references/feedback-loop.md)                       | フィードバック設計時       | フィードバックループ設計         |
-| [self-improvement-cycle.md](.claude/skills/skill-creator/references/self-improvement-cycle.md)     | 自己改善時                 | 改善サイクル詳細                 |
-| [patterns.md](.claude/skills/skill-creator/references/patterns.md)                                 | 成功/失敗パターン参照時    | 蓄積されたパターン集             |
-| [script-commands.md](.claude/skills/skill-creator/references/script-commands.md)                   | スクリプト実行時           | 全スクリプトの実行コマンド詳細   |
-| [library-management.md](.claude/skills/skill-creator/references/library-management.md)             | 依存関係追加時             | PNPM依存関係管理ガイド           |
-| [resource-map.md](.claude/skills/skill-creator/references/resource-map.md)                         | リソース詳細確認時         | このファイル（全リソースマップ） |
-| **オーケストレーション**                                                                           |                            |                                  |
-| [orchestration-guide.md](.claude/skills/skill-creator/references/orchestration-guide.md)           | オーケストレーション設計時 | オーケストレーション全体ガイド   |
-| [skill-chain-patterns.md](.claude/skills/skill-creator/references/skill-chain-patterns.md)         | スキルチェーン設計時       | チェーンパターン集               |
-| [parallel-execution-guide.md](.claude/skills/skill-creator/references/parallel-execution-guide.md) | 並列実行設計時             | 並列実行ベストプラクティス       |
-| [scheduler-guide.md](.claude/skills/skill-creator/references/scheduler-guide.md)                   | スケジューリング設計時     | cron/スケジューラー設定ガイド    |
-| [event-trigger-guide.md](.claude/skills/skill-creator/references/event-trigger-guide.md)           | イベントトリガー設計時     | Webhook/ファイル監視設定ガイド   |
-| **ドキュメント生成**                                                                               |                            |                                  |
-| [api-docs-standards.md](.claude/skills/skill-creator/references/api-docs-standards.md)             | APIドキュメント生成時      | ドキュメント品質基準・必須要素   |
-| [official-docs-registry.md](.claude/skills/skill-creator/references/official-docs-registry.md)     | 公式ドキュメント参照時     | 主要APIの公式ドキュメントURL     |
+| Reference                                                                                                    | 読み込み条件                | 内容                                               |
+| ------------------------------------------------------------------------------------------------------------ | --------------------------- | -------------------------------------------------- |
+| [overview.md](.claude/skills/skill-creator/references/overview.md)                                           | 初回/概要確認時             | skill-creator全体概要                              |
+| [core-principles.md](.claude/skills/skill-creator/references/core-principles.md)                             | 設計判断時                  | 設計原則・哲学                                     |
+| **問題発見・ドメイン分析**                                                                                   |                             |                                                    |
+| [problem-discovery-framework.md](.claude/skills/skill-creator/references/problem-discovery-framework.md)     | Phase 0-0（問題発見）時     | 根本原因分析・5 Whys・Problem-Solution Fit         |
+| [domain-modeling-guide.md](.claude/skills/skill-creator/references/domain-modeling-guide.md)                 | Phase 0.5（ドメイン分析）時 | DDD戦略的設計・ユビキタス言語・Bounded Context     |
+| [clean-architecture-for-skills.md](.claude/skills/skill-creator/references/clean-architecture-for-skills.md) | スキル設計・品質検証時      | Clean Architecture層分離・依存関係ルール・品質指標 |
+| [interview-guide.md](.claude/skills/skill-creator/references/interview-guide.md)                             | collaborativeモード時       | ユーザーインタビュー手法                           |
+| [goal-to-api-mapping.md](.claude/skills/skill-creator/references/goal-to-api-mapping.md)                     | Phase 0-3（API推薦）時      | 目的→API/サービスマッピング表                      |
+| [abstraction-levels.md](.claude/skills/skill-creator/references/abstraction-levels.md)                       | 抽象度判定時                | L1-L3レベル詳細                                    |
+| [execution-mode-guide.md](.claude/skills/skill-creator/references/execution-mode-guide.md)                   | orchestrateモード時         | モード選択フローチャート                           |
+| [codex-best-practices.md](.claude/skills/skill-creator/references/codex-best-practices.md)                   | Codex利用時                 | Codex活用ベストプラクティス                        |
+| [creation-process.md](.claude/skills/skill-creator/references/creation-process.md)                           | createモード時              | スキル作成プロセス詳細                             |
+| [update-process.md](.claude/skills/skill-creator/references/update-process.md)                               | updateモード時              | スキル更新プロセス詳細                             |
+| [script-types-catalog.md](.claude/skills/skill-creator/references/script-types-catalog.md)                   | スクリプトタイプ選択時      | スクリプトタイプ詳細カタログ                       |
+| [script-llm-patterns.md](.claude/skills/skill-creator/references/script-llm-patterns.md)                     | 処理役割分担設計時          | スクリプト/LLMパターンガイド                       |
+| [runtime-guide.md](.claude/skills/skill-creator/references/runtime-guide.md)                                 | ランタイム設定時            | node/python/bash別ガイド                           |
+| [variable-template-guide.md](.claude/skills/skill-creator/references/variable-template-guide.md)             | 変数設計時                  | テンプレート構文ガイド                             |
+| [api-integration-patterns.md](.claude/skills/skill-creator/references/api-integration-patterns.md)           | API系スクリプト時           | API統合パターン集                                  |
+| [workflow-patterns.md](.claude/skills/skill-creator/references/workflow-patterns.md)                         | ワークフロー設計時          | 実行パターン・分岐                                 |
+| [skill-structure.md](.claude/skills/skill-creator/references/skill-structure.md)                             | 構造計画時                  | ディレクトリ構造仕様                               |
+| [naming-conventions.md](.claude/skills/skill-creator/references/naming-conventions.md)                       | ファイル命名時              | 命名規則・形式                                     |
+| [output-patterns.md](.claude/skills/skill-creator/references/output-patterns.md)                             | 出力設計時                  | 出力形式・パターン                                 |
+| [quality-standards.md](.claude/skills/skill-creator/references/quality-standards.md)                         | 品質検証時                  | 品質基準・チェック項目                             |
+| [feedback-loop.md](.claude/skills/skill-creator/references/feedback-loop.md)                                 | フィードバック設計時        | フィードバックループ設計                           |
+| [self-improvement-cycle.md](.claude/skills/skill-creator/references/self-improvement-cycle.md)               | 自己改善時                  | 改善サイクル詳細                                   |
+| [patterns.md](.claude/skills/skill-creator/references/patterns.md)                                           | 成功/失敗パターン参照時     | 蓄積されたパターン集                               |
+| [script-commands.md](.claude/skills/skill-creator/references/script-commands.md)                             | スクリプト実行時            | 全スクリプトの実行コマンド詳細                     |
+| [library-management.md](.claude/skills/skill-creator/references/library-management.md)                       | 依存関係追加時              | PNPM依存関係管理ガイド                             |
+| [resource-map.md](.claude/skills/skill-creator/references/resource-map.md)                                   | リソース詳細確認時          | このファイル（全リソースマップ）                   |
+| **オーケストレーション**                                                                                     |                             |                                                    |
+| [orchestration-guide.md](.claude/skills/skill-creator/references/orchestration-guide.md)                     | オーケストレーション設計時  | オーケストレーション全体ガイド                     |
+| [skill-chain-patterns.md](.claude/skills/skill-creator/references/skill-chain-patterns.md)                   | スキルチェーン設計時        | チェーンパターン集                                 |
+| [parallel-execution-guide.md](.claude/skills/skill-creator/references/parallel-execution-guide.md)           | 並列実行設計時              | 並列実行ベストプラクティス                         |
+| [scheduler-guide.md](.claude/skills/skill-creator/references/scheduler-guide.md)                             | スケジューリング設計時      | cron/スケジューラー設定ガイド                      |
+| [event-trigger-guide.md](.claude/skills/skill-creator/references/event-trigger-guide.md)                     | イベントトリガー設計時      | Webhook/ファイル監視設定ガイド                     |
+| **ドキュメント生成**                                                                                         |                             |                                                    |
+| [api-docs-standards.md](.claude/skills/skill-creator/references/api-docs-standards.md)                       | APIドキュメント生成時       | ドキュメント品質基準・必須要素                     |
+| [official-docs-registry.md](.claude/skills/skill-creator/references/official-docs-registry.md)               | 公式ドキュメント参照時      | 主要APIの公式ドキュメントURL                       |
+| **統合・品質管理**                                                                                           |                             |                                                    |
+| [integration-patterns.md](.claude/skills/skill-creator/references/integration-patterns.md)                   | 統合設計時                  | 統合パターン選択ガイド（インデックス）             |
+| [integration-patterns-ipc.md](.claude/skills/skill-creator/references/integration-patterns-ipc.md)           | Electron IPC設計時          | Electron IPC契約定義・検証チェックリスト           |
+| [integration-patterns-rest.md](.claude/skills/skill-creator/references/integration-patterns-rest.md)         | REST API設計時              | REST API契約定義・OpenAPI・エラーハンドリング      |
+| [integration-patterns-graphql.md](.claude/skills/skill-creator/references/integration-patterns-graphql.md)   | GraphQL設計時               | GraphQL SDL定義・Resolver設計・N+1対策             |
+| [integration-patterns-webhook.md](.claude/skills/skill-creator/references/integration-patterns-webhook.md)   | Webhook設計時               | Webhook契約定義・署名検証・リトライ戦略            |
+| [phase-completion-checklist.md](.claude/skills/skill-creator/references/phase-completion-checklist.md)       | Phase完了確認時             | Phase完了チェックリスト                            |
+
+---
+
+## 成果物の明確化
+
+各モードで期待される最終成果物を明確化する。
+
+### createモード
+
+| Phase   | 成果物                                          | 説明                               |
+| ------- | ----------------------------------------------- | ---------------------------------- |
+| Phase 0 | `interview-result.json`                         | ユーザー要件のヒアリング結果       |
+| Phase 1 | `purpose.json`, `boundary.json`, `trigger.json` | スキルの目的・境界・発動条件定義   |
+| Phase 2 | `structure-plan.json`, `workflow.json`          | ディレクトリ構造・ワークフロー設計 |
+| Phase 3 | `scripts/`, `agents/`                           | スクリプト・エージェント実装       |
+| Phase 4 | `SKILL.md`, `references/`                       | ドキュメント・リファレンス生成     |
+| Phase 5 | 検証済みスキル                                  | 全体検証・品質確認完了             |
+
+### updateモード
+
+| Phase   | 成果物             | 説明                           |
+| ------- | ------------------ | ------------------------------ |
+| Phase 0 | 対象スキル特定     | 更新対象の既存スキル選定       |
+| Phase 1 | `update-plan.json` | 更新計画（変更内容・影響範囲） |
+| Phase 2 | 更新済みファイル   | 計画に基づく変更適用           |
+| Phase 3 | 検証済み更新       | 回帰テスト・動作確認完了       |
+
+### improve-promptモード
+
+| Phase   | 成果物                    | 説明                     |
+| ------- | ------------------------- | ------------------------ |
+| Phase 0 | `prompt-analysis.json`    | 対象プロンプトの品質分析 |
+| Phase 1 | `prompt-improvement.json` | 改善提案・最適化計画     |
+| Phase 2 | 改善済みプロンプト        | 最適化適用後のプロンプト |
+| Phase 3 | 効果検証結果              | Before/After比較・評価   |
+
+### 統合契約パターン
+
+モード間・Phase間の統合は以下のパターンに従う。
+
+| 統合ポイント          | 契約パターン    | 参照                                                                                                   |
+| --------------------- | --------------- | ------------------------------------------------------------------------------------------------------ |
+| Phase間データ受け渡し | JSON Schema検証 | [schemas/](.claude/skills/skill-creator/schemas/)                                                      |
+| スキル間連携          | 統合パターン集  | [integration-patterns.md](.claude/skills/skill-creator/references/integration-patterns.md)             |
+| 完了判定              | チェックリスト  | [phase-completion-checklist.md](.claude/skills/skill-creator/references/phase-completion-checklist.md) |
+| エラー伝播            | 統一エラー形式  | [execution-result.json](.claude/skills/skill-creator/schemas/execution-result.json)                    |
 
 ---
 
@@ -262,10 +323,12 @@ JSON Schema形式。[validate_schema.js](.claude/skills/skill-creator/scripts/va
 
 ### collaborativeモード
 
-| Schema                                                                                  | 読み込み条件       | 用途                     |
-| --------------------------------------------------------------------------------------- | ------------------ | ------------------------ |
-| [interview-result.json](.claude/skills/skill-creator/schemas/interview-result.json)     | インタビュー完了後 | ヒアリング結果の検証     |
-| [resource-selection.json](.claude/skills/skill-creator/schemas/resource-selection.json) | リソース選択後     | 選定リソースリストの検証 |
+| Schema                                                                                  | 読み込み条件            | 用途                         |
+| --------------------------------------------------------------------------------------- | ----------------------- | ---------------------------- |
+| [problem-definition.json](.claude/skills/skill-creator/schemas/problem-definition.json) | Phase 0-0（問題発見）後 | 問題定義・根本原因分析の検証 |
+| [domain-model.json](.claude/skills/skill-creator/schemas/domain-model.json)             | Phase 0.5（ドメイン）後 | ドメインモデルの検証         |
+| [interview-result.json](.claude/skills/skill-creator/schemas/interview-result.json)     | インタビュー完了後      | ヒアリング結果の検証         |
+| [resource-selection.json](.claude/skills/skill-creator/schemas/resource-selection.json) | リソース選択後          | 選定リソースリストの検証     |
 
 ### updateモード
 
