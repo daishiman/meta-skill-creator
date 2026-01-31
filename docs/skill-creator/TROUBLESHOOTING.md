@@ -1,6 +1,6 @@
 # トラブルシューティング
 
-Meta Skill Creatorで発生する可能性のある問題と解決方法をまとめています。
+Skill Creatorで発生する可能性のある問題と解決方法をまとめています。
 
 ---
 
@@ -487,7 +487,7 @@ A: `references/integration-patterns.md` が索引となっており、REST API /
 
 ## サポート
 
-上記で解決しない場合は、以下の情報を添えて[Issues](https://github.com/daishiman/meta-skill-creator/issues)で報告してください：
+上記で解決しない場合は、以下の情報を添えて[Issues](https://github.com/daishiman/daishiman-skills/issues)で報告してください：
 
 1. **エラーメッセージ**（全文）
 2. **実行したコマンドまたは操作**

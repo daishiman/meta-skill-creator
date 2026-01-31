@@ -1,6 +1,6 @@
 {
-  "name": "daishiman-skill-creator",
-  "description": "スキルを作成・更新・プロンプト改善するためのメタスキル。ユーザーと対話しながら共創し、抽象的なアイデアから具体的な実装まで柔軟に対応。",
+  "name": "daishiman-skills",
+  "description": "Claude Code用スキルコレクション。スキル作成メタツール、Google Forms自動生成など、様々なスキルを提供。",
   "author": {
     "name": "daishiman",
     "email": "daishimanju@gmail.com"

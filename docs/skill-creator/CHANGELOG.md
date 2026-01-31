@@ -1,6 +1,6 @@
 # 変更履歴
 
-このファイルには、Meta Skill Creatorの全ての注目すべき変更が記録されています。
+このファイルには、Skill Creatorの全ての注目すべき変更が記録されています。
 
 フォーマットは[Keep a Changelog](https://keepachangelog.com/ja/1.0.0/)に基づいています。
 

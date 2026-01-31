@@ -1,6 +1,6 @@
 # インストールガイド
 
-Meta Skill Creatorをインストールして使い始めるための詳細ガイドです。
+Skill Creatorをインストールして使い始めるための詳細ガイドです。
 
 ---
 
@@ -35,7 +35,7 @@ Claude CodeはAnthropicが提供するAIアシスタントアプリケーショ�
 
 ```bash
 # Step 1: マーケットプレイスを追加
-/plugin marketplace add daishiman/meta-skill-creator
+/plugin marketplace add daishiman/daishiman-skills
 
 # Step 2: プラグインをインストール
 /plugin install daishiman-skill-creator
@@ -49,11 +49,11 @@ Claude CodeはAnthropicが提供するAIアシスタントアプリケーショ�
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/daishiman/meta-skill-creator.git
-cd meta-skill-creator
+git clone https://github.com/daishiman/daishiman-skills.git
+cd daishiman-skills
 
 # シンボリックリンクを作成
-ln -sf $(pwd) ~/.claude/plugins/marketplaces/meta-skill-creator
+ln -sf $(pwd) ~/.claude/plugins/marketplaces/daishiman-skills
 
 # known_marketplaces.json に追加（手動）
 # ~/.claude/plugins/known_marketplaces.json を編集

@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "meta-skill-creator",
-  "description": "スキル作成・更新・プロンプト改善のためのメタスキルを提供するマーケットプレイス",
+  "name": "daishiman-skills",
+  "description": "Claude Code用スキルコレクション。様々な用途のスキルを提供するマーケットプレイス。",
   "owner": {
     "name": "daishiman",
     "email": "daishimanju@gmail.com"
@@ -12,6 +12,12 @@
       "source": "./",
       "description": "スキルを作成・更新・プロンプト改善するためのメタスキル。ユーザーと対話しながら共創し、抽象的なアイデアから具体的な実装まで柔軟に対応。",
       "skills": ["./skills/skill-creator"]
+    },
+    {
+      "name": "daishiman-google-forms-generator",
+      "source": "./",
+      "description": "Google Forms APIを使用してフォームを自動生成するスキル。対話型インタビューでフォーム要件を収集し、GASデプロイ可能なフォームを作成。",
+      "skills": ["./skills/google-forms-generator"]
     }
   ]
 }

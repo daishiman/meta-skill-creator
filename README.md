@@ -1,226 +1,183 @@
-# Meta Skill Creator
+# daishiman-skills
 
-Claude Codeでスキルを作成・更新・プロンプト改善するためのメタスキル。
-**問題の本質を特定**し、**対話形式のインタビュー**でユーザーの要件を引き出し、最適なスキルを自動生成します。
+Claude Code用スキルコレクション。様々な用途のスキルをプラグインとして提供します。
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)]()
 
 ---
 
-## 特徴
+## 収録スキル
 
-| 特徴 | 説明 |
-|------|------|
-| **Problem First** | 機能の前に本質的な問題を特定。5 Whysで根本原因を分析 |
-| **DDD / Clean Architecture** | ドメイン構造を明確化し、層分離設計で変更に強いスキルを生成 |
-| **対話型インタビュー** | 問題発見→ドメインモデリング→8段階の質問で要件を明確化 |
-| **Collaborativeモード** | ユーザーと対話しながらスキルを共創（推奨） |
-| **Orchestrateモード** | Claude Code / Codex を使い分けて最適な実行エンジンを選択 |
-| **24種類のスクリプトタイプ** | API連携、データ処理、開発ツールなど幅広く対応 |
-| **Progressive Disclosure** | 必要な時に必要なリソースのみ読み込み |
+| スキル | 説明 | バージョン |
+|--------|------|------------|
+| **[skill-creator](docs/skill-creator/README.md)** | スキル作成・更新・プロンプト改善のためのメタスキル。Problem First + DDD/Clean Architectureで高品質なスキルを自動生成 | v8.1.0 |
+| **[google-forms-generator](docs/google-forms-generator/README.md)** | Google Forms APIを使用したフォーム自動生成。対話形式で要件をヒアリングし、11種類の質問タイプに対応 | v1.3.0 |
+
+---
+
+## 前提条件
+
+| 要件 | バージョン | 備考 |
+|------|------------|------|
+| Claude Code | 1.0.0以上 | **必須** - https://claude.ai/download |
+| Node.js | 18.0.0以上 | スクリプト実行に必要 |
+
+> **重要**: このプラグインは**Claude Code**上で動作します。ターミナルで直接実行するものではありません。
 
 ---
 
 ## インストール
 
-> **重要**: このプラグインは**Claude Code**上で動作します。
-> ターミナルで直接実行するものではありません。
+### Step 1: マーケットプレイスを追加
 
-### 前提条件
-
-1. **Claude Codeをインストール**: https://claude.ai/download
-2. **Claude Codeを起動**: アプリケーションを開く
-
-### インストール手順
-
-Claude Codeを起動した状態で、以下のコマンドを入力：
+Claude Codeを起動した状態で以下を実行：
 
 ```bash
-# Step 1: マーケットプレイスを追加
-/plugin marketplace add daishiman/meta-skill-creator
-
-# Step 2: プラグインをインストール
-/plugin install daishiman-skill-creator
-
-# Step 3: Claude Codeを再起動
+/plugin marketplace add daishiman/daishiman-skills
 ```
 
-インストール完了後、Claude Codeに「スキル作成」と話しかけるとワークフローが開始されます。
+### Step 2: スキルをインストール
+
+必要なスキルを個別にインストールします：
+
+#### Skill Creator（スキル作成メタツール）
+
+```bash
+/plugin install daishiman-skill-creator
+```
+
+#### Google Forms Generator（フォーム自動生成）
+
+```bash
+/plugin install daishiman-google-forms-generator
+```
+
+### Step 3: Claude Codeを再起動
+
+インストール完了後、Claude Codeを再起動してください。
 
 ---
 
-## 使い方
+## アップグレード
 
-### 基本的な流れ
+各スキルを最新バージョンに更新するには：
 
-1. **スキル作成を依頼** - Claude Codeに話しかけるだけ
-2. **問題発見** - 5 Whysで根本原因を分析（Phase 0-0）
-3. **ドメインモデリング** - DDD戦略設計でスキル構造を設計（Phase 0.5）
-4. **インタビューに回答** - 8段階の質問に答える（選択肢から選ぶだけ）
-5. **スキル生成** - 回答に基づいて最適なスキルが自動生成される
+```bash
+# Skill Creatorをアップグレード
+/plugin update daishiman-skill-creator
 
-### スキル作成の開始
+# Google Forms Generatorをアップグレード
+/plugin update daishiman-google-forms-generator
+```
 
-Claude Codeに話しかけるだけでワークフローが始まります：
+---
+
+## アンインストール
+
+```bash
+# Skill Creatorをアンインストール
+/plugin uninstall daishiman-skill-creator
+
+# Google Forms Generatorをアンインストール
+/plugin uninstall daishiman-google-forms-generator
+```
+
+---
+
+## ローカル開発用インストール
+
+開発者向けのローカルインストール方法：
+
+```bash
+# リポジトリをクローン
+git clone https://github.com/daishiman/daishiman-skills.git
+cd daishiman-skills
+
+# シンボリックリンクを作成
+ln -sf $(pwd) ~/.claude/plugins/marketplaces/daishiman-skills
+
+# known_marketplaces.json に追加（手動）
+# ~/.claude/plugins/known_marketplaces.json を編集
+
+# settings.json で有効化（手動）
+# ~/.claude/settings.json の enabledPlugins に追加
+```
+
+---
+
+## 各スキルの概要
+
+### Skill Creator
+
+Claude Codeでスキルを作成・更新・プロンプト改善するためのメタスキル。
+
+**主な機能：**
+
+- **Problem First** - 5 Whysで問題の根本原因を特定してから設計
+- **DDD / Clean Architecture** - ドメイン構造と層分離でスキルを設計
+- **対話型インタビュー** - 8段階の質問で要件を明確化（選択肢から選ぶだけ）
+- **Collaborative / Orchestrate** - 2つのモードで柔軟に対応
+- **24種類のスクリプト** - API連携、データ処理、開発ツールなど
+
+**使い方：**
+
+Claude Codeに話しかけるだけでワークフローが開始されます：
 
 ```
 「新しいスキルを作成したい」
 「〇〇を自動化するスキルを作って」
-「毎日のレポート作成を自動化したい」
 ```
 
-または `/skill-creator` コマンドで直接呼び出し：
-
-```
-/skill-creator
-```
-
-### ワークフロー概要
-
-```
-Phase 0-0: 問題発見 → problem-definition.json
-      ↓
-Phase 0.5: ドメインモデリング → domain-model.json
-      ↓
-Phase 0-1〜0-8: インタビュー → interview-result.json
-      ↓
-リソース選択 → resource-selection.json
-      ↓
-Phase 1〜6: 分析 → 設計 → 構造計画 → 生成 → 検証
-```
-
-### Phase 0-0: 問題発見
-
-スキル作成の最初に、解決すべき問題の本質を特定します：
-
-- **5 Whys**: 「なぜ？」を繰り返して根本原因に到達
-- **影響度評価**: 頻度・範囲・深刻度・緊急度で定量化
-- **Outcome定義**: 作るもの（Output）ではなく、状態変化（Outcome）でゴールを設定
-
-### Phase 0.5: ドメインモデリング
-
-DDDの戦略的設計でスキルの構造を決定します：
-
-- **ドメイン分類**: Core / Supporting / Generic の3分類
-- **ユビキタス言語**: ユーザー用語と技術用語の対応表を作成
-- **Bounded Context**: スキルの責務境界（In/Out/Port）を定義
-- **Clean Architecture**: 4層構造（Entities→Use Cases→Interface Adapters→External）
-
-### インタビューの流れ（Phase 0-1〜0-8）
-
-| Phase | 質問内容 | 例 |
-|-------|----------|-----|
-| 0-1 | **ゴール特定** | 「何を達成したいですか？」 |
-| 0-2 | **機能ヒアリング** | 「必要な機能は？」 |
-| 0-3 | **外部連携** | 「連携するサービスは？」（API自動推薦あり） |
-| 0-4 | **スクリプト** | 「どんな処理が必要？」 |
-| 0-5 | **オーケストレーション** | 「処理の流れは？（順次/並列/条件分岐）」 |
-| 0-6 | **スケジュール** | 「いつ実行？（手動/定期/イベント）」 |
-| 0-7 | **ドキュメント** | 「APIガイドは必要？」 |
-| 0-8 | **構成・優先事項** | 「シンプル？フル機能？」 |
-
-各質問では**選択肢が提示**されるので、選ぶだけで回答できます。
-自由記述も可能なので、想定外の要件にも対応できます。
-
-### 入力例と回答例
-
-```
-ユーザー: 「GitHubのPRを自動でSlackに通知するスキルを作って」
-
-Claude: まず、解決したい問題を特定させてください。
-        なぜPR通知が必要ですか？（5 Whys）
-        1. レビュー漏れを防ぎたい
-        2. チーム全体の進捗を可視化したい
-        3. レビュー依頼の伝達を効率化したい
-        4. その他（自由記述）
-
-ユーザー: 「1」を選択
-
-Claude: ドメインを分析します。
-        このスキルのCore Domainは「PR通知」です。
-        次に、具体的なゴールを確認させてください...
-
-... (以降、インタビューが続く)
-```
+詳細 → [Skill Creator ドキュメント](docs/skill-creator/README.md)
 
 ---
 
-## 高度な機能
+### Google Forms Generator
 
-### オーケストレーション
+Google Forms APIを使用してフォームを自動生成するスキル。
 
-複数のスキルを組み合わせて複雑なワークフローを実現：
+**主な機能：**
 
-| パターン | 説明 | 使用例 |
-|----------|------|--------|
-| chain | 順次実行 | データ取得→変換→保存 |
-| parallel | 並列実行 | 複数APIから同時取得 |
-| conditional | 条件分岐 | 成功→ログ、失敗→通知 |
+- **11種類の質問タイプ** - 短文/長文/ラジオ/チェック/プルダウン/スケール/選択式グリッド/チェックボックスグリッド/日付/時刻/評価
+- **フォーム設定** - クイズモード、メール収集、公開設定
+- **高度な機能** - 条件分岐、セクション、画像/動画埋め込み
+- **連携** - Google Drive（フォルダ移動）、Google Sheets（回答取得）
+- **テンプレート** - 6種類のフォームパターンから素早く作成
 
-### イベントトリガー
+**使い方：**
 
-| タイプ | 説明 | 例 |
-|--------|------|-----|
-| file | ファイル変更を監視 | `*.md`ファイルの変更 |
-| cron | 時刻ベース | 毎日9:00 |
-| webhook | 外部イベント | GitHub webhook |
-
-### スケジューラ
-
-Cron形式で定期実行を設定：
+Claude Codeに話しかけるだけでワークフローが開始されます：
 
 ```
-0 9 * * *     # 毎日9:00
-0 9 * * 1     # 毎週月曜9:00
-0 0 1 * *     # 毎月1日0:00
+「Googleフォームを作成したい」
+「アンケートフォームを作って」
 ```
 
-### ドキュメント自動生成
-
-- **APIドキュメント**: エンドポイント、パラメータ、使用例を自動生成
-- **セットアップガイド**: インストールから使用開始までの手順を自動生成
-
-### 統合パターン
-
-目的に応じた統合パターンを自動選定：
-
-| パターン | 用途 |
-|----------|------|
-| REST API | CRUD操作、外部サービス連携 |
-| GraphQL | 複雑なデータ取得、型安全なクエリ |
-| Webhook | イベント駆動、リアルタイム連携 |
-| IPC | Electron Main/Renderer間通信 |
-
----
-
-## 設計原則
-
-| 原則 | 説明 |
-|------|------|
-| **Problem First** | 機能の前に本質的な問題を特定する |
-| **Collaborative First** | ユーザーとの対話を通じて要件を明確化 |
-| Domain-Driven Design | ドメイン構造を明確化し高精度な設計を導く |
-| Clean Architecture | 層分離と依存関係ルールで変更に強い構造 |
-| Script First | 決定論的処理はスクリプトで実行 |
-| Progressive Disclosure | 必要な時に必要なリソースのみ読み込み |
-
----
-
-## 動作要件
-
-| 要件 | バージョン |
-|------|------------|
-| Claude Code | 1.0.0以上 |
-| Node.js | 18.0.0以上 |
+詳細 → [Google Forms Generator ドキュメント](docs/google-forms-generator/README.md)
 
 ---
 
 ## ドキュメント
 
-- [インストールガイド](./docs/INSTALLATION.md)
-- [詳細な使い方](./docs/USAGE.md)
-- [トラブルシューティング](./docs/TROUBLESHOOTING.md)
-- [変更履歴](./docs/CHANGELOG.md)
+### Skill Creator
+
+| ドキュメント | 内容 |
+|-------------|------|
+| [概要・詳細](docs/skill-creator/README.md) | 機能説明、設計原則、ワークフロー |
+| [インストールガイド](docs/skill-creator/INSTALLATION.md) | インストール手順、プラグイン構造 |
+| [使い方ガイド](docs/skill-creator/USAGE.md) | 各フェーズの詳細、ベストプラクティス |
+| [トラブルシューティング](docs/skill-creator/TROUBLESHOOTING.md) | 問題解決、FAQ |
+| [変更履歴](docs/skill-creator/CHANGELOG.md) | バージョン履歴 |
+
+### Google Forms Generator
+
+| ドキュメント | 内容 |
+|-------------|------|
+| [概要・詳細](docs/google-forms-generator/README.md) | 機能説明、対応質問タイプ、ワークフロー |
+| [インストールガイド](docs/google-forms-generator/INSTALLATION.md) | OAuth認証設定、環境構築 |
+| [使い方ガイド](docs/google-forms-generator/USAGE.md) | フォーム作成手順、テンプレート活用 |
+| [トラブルシューティング](docs/google-forms-generator/TROUBLESHOOTING.md) | API エラー、認証問題の解決 |
+| [変更履歴](docs/google-forms-generator/CHANGELOG.md) | バージョン履歴 |
 
 ---
 
@@ -232,4 +189,4 @@ MIT License
 
 ## サポート
 
-[Issues](https://github.com/daishiman/meta-skill-creator/issues)
+[Issues](https://github.com/daishiman/daishiman-skills/issues)
