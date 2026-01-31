@@ -4,24 +4,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-**Meta Skill Creator** - スキルを作成・更新・プロンプト改善するためのメタスキル。
+**daishiman-skills** - Claude Code用スキルコレクション。スキル作成メタツール、Google Forms自動生成など、様々なスキルを提供。
 
 ## プラグイン構造
 
 ```
-meta-skill-creator/
+daishiman-skills/
 ├── .claude-plugin/
 │   ├── plugin.json          # プラグインメタデータ（必須）
 │   └── marketplace.json     # マーケットプレイス定義
 ├── skills/                  # スキル配置ディレクトリ
-│   └── skill-creator/       # メインスキル
-│       ├── SKILL.md         # スキル定義（必須）
-│       ├── agents/          # サブエージェント定義
-│       ├── assets/          # テンプレート・素材
-│       ├── references/      # 参照ドキュメント（Progressive Disclosure）
-│       ├── schemas/         # JSONスキーマ
-│       └── scripts/         # 自動化スクリプト（決定論的処理）
+│   ├── skill-creator/       # スキル作成メタスキル
+│   │   ├── SKILL.md
+│   │   ├── agents/
+│   │   ├── assets/
+│   │   ├── references/
+│   │   ├── schemas/
+│   │   └── scripts/
+│   └── google-forms-generator/  # Google Forms自動生成スキル
+│       ├── SKILL.md
+│       ├── agents/
+│       ├── references/
+│       ├── scripts/
+│       ├── templates/
+│       └── .env.example
 ├── docs/                    # ユーザー向けドキュメント
+│   ├── skill-creator/       # Skill Creator個別ドキュメント
+│   └── google-forms-generator/ # Google Forms Generator個別ドキュメント
 ├── .gitignore
 ├── README.md
 └── CLAUDE.md
@@ -75,8 +84,9 @@ node skills/skill-creator/scripts/detect_mode.js --request "新規スキル"
 
 ```bash
 # Step 1: マーケットプレイスを追加
-/plugin marketplace add daishiman/meta-skill-creator
+/plugin marketplace add daishiman/daishiman-skills
 
-# Step 2: プラグインをインストール
+# Step 2: プラグインをインストール（個別選択）
 /plugin install daishiman-skill-creator
+/plugin install daishiman-google-forms-generator
 ```

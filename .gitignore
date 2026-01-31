@@ -28,12 +28,10 @@ pnpm-lock.yaml
 tmp/
 temp/
 
-# Environment
-.env
-.env.local
-.env.*.local
-.env.development
-.env.production
+# Environment (any depth)
+**/.env
+**/.env.*
+!**/.env.example
 
 # Build output
 dist/
