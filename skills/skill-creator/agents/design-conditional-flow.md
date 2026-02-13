@@ -2,6 +2,7 @@
 
 > **読み込み条件**: 条件分岐フロー設計時
 > **相対パス**: `agents/design-conditional-flow.md`
+> **Phase**: 2（設計サブタスク）
 
 ## 1. メタ情報
 

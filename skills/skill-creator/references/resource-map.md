@@ -12,7 +12,7 @@
 | [discover-problem.md](.claude/skills/skill-creator/agents/discover-problem.md)                     | collaborativeモード時（Phase 0-0） | 根本原因分析・問題定義                   |
 | [model-domain.md](.claude/skills/skill-creator/agents/model-domain.md)                             | collaborativeモード時（Phase 0.5） | DDD/Clean Architectureドメインモデリング |
 | **ユーザーインタラクション**                                                                       |                                    |                                          |
-| [interview-user.md](.claude/skills/skill-creator/agents/interview-user.md)                         | collaborativeモード時              | 要件ヒアリング・抽象度判定               |
+| [interview-user.md](.claude/skills/skill-creator/agents/interview-user.md)                         | collaborativeモード時（Phase 0-1〜0-8） | 要件ヒアリング・抽象度判定               |
 | [recommend-integrations.md](.claude/skills/skill-creator/agents/recommend-integrations.md)         | Phase 0-3（外部連携）時            | 目的からAPI/サービスを推薦               |
 | [select-resources.md](.claude/skills/skill-creator/agents/select-resources.md)                     | interview-result.json生成後        | 最適リソース自動選択                     |
 | [interview-execution-mode.md](.claude/skills/skill-creator/agents/interview-execution-mode.md)     | orchestrateモード時                | 実行モード選択ヒアリング                 |
@@ -34,6 +34,10 @@
 | [analyze-feedback.md](.claude/skills/skill-creator/agents/analyze-feedback.md)                     | 改善分析時                         | フィードバックデータ解釈                 |
 | [design-self-improvement.md](.claude/skills/skill-creator/agents/design-self-improvement.md)       | 改善計画時                         | 改善提案の設計                           |
 | [save-patterns.md](.claude/skills/skill-creator/agents/save-patterns.md)                           | パターン保存時                     | patterns.mdへのパターン記録              |
+| **クロススキル依存関係・外部CLI**                                                                  |                                    |                                          |
+| [resolve-skill-dependencies.md](.claude/skills/skill-creator/agents/resolve-skill-dependencies.md) | skillDependencies存在時（Phase 2.5） | スキル間依存関係解決・相対パス計算       |
+| [delegate-to-external-cli.md](.claude/skills/skill-creator/agents/delegate-to-external-cli.md)     | externalCliAgents存在時（Phase 4.5） | 外部CLIエージェント汎用委譲             |
+| [design-multi-skill.md](.claude/skills/skill-creator/agents/design-multi-skill.md)                 | multiSkillPlan存在時（Phase 0.9）    | 複数スキル同時設計・依存関係グラフ       |
 | **オーケストレーション**                                                                           |                                    |                                          |
 | [design-orchestration.md](.claude/skills/skill-creator/agents/design-orchestration.md)             | オーケストレーション全体設計時     | ワークフロー構成設計                     |
 | [design-skill-chain.md](.claude/skills/skill-creator/agents/design-skill-chain.md)                 | スキルチェーン設計時               | A→B→C連鎖実行設計                        |
@@ -81,6 +85,9 @@
 | [script-commands.md](.claude/skills/skill-creator/references/script-commands.md)                             | スクリプト実行時            | 全スクリプトの実行コマンド詳細                     |
 | [library-management.md](.claude/skills/skill-creator/references/library-management.md)                       | 依存関係追加時              | PNPM依存関係管理ガイド                             |
 | [resource-map.md](.claude/skills/skill-creator/references/resource-map.md)                                   | リソース詳細確認時          | このファイル（全リソースマップ）                   |
+| **クロススキル依存関係・外部CLI**                                                                            |                             |                                                    |
+| [cross-skill-reference-patterns.md](.claude/skills/skill-creator/references/cross-skill-reference-patterns.md) | skillDependencies設計時   | スキル間参照パターン集（read-only/execute/invoke/chain） |
+| [external-cli-agents-guide.md](.claude/skills/skill-creator/references/external-cli-agents-guide.md)         | externalCliAgents設計時     | 外部CLIエージェント統合ガイド（Gemini/Codex/Aider） |
 | **オーケストレーション**                                                                                     |                             |                                                    |
 | [orchestration-guide.md](.claude/skills/skill-creator/references/orchestration-guide.md)                     | オーケストレーション設計時  | オーケストレーション全体ガイド                     |
 | [skill-chain-patterns.md](.claude/skills/skill-creator/references/skill-chain-patterns.md)                   | スキルチェーン設計時        | チェーンパターン集                                 |
@@ -380,6 +387,14 @@ JSON Schema形式。[validate_schema.js](.claude/skills/skill-creator/scripts/va
 | [conditional-flow.json](.claude/skills/skill-creator/schemas/conditional-flow.json)     | 条件分岐設計時                 | 条件定義の検証     |
 | [schedule.json](.claude/skills/skill-creator/schemas/schedule.json)                     | スケジュール設計時             | cron定義の検証     |
 | [event-trigger.json](.claude/skills/skill-creator/schemas/event-trigger.json)           | イベントトリガー設計時         | トリガー定義の検証 |
+
+### クロススキル依存関係
+
+| Schema                                                                                          | 読み込み条件                 | 用途                       |
+| ----------------------------------------------------------------------------------------------- | ---------------------------- | -------------------------- |
+| [skill-dependency-graph.json](.claude/skills/skill-creator/schemas/skill-dependency-graph.json) | skillDependencies存在時         | 単一スキル依存関係グラフ・DAG検証 |
+| [multi-skill-graph.json](.claude/skills/skill-creator/schemas/multi-skill-graph.json)           | multiSkillPlan存在時            | マルチスキル設計グラフ・作成順序  |
+| [external-cli-result.json](.claude/skills/skill-creator/schemas/external-cli-result.json)       | externalCliAgents実行後         | 外部CLIエージェント実行結果スキーマ |
 
 ### ドキュメント生成
 

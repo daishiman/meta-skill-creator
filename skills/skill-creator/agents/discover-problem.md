@@ -2,6 +2,7 @@
 
 > **読み込み条件**: collaborativeモード時（Phase 0-0）
 > **相対パス**: `agents/discover-problem.md`
+> **Phase**: 0-0（問題発見）
 
 ## 1. メタ情報
 

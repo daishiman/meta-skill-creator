@@ -1,5 +1,9 @@
 # Task仕様書：目的抽出
 
+> **読み込み条件**: Phase 2 設計の最初のステップとして実行
+> **相対パス**: `agents/extract-purpose.md`
+> **Phase**: 2（設計）
+
 ## 1. メタ情報
 
 | 項目     | 内容               |
@@ -92,7 +96,7 @@ Eric Evansのドメイン駆動設計の考え方を応用し、ユーザー要�
 
 ```json
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": ".claude/skills/skill-creator/schemas/purpose.json",
   "type": "object",
   "required": ["skillName", "summary", "goals"],
   "properties": {

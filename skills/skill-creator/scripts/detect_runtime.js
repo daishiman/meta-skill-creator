@@ -16,12 +16,8 @@
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
-import { resolve, dirname } from "path";
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_FILE_NOT_FOUND = 3;
+import { dirname } from "path";
+import { EXIT_CODES, getArg, resolvePath } from "./utils.js";
 
 // タイプ別推奨ランタイム
 const TYPE_RUNTIME_MAP = {
@@ -102,15 +98,6 @@ Options:
 `);
 }
 
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
-}
-
-function resolvePath(p) {
-  if (p.startsWith("/")) return p;
-  return resolve(process.cwd(), p);
-}
 
 function detectRuntime(requirement, verbose = false) {
   const { type, purpose = "", dependencies = {}, keywords = [] } = requirement;
@@ -242,7 +229,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   const requirementPath = getArg(args, "--requirement");
@@ -251,14 +238,14 @@ async function main() {
 
   if (!requirementPath) {
     console.error("Error: --requirement は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const resolvedRequirement = resolvePath(requirementPath);
 
   if (!existsSync(resolvedRequirement)) {
     console.error(`Error: 要件ファイルが存在しません: ${resolvedRequirement}`);
-    process.exit(EXIT_FILE_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   try {
@@ -279,14 +266,14 @@ async function main() {
       console.log(output);
     }
 
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   } catch (err) {
     console.error(`Error: ${err.message}`);
-    process.exit(EXIT_ERROR);
+    process.exit(EXIT_CODES.ERROR);
   }
 }
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });

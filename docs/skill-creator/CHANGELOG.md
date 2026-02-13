@@ -6,6 +6,224 @@
 
 ---
 
+## [10.5.0] - 2026-02-13
+
+### Changed
+- **ラウンド3リファクタリング（修正）**:
+  - `script-types-catalog.md` 全24テンプレート参照修正（存在しないパス→実在パスに修正）
+  - `interview-user.md` にPhaseラベル追加（Phase 0-1〜0-8）
+  - `resource-map.md` のinterview-user.mdエントリにPhase情報追加
+  - `phase-completion-checklist.md` のPhase 5/6に「担当スクリプト」セクション追加
+  - scripts/ DRY違反修正（19スクリプト: `getArg/resolvePath/EXIT_*`定数を`utils.js`からのimportに統一）
+  - `generate_script.js` テンプレート本体の`EXIT_*`→`EXIT_CODES.*`統一
+  - `validate_all.js` の`normalizeLink()`ローカル重複定義を`utils.js`からのimportに統一
+  - `delegate-to-codex.md` §5.5残留参照修正
+
+---
+
+## [10.4.0] - 2026-02-13
+
+### Changed
+- **ラウンド2リファクタリング（27件修正）**:
+  - `phase-completion-checklist.md` 完全書き換え（skill-creator用Phase 0-0〜6対応）
+  - `creation-process.md` にCollaborativeモード追加
+  - SKILL.md重複バージョン統合
+  - 全エージェントへのPhaseラベル追加（16ファイル）
+  - データフロー修正（`resolve-skill-dependencies.md`, `delegate-to-codex.md`, `design-multi-skill.md`）
+
+---
+
+## [10.3.0] - 2026-02-13
+
+### Changed
+- **ラウンド1リファクタリング（20件修正）**:
+  - `design-multi-skill.md` 後続処理フロー修正
+  - `delegate-to-external-cli.md` インライン例修正
+  - `interview-user.md` 入出力インターフェース拡充・チェックリスト補完
+  - `analyze-request.md` にPhase 1ラベル・上流入力・受領先追加
+  - `resolve-skill-dependencies.md` / `delegate-to-external-cli.md` にPhase番号追加
+  - `select-resources.md` Phase 2.5記述修正・`type-aggregator.md`追加
+  - `interview-result.json` MoSCoW記述修正
+  - `multi-skill-graph.json` failedSkills required追加
+
+---
+
+## [10.2.0] - 2026-02-13
+
+### Added
+- **interviewDepth機能追加**: インタビュー開始時にquick/standard/detailedの3段階深度選択
+  - quickモード: 3-4問の最小限質問＋自動推定
+  - standardモード: 通常の8段階インタビュー
+  - detailedモード: 10-15問の網羅的ヒアリング
+- `interview-user.md` にPhase実行マトリクス・デフォルト値テーブル・深度別スキップ条件追加
+- `interview-result.json` スキーマに`interviewDepth`フィールド追加
+
+---
+
+## [10.1.0] - 2026-02-13
+
+### Fixed
+- 4レビューエージェントの全指摘事項を修正
+- スキーマ新規作成: `external-cli-result.json`, `multi-skill-graph.json`
+- ワークフロー図更新、相対パス修正、失敗リカバリ追加
+
+---
+
+## [10.0.1] - 2026-02-13
+
+### Fixed
+- **v10.0.0レビュー修正18件**:
+  - 緊急3件: `select-resources.md`ステップ追加、シェルインジェクション修正、`multi-skill-graph.json`スキーマ作成
+  - 高5件: 責務境界明確化、静的/ランタイム分離、enum不一致修正、スキップ条件追加、Script First原則適用
+  - 中6件: 正規化マッピング、creationOrder優先順位、ユーザー承認ステップ、examples拡充
+  - 低3件: 自己参照ノート、MCP検討、パターン記録
+
+---
+
+## [10.0.0] - 2026-02-13
+
+### Added
+- **クロススキル依存関係解決**: 他スキルのSKILL.mdを読み込み、公開インターフェースを特定して依存関係を解決
+- **外部CLIエージェント統合**: Gemini CLI等の外部CLIツールをサブタスク実行に活用
+- **マルチスキル同時設計**: 複数スキルを一度に設計し、依存関係グラフで管理
+- 新規エージェント3件:
+  - `agents/resolve-skill-dependencies.md`: クロススキル依存関係解決
+  - `agents/delegate-to-external-cli.md`: 外部CLIエージェント委譲
+  - `agents/design-multi-skill.md`: マルチスキル同時設計
+- 新規リファレンス2件:
+  - `references/cross-skill-reference-patterns.md`: クロススキル参照パターン
+  - `references/external-cli-agents-guide.md`: 外部CLIエージェントガイド
+- 新規スキーマ: `skill-dependency-graph.json`
+- `interview-result.json`スキーマ拡張: `skillDependencies`, `externalCliAgents`, `multiSkillPlan`フィールド追加
+- `interview-user.md` にPhase 0-3.5（クロススキル参照）・Phase 0-5.5（外部CLI）追加
+- Orchestrateモードに`gemini`実行エンジン追加
+
+---
+
+## [9.4.0] - 2026-02-13
+
+### Changed
+- セキュリティ教訓反映: TDDセキュリティテスト分類体系、YAGNI共通化判断記録のパターン追加
+- Phase 12未タスク2段階判定（raw→精査）を成功パターンとして追加
+
+---
+
+## [9.3.0] - 2026-02-12
+
+### Changed
+- SDK統合ドメイン新設: TypeScriptモジュール解決による型安全統合パターン追加
+- `phase-completion-checklist.md` のPhase 12完了条件に`verify-unassigned-links.js`実行を追加
+- Phase 12成果物名を`documentation-changelog.md`に統一
+
+---
+
+## [9.2.0] - 2026-02-12
+
+### Changed
+- IPC機能開発ワークフロー6段階パターン追加（チャンネル定数→ハンドラー→Preload→統合→型定義→登録）
+
+---
+
+## [9.1.0] - 2026-02-12
+
+### Changed
+- SkillCreatorService IPC通信基盤の構築完了記録
+- Store Hook `renderHook`テストパターン追加
+- テストカテゴリ分類(CAT-01〜CAT-05)追加
+
+---
+
+## [9.0.0] - 2026-02-11
+
+### Changed
+- Setter Injection（遅延初期化DI）パターン追加
+- 型変換パターン（Skill→SkillMetadata）追加
+- DIテストモック大規模修正パターン追加
+
+---
+
+## [8.10.0] - 2026-02-10
+
+### Changed
+- 統合テストでの依存サービスモック漏れ防止パターン追加
+- 入力バリデーション統一パターン追加（whitespace対策）
+
+---
+
+## [8.9.0] - 2026-02-09
+
+### Changed
+- `mockReturnValue` vs `mockReturnValueOnce`テスト間リーク防止パターン追加
+
+---
+
+## [8.8.0] - 2026-02-06
+
+### Added
+- Supabase OAuth flowType設定、PKCE内部管理委任、ローカルHTTPサーバーコールバック受信の3成功パターン追加
+- OAuth関連失敗パターン5件追加
+
+---
+
+## [8.7.0] - 2026-02-06
+
+### Changed
+- パターン間のクロスリファレンス追加
+
+---
+
+## [8.6.1] - 2026-02-06
+
+### Changed
+- IPC Bridge API統一時のテストモック設計パターン追加
+- セッション間仕様書編集永続化検証パターン追加
+- Phase 1依存仕様書マトリクスパターン追加
+
+---
+
+## [8.6.0] - 2026-02-06
+
+### Added
+- Supabase SDK競合防止パターン追加
+- `setTimeout` vs `setInterval`選択パターン追加
+- `vi.useFakeTimers`+`flushPromises`テストパターン追加
+- Callback DIテスタブル設計パターン追加
+
+---
+
+## [8.5.0] - 2026-02-05
+
+### Added
+- OAuthコールバックエラーパラメータ抽出パターン追加
+- Zustandリスナー二重登録防止パターン追加
+- IPC経由エラー情報伝達設計パターン追加
+
+---
+
+## [8.4.0] - 2026-02-05
+
+### Added
+- IPCチャンネル統合パターン追加（ハードコード文字列発見、重複定義整理、ホワイトリスト更新漏れ検証）
+
+---
+
+## [8.3.0] - 2026-02-04
+
+### Added
+- 既実装済み修正の発見パターン追加
+- テスト環境問題切り分けパターン追加
+- React Portal z-index解決パターン追加
+- Supabase認証状態変更後即時UI更新パターン追加
+
+---
+
+## [8.2.0] - 2026-02-02
+
+### Added
+- E2Eテストパターン追加: ARIA属性ベースセレクタ、ヘルパー関数分離、安定性対策3層パターン
+
+---
+
 ## [8.1.0] - 2026-01-30
 
 ### Changed

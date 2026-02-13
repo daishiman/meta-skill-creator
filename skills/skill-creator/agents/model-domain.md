@@ -2,6 +2,7 @@
 
 > **読み込み条件**: collaborativeモード時（Phase 0.5）
 > **相対パス**: `agents/model-domain.md`
+> **Phase**: 0.5（ドメインモデリング）
 
 ## 1. メタ情報
 

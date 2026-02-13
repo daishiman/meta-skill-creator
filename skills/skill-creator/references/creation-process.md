@@ -6,7 +6,41 @@
 
 ---
 
-## 新規作成フロー概要
+## Collaborative モード（推奨）
+
+SKILL.md で推奨されるモード。ユーザーと対話しながら段階的にスキルを共創する。
+
+```
+Phase 0-0: 問題発見 → problem-definition.json
+      ↓
+Phase 0.5: ドメインモデリング → domain-model.json
+      ↓
+Phase 0-1〜0-8: インタビュー → interview-result.json
+      ↓
+[分岐] multiSkillPlan がある場合:
+  Phase 0.9: マルチスキル設計 (design-multi-skill) → multi-skill-graph.json
+  → 各サブスキルに対して以下を繰り返し:
+      ↓
+リソース選択: select-resources.md → resource-selection.json
+      ↓
+Phase 1: 要求分析 → Phase 2: 設計
+      ↓
+[条件] skillDependencies がある場合:
+  Phase 2.5: 依存関係解決 (resolve-skill-dependencies) → skill-dependency-graph.json
+      ↓
+Phase 3: 構造計画 → Phase 4: 生成
+      ↓
+[条件] externalCliAgents がある場合:
+  Phase 4.5: 外部CLIエージェント委譲 (delegate-to-external-cli) → external-cli-result.json
+      ↓
+Phase 5: レビュー → Phase 6: 検証
+```
+
+---
+
+## Create モード（手動）
+
+手動でStep 1-6を順に実行するモード。
 
 ```
 1. 具体例でスキルを理解する

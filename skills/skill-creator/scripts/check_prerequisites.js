@@ -14,9 +14,7 @@
 
 import { execSync } from "node:child_process";
 import { parseArgs } from "node:util";
-
-const EXIT_SUCCESS = 0;
-const EXIT_FAILED = 1;
+import { EXIT_CODES } from "./utils.js";
 
 const { values } = parseArgs({
   options: {
@@ -41,7 +39,7 @@ Checks:
   1. gitリポジトリであること
   2. Codex CLIがインストールされていること
 `);
-  process.exit(EXIT_SUCCESS);
+  process.exit(EXIT_CODES.SUCCESS);
 }
 
 const verbose = values.verbose || false;
@@ -136,10 +134,10 @@ function main() {
         console.error(`  - ${value.message}`);
       }
     });
-    process.exit(EXIT_FAILED);
+    process.exit(EXIT_CODES.ERROR);
   }
 
-  process.exit(EXIT_SUCCESS);
+  process.exit(EXIT_CODES.SUCCESS);
 }
 
 main();

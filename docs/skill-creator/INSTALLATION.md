@@ -103,10 +103,13 @@ Claude Codeでは、スキルの配置場所が用途によって異なります
 skills/skill-creator/
 ├── SKILL.md           # スキル定義（必須）
 ├── agents/            # サブエージェント定義
-│   ├── discover-problem.md   # 問題発見（Phase 0-0）
-│   ├── model-domain.md       # ドメインモデリング（Phase 0.5）
-│   ├── interview-user.md     # インタビュー（Phase 0-1〜0-8）
-│   ├── select-resources.md   # リソース自動選択
+│   ├── discover-problem.md          # 問題発見（Phase 0-0）
+│   ├── model-domain.md              # ドメインモデリング（Phase 0.5）
+│   ├── interview-user.md            # インタビュー（Phase 0-1〜0-8）
+│   ├── select-resources.md          # リソース自動選択
+│   ├── resolve-skill-dependencies.md  # クロススキル依存解決（Phase 2.5）
+│   ├── delegate-to-external-cli.md    # 外部CLIエージェント委譲（Phase 4.5）
+│   ├── design-multi-skill.md          # マルチスキル同時設計（Phase 0.9）
 │   └── ...
 ├── references/        # 参照ドキュメント
 │   ├── resource-map.md                    # リソース一覧
@@ -114,6 +117,8 @@ skills/skill-creator/
 │   ├── problem-discovery-framework.md     # 問題発見フレームワーク
 │   ├── domain-modeling-guide.md           # ドメインモデリングガイド
 │   ├── clean-architecture-for-skills.md   # Clean Architecture
+│   ├── cross-skill-reference-patterns.md  # クロススキル参照パターン
+│   ├── external-cli-agents-guide.md       # 外部CLIエージェントガイド
 │   ├── integration-patterns.md            # 統合パターン（索引）
 │   └── ...
 ├── scripts/           # 自動化スクリプト
@@ -121,18 +126,21 @@ skills/skill-creator/
 │   ├── quick_validate.js
 │   └── ...
 ├── schemas/           # JSONスキーマ
-│   ├── problem-definition.json   # 問題定義
-│   ├── domain-model.json         # ドメインモデル
-│   ├── interview-result.json     # インタビュー結果
+│   ├── problem-definition.json     # 問題定義
+│   ├── domain-model.json           # ドメインモデル
+│   ├── interview-result.json       # インタビュー結果
+│   ├── skill-dependency-graph.json # クロススキル依存グラフ
+│   ├── multi-skill-graph.json      # マルチスキル設計グラフ
+│   ├── external-cli-result.json    # 外部CLI実行結果
 │   └── ...
 └── assets/            # テンプレート・素材
     └── ...
 ```
 
 - `SKILL.md` - 唯一の必須ファイル。YAMLフロントマターとMarkdown指示で構成
-- `agents/` - 問題発見、ドメインモデリング、インタビュー、分析、生成などのサブタスク用エージェント
-- `scripts/` - バリデーション、生成などの決定論的処理
-- `schemas/` - problem-definition、domain-model、interview-result等の構造化データ定義
+- `agents/` - 問題発見、ドメインモデリング、インタビュー、依存解決、マルチスキル設計などのサブタスク用エージェント
+- `scripts/` - バリデーション、生成などの決定論的処理（`utils.js`で共通ユーティリティを統一）
+- `schemas/` - problem-definition、domain-model、interview-result、skill-dependency-graph等の構造化データ定義
 - `references/` - Progressive Disclosureで必要時に読み込む参照情報
 
 ---

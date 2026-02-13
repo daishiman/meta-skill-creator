@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "external-cli-result.json",
+  "title": "External CLI Agent Result",
+  "description": "外部CLIエージェント実行結果を格納するスキーマ",
+  "type": "object",
+  "required": ["agentName", "status", "executedAt"],
+  "properties": {
+    "agentName": {
+      "type": "string",
+      "enum": ["codex", "gemini", "aider", "claude-code", "custom"],
+      "description": "実行した外部CLIエージェント名"
+    },
+    "customCommand": {
+      "type": "string",
+      "description": "カスタムエージェントの実行コマンド名（agentName='custom'時）"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["success", "failure", "timeout", "unavailable"],
+      "description": "実行結果ステータス"
+    },
+    "invocationPattern": {
+      "type": "string",
+      "enum": ["delegate", "parallel-review", "fallback", "pipeline"],
+      "description": "使用した呼び出しパターン"
+    },
+    "input": {
+      "type": "object",
+      "properties": {
+        "prompt": { "type": "string", "description": "送信したプロンプト" },
+        "contextFiles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "コンテキストとして提供したファイルパス"
+        },
+        "inputFormat": {
+          "type": "string",
+          "enum": ["prompt-string", "context-file", "stdin-pipe"]
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "content": { "type": "string", "description": "エージェントの出力内容" },
+        "format": {
+          "type": "string",
+          "enum": ["text", "json", "stream-json", "markdown"],
+          "description": "出力形式"
+        },
+        "truncated": {
+          "type": "boolean",
+          "description": "出力が切り詰められたか",
+          "default": false
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "code": { "type": "string", "description": "エラーコード" },
+        "message": { "type": "string", "description": "エラーメッセージ" },
+        "recoverable": { "type": "boolean", "description": "リカバリ可能か" }
+      }
+    },
+    "executedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "実行日時"
+    },
+    "duration": {
+      "type": "integer",
+      "description": "実行時間（ミリ秒）"
+    },
+    "cliVersion": {
+      "type": "string",
+      "description": "使用したCLIツールのバージョン"
+    }
+  }
+}

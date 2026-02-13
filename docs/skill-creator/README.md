@@ -12,8 +12,12 @@
 | **Problem First** | 5 Whysで根本原因を分析し、本質的な問題を特定 |
 | **DDD / Clean Architecture** | ドメイン構造を明確化し、層分離設計で変更に強いスキルを生成 |
 | **対話型インタビュー** | 問題発見→ドメインモデリング→8段階の質問で要件を明確化 |
+| **interviewDepth** | quick/standard/detailedの3段階で質問量を調整 |
 | **Collaborativeモード** | ユーザーと対話しながらスキルを共創（推奨） |
-| **Orchestrateモード** | Claude Code / Codex を使い分けて最適な実行エンジンを選択 |
+| **Orchestrateモード** | Claude Code / Codex / Gemini を使い分けて最適な実行エンジンを選択 |
+| **マルチスキル設計** | 複数スキルを一度に設計し、依存関係グラフで管理 |
+| **クロススキル依存解決** | 他スキルの公開インターフェースを特定して依存関係を自動解決 |
+| **外部CLIエージェント** | Gemini CLI等の外部CLIツールをサブタスク実行に活用 |
 | **24種類のスクリプトタイプ** | API連携、データ処理、開発ツールなど幅広く対応 |
 | **Progressive Disclosure** | 必要な時に必要なリソースのみ読み込み |
 
@@ -46,9 +50,23 @@ Phase 0.5: ドメインモデリング → domain-model.json
       ↓
 Phase 0-1〜0-8: インタビュー → interview-result.json
       ↓
+[分岐] multiSkillPlan がある場合:
+  Phase 0.9: マルチスキル設計 → multi-skill-graph.json
+  → 各サブスキルに対して以下を繰り返し
+      ↓
 リソース選択 → resource-selection.json
       ↓
-Phase 1〜6: 分析 → 設計 → 構造計画 → 生成 → 検証
+Phase 1: 要求分析 → Phase 2: 設計
+      ↓
+[条件] skillDependencies がある場合:
+  Phase 2.5: 依存関係解決 → skill-dependency-graph.json
+      ↓
+Phase 3: 構造計画 → Phase 4: 生成
+      ↓
+[条件] externalCliAgents がある場合:
+  Phase 4.5: 外部CLIエージェント委譲 → external-cli-result.json
+      ↓
+Phase 5: レビュー → Phase 6: 検証
 ```
 
 ---
@@ -89,6 +107,28 @@ Phase 1〜6: 分析 → 設計 → 構造計画 → 生成 → 検証
 | chain | 順次実行 | データ取得→変換→保存 |
 | parallel | 並列実行 | 複数APIから同時取得 |
 | conditional | 条件分岐 | 成功→ログ、失敗→通知 |
+
+### マルチスキル設計
+
+複数のスキルを一度に設計し、依存関係グラフで管理：
+
+- **依存関係グラフ**: スキル間の依存関係をDAGで可視化
+- **creationOrder**: 依存関係に基づく最適な作成順序を自動決定
+- **失敗リカバリ**: 一部のスキル生成が失敗しても残りを継続
+
+### クロススキル依存解決
+
+他のスキルのSKILL.mdを読み込み、公開インターフェースを特定：
+
+- **相対パス参照**: `../other-skill/scripts/utils.js` のように相対パスで参照
+- **インターフェース特定**: 他スキルのエントリポイントを自動検出
+
+### 外部CLIエージェント
+
+Gemini CLI等の外部CLIツールをサブタスク実行に活用：
+
+- **Gemini CLI**: Google Geminiを実行エンジンとして利用
+- **任意のCLI**: コマンドラインインターフェースを持つ任意のツールと連携
 
 ### イベントトリガー
 

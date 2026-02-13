@@ -8,6 +8,7 @@ import { parseArgs } from 'node:util';
 import { readFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { EXIT_CODES } from './utils.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -33,7 +34,7 @@ Options:
   -v, --verbose         詳細ログを出力
   -h, --help            ヘルプを表示
 `);
-  process.exit(0);
+  process.exit(EXIT_CODES.SUCCESS);
 }
 
 // ====================
@@ -290,7 +291,7 @@ const validators = {
 async function main() {
   if (!args.config) {
     console.error('Error: --config is required');
-    process.exit(1);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   // 設定を読み込み
@@ -336,10 +337,10 @@ async function main() {
     }
   }
 
-  process.exit(result.valid ? 0 : 1);
+  process.exit(result.valid ? EXIT_CODES.SUCCESS : EXIT_CODES.ERROR);
 }
 
 main().catch(err => {
   console.error(JSON.stringify({ success: false, error: err.message }));
-  process.exit(1);
+  process.exit(EXIT_CODES.ERROR);
 });

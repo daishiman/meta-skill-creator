@@ -8,6 +8,7 @@ import { parseArgs } from 'node:util';
 import { readFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { EXIT_CODES } from './utils.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -35,7 +36,7 @@ Options:
   -v, --verbose         詳細ログを出力
   -h, --help            ヘルプを表示
 `);
-  process.exit(0);
+  process.exit(EXIT_CODES.SUCCESS);
 }
 
 // ====================
@@ -165,7 +166,7 @@ class ChainExecutor {
 async function main() {
   if (!args.chain) {
     console.error('Error: --chain is required');
-    process.exit(1);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   // チェーン定義を読み込み
@@ -185,5 +186,5 @@ async function main() {
 
 main().catch(err => {
   console.error(JSON.stringify({ success: false, error: err.message }));
-  process.exit(1);
+  process.exit(EXIT_CODES.ERROR);
 });
