@@ -41,7 +41,7 @@
 - Webhook送信
 - OAuth認証フロー
 
-**テンプレート**: `assets/api-client-node.js`, `assets/api-client-python.py`
+**テンプレート**: `assets/type-api-client.md` + `assets/base-node.js` / `assets/base-python.py`
 
 ### 1.2 webhook
 
@@ -57,7 +57,7 @@
 - Slack/Discord通知
 - CI/CDトリガー
 
-**テンプレート**: `assets/webhook-node.js`, `assets/webhook-python.py`
+**テンプレート**: `assets/type-webhook.md` + `assets/base-node.js` / `assets/base-python.py`
 
 ### 1.3 scraper
 
@@ -73,7 +73,7 @@
 - 定期的な情報収集
 - コンテンツ監視
 
-**テンプレート**: `assets/scraper-python.py`, `assets/scraper-node.js`
+**テンプレート**: `assets/type-scraper.md` + `assets/base-python.py` / `assets/base-node.js`
 
 ---
 
@@ -92,7 +92,7 @@
 - データフォーマット統一
 - ログパース
 
-**テンプレート**: `assets/parser-node.js`, `assets/parser-python.py`
+**テンプレート**: `assets/type-parser.md` + `assets/base-node.js` / `assets/base-python.py`
 
 ### 2.2 transformer
 
@@ -107,7 +107,7 @@
 - データマイグレーション
 - ETL処理
 
-**テンプレート**: `assets/transformer-node.js`, `assets/transformer-python.py`
+**テンプレート**: `assets/type-transformer.md` + `assets/base-node.js` / `assets/base-python.py`
 
 ### 2.3 aggregator
 
@@ -122,7 +122,7 @@
 - メトリクス集計
 - 分析データ準備
 
-**テンプレート**: `assets/aggregator-python.py`, `assets/aggregator-node.js`
+**テンプレート**: `assets/type-aggregator.md` + `assets/base-python.py` / `assets/base-node.js`
 
 ### 2.4 file-processor
 
@@ -137,7 +137,7 @@
 - ファイル一括処理
 - バックアップ
 
-**テンプレート**: `assets/file-processor-bash.sh`, `assets/file-processor-node.js`
+**テンプレート**: `assets/type-file-processor.md` + `assets/base-bash.sh` / `assets/base-node.js`
 
 ---
 
@@ -157,7 +157,7 @@
 - スキーママイグレーション
 - データシーディング
 
-**テンプレート**: `assets/database-node.js`, `assets/database-python.py`
+**テンプレート**: `assets/type-database.md` + `assets/base-node.js` / `assets/base-python.py`
 
 ### 3.2 cache
 
@@ -173,7 +173,7 @@
 - セッション管理
 - レート制限
 
-**テンプレート**: `assets/cache-node.js`, `assets/cache-python.py`
+**テンプレート**: `assets/type-cache.md` + `assets/base-node.js` / `assets/base-python.py`
 
 ### 3.3 queue
 
@@ -189,7 +189,7 @@
 - イベント発行
 - ワーカー処理
 
-**テンプレート**: `assets/queue-node.js`, `assets/queue-python.py`
+**テンプレート**: `assets/type-queue.md` + `assets/base-node.js` / `assets/base-python.py`
 
 ---
 
@@ -208,7 +208,7 @@
 - コミット・プッシュ
 - PR作成
 
-**テンプレート**: `assets/git-ops-bash.sh`, `assets/git-ops-node.js`
+**テンプレート**: `assets/type-git-ops.md` + `assets/base-bash.sh` / `assets/base-node.js`
 
 ### 4.2 test-runner
 
@@ -223,7 +223,7 @@
 - 統合テスト
 - カバレッジ収集
 
-**テンプレート**: `assets/test-runner-node.js`, `assets/test-runner-python.py`
+**テンプレート**: `assets/type-test-runner.md` + `assets/base-node.js` / `assets/base-python.py`
 
 ### 4.3 linter
 
@@ -238,7 +238,7 @@
 - 自動修正
 - CI統合
 
-**テンプレート**: `assets/linter-node.js`, `assets/linter-bash.sh`
+**テンプレート**: `assets/type-linter.md` + `assets/base-node.js` / `assets/base-bash.sh`
 
 ### 4.4 formatter
 
@@ -253,7 +253,7 @@
 - 一括フォーマット
 - pre-commitフック
 
-**テンプレート**: `assets/formatter-node.js`, `assets/formatter-bash.sh`
+**テンプレート**: `assets/type-formatter.md` + `assets/base-node.js` / `assets/base-bash.sh`
 
 ### 4.5 builder
 
@@ -268,7 +268,7 @@
 - バンドル作成
 - アセット最適化
 
-**テンプレート**: `assets/builder-node.js`, `assets/builder-bash.sh`
+**テンプレート**: `assets/type-builder.md` + `assets/base-node.js` / `assets/base-bash.sh`
 
 ### 4.6 deployer
 
@@ -284,7 +284,7 @@
 - CDN更新
 - 環境切り替え
 
-**テンプレート**: `assets/deployer-bash.sh`, `assets/deployer-node.js`
+**テンプレート**: `assets/type-deployer.md` + `assets/base-bash.sh` / `assets/base-node.js`
 
 ---
 
@@ -303,7 +303,7 @@
 - イメージビルド
 - Compose操作
 
-**テンプレート**: `assets/docker-bash.sh`
+**テンプレート**: `assets/type-docker.md` + `assets/base-bash.sh`
 
 ### 5.2 cloud
 
@@ -319,7 +319,7 @@
 - S3操作
 - Lambda/Cloud Functions
 
-**テンプレート**: `assets/cloud-bash.sh`, `assets/cloud-python.py`
+**テンプレート**: `assets/type-cloud.md` + `assets/base-bash.sh` / `assets/base-python.py`
 
 ### 5.3 monitor
 
@@ -334,7 +334,7 @@
 - メトリクス収集
 - アラート発報
 
-**テンプレート**: `assets/monitor-node.js`, `assets/monitor-python.py`
+**テンプレート**: `assets/type-monitor.md` + `assets/base-node.js` / `assets/base-python.py`
 
 ---
 
@@ -354,7 +354,7 @@
 - AI API統合
 - プロンプト実行
 
-**テンプレート**: `assets/ai-tool-bash.sh`, `assets/ai-tool-node.js`
+**テンプレート**: `assets/type-ai-tool.md` + `assets/base-bash.sh` / `assets/base-node.js`
 
 ### 6.2 mcp-bridge
 
@@ -369,7 +369,7 @@
 - カスタムMCPサーバー構築
 - ツール統合
 
-**テンプレート**: `assets/mcp-bridge-node.js`
+**テンプレート**: `assets/type-mcp-bridge.md` + `assets/base-node.js`
 
 ---
 
@@ -389,7 +389,7 @@
 - メール送信
 - Discord/Teamsメッセージ
 
-**テンプレート**: `assets/notification-node.js`, `assets/notification-python.py`
+**テンプレート**: `assets/type-notification.md` + `assets/base-node.js` / `assets/base-python.py`
 
 ### 7.2 shell
 
@@ -404,7 +404,7 @@
 - 複合コマンド実行
 - 環境セットアップ
 
-**テンプレート**: `assets/shell-bash.sh`
+**テンプレート**: `assets/type-shell.md` + `assets/base-bash.sh`
 
 ### 7.3 universal
 
@@ -419,7 +419,7 @@
 - 特殊要件対応
 - プロトタイピング
 
-**テンプレート**: `assets/universal-node.js`, `assets/universal-python.py`, `assets/universal-bash.sh`
+**テンプレート**: `assets/type-universal.md` + `assets/base-node.js` / `assets/base-python.py` / `assets/base-bash.sh`
 
 ---
 

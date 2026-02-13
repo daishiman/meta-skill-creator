@@ -19,13 +19,9 @@
 import { readFileSync, existsSync, readdirSync, writeFileSync, mkdirSync } from "fs";
 import { resolve, dirname, join, basename } from "path";
 import { fileURLToPath } from "url";
+import { EXIT_CODES, getArg } from "./utils.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_FILE_NOT_FOUND = 3;
 
 // 5セクション構造
 const REQUIRED_SECTIONS = [
@@ -69,11 +65,6 @@ Analysis Criteria:
   - チェックリストの有無
   - 思考プロセスの具体性
 `);
-}
-
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
 }
 
 function analyzeStructure(content) {
@@ -243,7 +234,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   const inputFile = getArg(args, "--input");
@@ -253,7 +244,7 @@ async function main() {
 
   if (!inputFile && !skillPath) {
     console.error("Error: --input または --skill-path のいずれかが必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const filesToAnalyze = [];
@@ -262,7 +253,7 @@ async function main() {
     const resolvedInput = resolve(process.cwd(), inputFile);
     if (!existsSync(resolvedInput)) {
       console.error(`Error: ファイルが存在しません: ${resolvedInput}`);
-      process.exit(EXIT_FILE_NOT_FOUND);
+      process.exit(EXIT_CODES.FILE_NOT_FOUND);
     }
     filesToAnalyze.push(resolvedInput);
   }
@@ -271,7 +262,7 @@ async function main() {
     const agentsDir = join(resolve(process.cwd(), skillPath), "agents");
     if (!existsSync(agentsDir)) {
       console.error(`Error: agents/ディレクトリが存在しません: ${agentsDir}`);
-      process.exit(EXIT_FILE_NOT_FOUND);
+      process.exit(EXIT_CODES.FILE_NOT_FOUND);
     }
     const agentFiles = readdirSync(agentsDir)
       .filter((f) => f.endsWith(".md"))
@@ -281,7 +272,7 @@ async function main() {
 
   if (filesToAnalyze.length === 0) {
     console.error("Error: 分析対象のファイルがありません");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   // 分析実行
@@ -343,10 +334,10 @@ async function main() {
     }
   }
 
-  process.exit(EXIT_SUCCESS);
+  process.exit(EXIT_CODES.SUCCESS);
 }
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });

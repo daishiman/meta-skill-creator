@@ -1,0 +1,162 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "multi-skill-graph.json",
+  "title": "Multi-Skill Dependency Graph",
+  "description": "複数スキル同時作成時の依存関係グラフスキーマ",
+  "type": "object",
+  "required": ["projectName", "pattern", "skills", "dependencyGraph", "topologicalOrder", "validation"],
+  "properties": {
+    "projectName": {
+      "type": "string",
+      "description": "プロジェクト名"
+    },
+    "pattern": {
+      "type": "string",
+      "enum": ["hub-and-spoke", "pipeline", "mesh"],
+      "description": "マルチスキル設計パターン"
+    },
+    "skills": {
+      "type": "array",
+      "description": "作成するスキル一覧",
+      "items": {
+        "type": "object",
+        "required": ["name", "role", "boundedContext", "creationOrder"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "スキル名",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "role": {
+            "type": "string",
+            "description": "スキルの役割"
+          },
+          "boundedContext": {
+            "type": "string",
+            "description": "Bounded Context名"
+          },
+          "creationOrder": {
+            "type": "integer",
+            "description": "作成順序（topologicalOrderから自動算出）"
+          },
+          "dependencies": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "依存するスキル名一覧"
+          },
+          "exposedInterfaces": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["type", "path"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["script", "agent", "reference", "schema", "asset"],
+                  "description": "公開インターフェースの種類"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "公開するファイルパス"
+                }
+              }
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "in-progress", "completed", "failed", "skipped"],
+            "description": "スキル作成ステータス",
+            "default": "pending"
+          }
+        }
+      }
+    },
+    "sharedResources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["resourcePath", "owner"],
+        "properties": {
+          "resourcePath": {
+            "type": "string",
+            "description": "共有リソースのパス"
+          },
+          "owner": {
+            "type": "string",
+            "description": "リソースのオーナースキル名"
+          },
+          "consumers": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "リソースを利用するスキル名一覧"
+          }
+        }
+      }
+    },
+    "dependencyGraph": {
+      "type": "object",
+      "description": "スキル間の依存関係グラフ（key: スキル名, value: 依存先スキル名配列）",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "topologicalOrder": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "トポロジカルソート順（作成順序の正本）"
+    },
+    "validation": {
+      "type": "object",
+      "required": ["isDAG"],
+      "properties": {
+        "isDAG": {
+          "type": "boolean",
+          "description": "有向非巡回グラフとして有効か"
+        },
+        "totalSkills": {
+          "type": "integer",
+          "description": "スキル総数"
+        },
+        "totalDependencies": {
+          "type": "integer",
+          "description": "依存関係の総数"
+        }
+      }
+    },
+    "failureRecovery": {
+      "type": "object",
+      "description": "失敗リカバリ設定",
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": ["stop-on-failure", "skip-and-continue", "retry-then-skip"],
+          "description": "失敗時の戦略",
+          "default": "stop-on-failure"
+        },
+        "maxRetries": {
+          "type": "integer",
+          "description": "最大リトライ回数",
+          "default": 1
+        },
+        "completedSkills": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "作成完了済みスキル一覧（リカバリ用）"
+        },
+        "failedSkills": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "failedAt": { "type": "string", "description": "失敗したPhase" },
+              "error": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

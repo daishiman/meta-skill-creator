@@ -23,13 +23,8 @@ import {
   mkdirSync,
   copyFileSync,
 } from "fs";
-import { resolve, dirname, join, basename } from "path";
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_FILE_NOT_FOUND = 3;
-const EXIT_APPLY_FAILED = 4;
+import { dirname, join, basename } from "path";
+import { EXIT_CODES, getArg, resolvePath } from "./utils.js";
 
 function showHelp() {
   console.log(`
@@ -47,16 +42,6 @@ Options:
   --verbose         詳細出力
   -h, --help        ヘルプ表示
 `);
-}
-
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
-}
-
-function resolvePath(p) {
-  if (p.startsWith("/")) return p;
-  return resolve(process.cwd(), p);
 }
 
 // バックアップを作成
@@ -197,7 +182,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   const planPath = getArg(args, "--plan");
@@ -209,14 +194,14 @@ async function main() {
 
   if (!planPath) {
     console.error("Error: --plan は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const resolvedPlan = resolvePath(planPath);
 
   if (!existsSync(resolvedPlan)) {
     console.error(`Error: 改善計画ファイルが存在しません: ${resolvedPlan}`);
-    process.exit(EXIT_FILE_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   try {
@@ -224,7 +209,7 @@ async function main() {
 
     if (!plan.changes || !Array.isArray(plan.changes)) {
       console.error("Error: 改善計画に changes が含まれていません");
-      process.exit(EXIT_ARGS_ERROR);
+      process.exit(EXIT_CODES.ARGS_ERROR);
     }
 
     console.log(`改善計画: ${plan.skillName || "unknown"}`);
@@ -250,7 +235,7 @@ async function main() {
 
     if (changesToApply.length === 0) {
       console.log("\n適用可能な変更がありません");
-      process.exit(EXIT_SUCCESS);
+      process.exit(EXIT_CODES.SUCCESS);
     }
 
     // 実行順序に従って適用
@@ -280,7 +265,7 @@ async function main() {
     console.log(`\n完了: ${successCount}成功, ${failCount}失敗`);
 
     if (failCount > 0 && !dryRun) {
-      process.exit(EXIT_APPLY_FAILED);
+      process.exit(EXIT_CODES.APPLY_FAILED);
     }
 
     // 検証コマンドの表示
@@ -289,14 +274,14 @@ async function main() {
       plan.postValidation.forEach((cmd) => console.log(`  ${cmd}`));
     }
 
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   } catch (err) {
     console.error(`Error: ${err.message}`);
-    process.exit(EXIT_ERROR);
+    process.exit(EXIT_CODES.ERROR);
   }
 }
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });

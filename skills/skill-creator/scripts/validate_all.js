@@ -21,37 +21,15 @@
 import { readFileSync, existsSync, readdirSync, statSync, writeFileSync, mkdirSync } from "fs";
 import { resolve, dirname, join, basename, extname } from "path";
 import { fileURLToPath } from "url";
+import { EXIT_CODES, getArg, normalizeLink } from "./utils.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_PATH_NOT_FOUND = 3;
-const EXIT_VALIDATION_FAILED = 4;
 
 // 標準ディレクトリ構造
 const STANDARD_DIRS = ["agents", "scripts", "schemas", "references", "assets"];
 const REQUIRED_FILES = ["SKILL.md"];
 const FORBIDDEN_FILES = ["README.md", "readme.md", "index.md", "INDEX.md"];
 
-/**
- * リンクパスを正規化
- * .claude/skills/{skill-name}/ 形式のプレフィックスを除去
- */
-function normalizeLink(link, skillName) {
-  const prefixPatterns = [
-    new RegExp(`^\\.claude/skills/${skillName}/`),
-    new RegExp(`^/\\.claude/skills/${skillName}/`),
-  ];
-
-  for (const pattern of prefixPatterns) {
-    if (pattern.test(link)) {
-      return link.replace(pattern, "");
-    }
-  }
-  return link;
-}
 
 function showHelp() {
   console.log(`
@@ -72,11 +50,6 @@ Validations:
   3. 品質検証    - SKILL.md行数、frontmatter形式
   4. 禁止検証    - 禁止ファイルの存在チェック
 `);
-}
-
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
 }
 
 function validateStructure(skillPath) {
@@ -308,7 +281,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   const skillPath = args.find((arg) => !arg.startsWith("-"));
@@ -318,13 +291,13 @@ async function main() {
 
   if (!skillPath) {
     console.error("Error: スキルパスを指定してください");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const resolvedPath = resolve(process.cwd(), skillPath);
   if (!existsSync(resolvedPath)) {
     console.error(`Error: パスが存在しません: ${resolvedPath}`);
-    process.exit(EXIT_PATH_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   console.log("=== スキル全体検証 ===");
@@ -418,14 +391,14 @@ async function main() {
 
   if (allErrors.length > 0) {
     console.log("\n✗ 検証失敗");
-    process.exit(EXIT_VALIDATION_FAILED);
+    process.exit(EXIT_CODES.VALIDATION_FAILED);
   }
 
   console.log("\n✓ 検証成功");
-  process.exit(EXIT_SUCCESS);
+  process.exit(EXIT_CODES.SUCCESS);
 }
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });

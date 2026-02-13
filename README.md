@@ -10,7 +10,7 @@ Claude Code用スキルコレクション。様々な用途のスキルをプラ
 
 | スキル | 説明 | バージョン |
 |--------|------|------------|
-| **[skill-creator](docs/skill-creator/README.md)** | スキル作成・更新・プロンプト改善のためのメタスキル。Problem First + DDD/Clean Architectureで高品質なスキルを自動生成 | v8.1.0 |
+| **[skill-creator](docs/skill-creator/README.md)** | スキル作成・更新・プロンプト改善のためのメタスキル。Problem First + DDD/Clean Architectureで高品質なスキルを自動生成 | v10.5.0 |
 | **[google-forms-generator](docs/google-forms-generator/README.md)** | Google Forms APIを使用したフォーム自動生成。対話形式で要件をヒアリングし、11種類の質問タイプに対応 | v1.3.0 |
 
 ---
@@ -115,8 +115,10 @@ Claude Codeでスキルを作成・更新・プロンプト改善するための
 
 - **Problem First** - 5 Whysで問題の根本原因を特定してから設計
 - **DDD / Clean Architecture** - ドメイン構造と層分離でスキルを設計
-- **対話型インタビュー** - 8段階の質問で要件を明確化（選択肢から選ぶだけ）
-- **Collaborative / Orchestrate** - 2つのモードで柔軟に対応
+- **対話型インタビュー** - 8段階の質問で要件を明確化（quick/standard/detailedの3段階深度対応）
+- **Collaborative / Orchestrate** - 2つのモードで柔軟に対応（Gemini CLIにも対応）
+- **マルチスキル設計** - 複数スキルを一度に設計し依存関係グラフで管理
+- **クロススキル依存解決** - 他スキルの公開インターフェースを自動特定
 - **24種類のスクリプト** - API連携、データ処理、開発ツールなど
 
 **使い方：**

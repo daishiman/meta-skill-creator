@@ -17,17 +17,12 @@
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
-import { resolve, dirname, join, basename } from "path";
+import { dirname, join, basename } from "path";
 import { fileURLToPath } from "url";
+import { EXIT_CODES, getArg, resolvePath } from "./utils.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SKILL_DIR = join(__dirname, "..");
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_FILE_NOT_FOUND = 3;
-const EXIT_VALIDATION_FAILED = 4;
 
 function showHelp() {
   console.log(`
@@ -47,15 +42,6 @@ Examples:
 `);
 }
 
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
-}
-
-function resolvePath(p) {
-  if (p.startsWith("/")) return p;
-  return resolve(process.cwd(), p);
-}
 
 function capitalize(str) {
   return str.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
@@ -242,7 +228,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   const planPath = getArg(args, "--plan");
@@ -250,12 +236,12 @@ async function main() {
 
   if (!planPath) {
     console.error("Error: --plan は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   if (!outputPath) {
     console.error("Error: --output は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const resolvedPlan = resolvePath(planPath);
@@ -263,7 +249,7 @@ async function main() {
 
   if (!existsSync(resolvedPlan)) {
     console.error(`Error: 構造計画ファイルが存在しません: ${resolvedPlan}`);
-    process.exit(EXIT_FILE_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   try {
@@ -272,7 +258,7 @@ async function main() {
     // 必須フィールドの検証
     if (!plan.skillName) {
       console.error("Error: 構造計画にskillNameが含まれていません");
-      process.exit(EXIT_VALIDATION_FAILED);
+      process.exit(EXIT_CODES.VALIDATION_FAILED);
     }
 
     const content = generateSkillMd(plan);
@@ -285,18 +271,18 @@ async function main() {
 
     writeFileSync(resolvedOutput, content, "utf-8");
     console.log(`✓ SKILL.mdを生成しました: ${outputPath}`);
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   } catch (err) {
     if (err instanceof SyntaxError) {
       console.error(`Error: JSONの解析に失敗しました: ${err.message}`);
     } else {
       console.error(`Error: ${err.message}`);
     }
-    process.exit(EXIT_ERROR);
+    process.exit(EXIT_CODES.ERROR);
   }
 }
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });

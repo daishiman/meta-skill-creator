@@ -17,13 +17,8 @@
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
-import { resolve, dirname, basename } from "path";
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_FILE_NOT_FOUND = 3;
-const EXIT_VALIDATION_FAILED = 4;
+import { dirname, basename } from "path";
+import { EXIT_CODES, getArg, resolvePath } from "./utils.js";
 
 function showHelp() {
   console.log(`
@@ -58,16 +53,6 @@ Examples:
 `);
 }
 
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
-}
-
-function resolvePath(p) {
-  if (p.startsWith("/")) return p;
-  return resolve(process.cwd(), p);
-}
-
 function generateTaskScript(def) {
   const name = def.name || "task-script";
   const description = def.description || "タスク実行スクリプト";
@@ -87,7 +72,7 @@ function generateTaskScript(def) {
   const ${a.name.replace("--", "").replace(/-/g, "_")} = getArg(args, "${a.name}");
   if (!${a.name.replace("--", "").replace(/-/g, "_")}) {
     console.error("Error: ${a.name} は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }`).join("\n");
 
   return `#!/usr/bin/env node
@@ -103,13 +88,7 @@ ${exitCodesDoc}
  */
 
 import { existsSync } from "fs";
-import { resolve } from "path";
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_FILE_NOT_FOUND = 3;
-const EXIT_VALIDATION_FAILED = 4;
+import { EXIT_CODES, getArg, resolvePath } from "./utils.js";
 
 function showHelp() {
   console.log(\`
@@ -124,38 +103,28 @@ ${argsDoc}
 \`);
 }
 
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
-}
-
-function resolvePath(p) {
-  if (p.startsWith("/")) return p;
-  return resolve(process.cwd(), p);
-}
-
 async function main() {
   const args = process.argv.slice(2);
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 ${argChecks}
 
   try {
     // TODO: タスクロジックを実装
     console.log("✓ タスクが完了しました");
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   } catch (err) {
     console.error(\`Error: \${err.message}\`);
-    process.exit(EXIT_ERROR);
+    process.exit(EXIT_CODES.ERROR);
   }
 }
 
 main().catch((err) => {
   console.error(\`Error: \${err.message}\`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });
 `;
 }
@@ -181,13 +150,7 @@ function generateValidatorScript(def) {
  */
 
 import { readFileSync, existsSync } from "fs";
-import { resolve } from "path";
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_FILE_NOT_FOUND = 3;
-const EXIT_VALIDATION_FAILED = 4;
+import { EXIT_CODES, getArg, resolvePath } from "./utils.js";
 
 function showHelp() {
   console.log(\`
@@ -201,16 +164,6 @@ Options:
   --verbose        詳細な検証結果を表示
   -h, --help       このヘルプを表示
 \`);
-}
-
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
-}
-
-function resolvePath(p) {
-  if (p.startsWith("/")) return p;
-  return resolve(process.cwd(), p);
 }
 
 function validate(input) {
@@ -229,7 +182,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   const verbose = args.includes("--verbose");
@@ -237,14 +190,14 @@ async function main() {
 
   if (!inputPath) {
     console.error("Error: --input は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const resolvedInput = resolvePath(inputPath);
 
   if (!existsSync(resolvedInput)) {
     console.error(\`Error: ファイルが存在しません: \${resolvedInput}\`);
-    process.exit(EXIT_FILE_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   try {
@@ -258,20 +211,20 @@ async function main() {
     if (errors.length > 0) {
       console.error("✗ 検証失敗:");
       errors.forEach((e) => console.error(\`  - \${e}\`));
-      process.exit(EXIT_VALIDATION_FAILED);
+      process.exit(EXIT_CODES.VALIDATION_FAILED);
     }
 
     console.log(\`✓ 検証成功: \${inputPath}\`);
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   } catch (err) {
     console.error(\`Error: \${err.message}\`);
-    process.exit(EXIT_ERROR);
+    process.exit(EXIT_CODES.ERROR);
   }
 }
 
 main().catch((err) => {
   console.error(\`Error: \${err.message}\`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });
 `;
 }
@@ -296,12 +249,8 @@ function generateGeneratorScript(def) {
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
-import { resolve, dirname } from "path";
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_FILE_NOT_FOUND = 3;
+import { dirname } from "path";
+import { EXIT_CODES, getArg, resolvePath } from "./utils.js";
 
 function showHelp() {
   console.log(\`
@@ -317,16 +266,6 @@ Options:
 \`);
 }
 
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
-}
-
-function resolvePath(p) {
-  if (p.startsWith("/")) return p;
-  return resolve(process.cwd(), p);
-}
-
 function generate(input) {
   // TODO: 生成ロジックを実装
   return \`// Generated content based on: \${input}\n\`;
@@ -337,7 +276,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   const inputPath = getArg(args, "--input");
@@ -345,12 +284,12 @@ async function main() {
 
   if (!inputPath) {
     console.error("Error: --input は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   if (!outputPath) {
     console.error("Error: --output は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const resolvedInput = resolvePath(inputPath);
@@ -358,7 +297,7 @@ async function main() {
 
   if (!existsSync(resolvedInput)) {
     console.error(\`Error: 入力ファイルが存在しません: \${resolvedInput}\`);
-    process.exit(EXIT_FILE_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   try {
@@ -372,16 +311,16 @@ async function main() {
 
     writeFileSync(resolvedOutput, content, "utf-8");
     console.log(\`✓ 生成完了: \${outputPath}\`);
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   } catch (err) {
     console.error(\`Error: \${err.message}\`);
-    process.exit(EXIT_ERROR);
+    process.exit(EXIT_CODES.ERROR);
   }
 }
 
 main().catch((err) => {
   console.error(\`Error: \${err.message}\`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });
 `;
 }
@@ -391,7 +330,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   const defPath = getArg(args, "--def");
@@ -400,12 +339,12 @@ async function main() {
 
   if (!defPath) {
     console.error("Error: --def は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   if (!outputPath) {
     console.error("Error: --output は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const resolvedDef = resolvePath(defPath);
@@ -413,7 +352,7 @@ async function main() {
 
   if (!existsSync(resolvedDef)) {
     console.error(`Error: Script定義ファイルが存在しません: ${resolvedDef}`);
-    process.exit(EXIT_FILE_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   try {
@@ -440,18 +379,18 @@ async function main() {
 
     writeFileSync(resolvedOutput, content, "utf-8");
     console.log(`✓ scripts/${basename(resolvedOutput)}を生成しました (type: ${type})`);
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   } catch (err) {
     if (err instanceof SyntaxError) {
       console.error(`Error: JSONの解析に失敗しました: ${err.message}`);
     } else {
       console.error(`Error: ${err.message}`);
     }
-    process.exit(EXIT_ERROR);
+    process.exit(EXIT_CODES.ERROR);
   }
 }
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });

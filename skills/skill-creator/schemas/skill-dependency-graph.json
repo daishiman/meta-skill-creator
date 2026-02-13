@@ -1,0 +1,154 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "skill-dependency-graph.json",
+  "title": "Skill Dependency Graph",
+  "description": "スキル間の依存関係グラフと相対パスマッピングを定義するスキーマ。静的な依存構造のみを扱い、ランタイム設定（外部CLIエージェント等）は含まない。",
+  "type": "object",
+  "required": ["skillName", "dependencies", "graphValidation"],
+  "properties": {
+    "skillName": {
+      "type": "string",
+      "description": "新規スキル名",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "dependencies": {
+      "type": "array",
+      "description": "このスキルが依存する他スキル一覧",
+      "items": {
+        "type": "object",
+        "required": ["skillName", "skillPath", "relativePath", "referenceType", "interfaces", "verified"],
+        "properties": {
+          "skillName": {
+            "type": "string",
+            "description": "依存先スキル名"
+          },
+          "skillPath": {
+            "type": "string",
+            "description": "依存先スキルの絶対パス（.claude/skills/ 配下）"
+          },
+          "relativePath": {
+            "type": "string",
+            "description": "新規スキルから依存先への相対パス"
+          },
+          "referenceType": {
+            "type": "string",
+            "enum": ["read-only", "execute-script", "invoke-agent", "chain-step"],
+            "description": "参照タイプ"
+          },
+          "interfaces": {
+            "type": "array",
+            "description": "使用するインターフェース一覧",
+            "items": {
+              "type": "object",
+              "required": ["type", "path", "fullRelativePath"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["script", "agent", "reference", "schema", "asset"],
+                  "description": "インターフェースの種類"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "依存先スキル内の相対パス"
+                },
+                "fullRelativePath": {
+                  "type": "string",
+                  "description": "新規スキルからの完全な相対パス"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "インターフェースの説明"
+                }
+              }
+            }
+          },
+          "required": {
+            "type": "boolean",
+            "description": "必須依存かオプショナルか",
+            "default": true
+          },
+          "verified": {
+            "type": "boolean",
+            "description": "依存先の存在が確認されたか"
+          }
+        }
+      }
+    },
+    "exposedInterfaces": {
+      "type": "array",
+      "description": "このスキルが他スキルに公開するインターフェース",
+      "items": {
+        "type": "object",
+        "required": ["path", "type"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "スキル内の公開ファイルパス"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["script", "agent", "reference", "schema", "asset"],
+            "description": "インターフェースの種類"
+          },
+          "consumers": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "利用者スキル名一覧"
+          },
+          "description": {
+            "type": "string",
+            "description": "公開インターフェースの説明"
+          }
+        }
+      }
+    },
+    "sharedResources": {
+      "type": "array",
+      "description": "複数スキル間で共有するリソース",
+      "items": {
+        "type": "object",
+        "required": ["resourcePath", "owner"],
+        "properties": {
+          "resourcePath": {
+            "type": "string",
+            "description": "共有リソースのパス"
+          },
+          "owner": {
+            "type": "string",
+            "description": "リソースのオーナースキル名"
+          },
+          "consumers": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "リソースを利用するスキル名一覧"
+          }
+        }
+      }
+    },
+    "graphValidation": {
+      "type": "object",
+      "required": ["isDAG"],
+      "properties": {
+        "isDAG": {
+          "type": "boolean",
+          "description": "有向非巡回グラフ（DAG）かどうか"
+        },
+        "hasCycles": {
+          "type": "boolean",
+          "description": "循環依存があるかどうか",
+          "default": false
+        },
+        "cycleDetails": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "循環依存の詳細（存在する場合）"
+        },
+        "topologicalOrder": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "トポロジカルソート順"
+        }
+      }
+    }
+  }
+}

@@ -28,6 +28,7 @@ import { execSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
+import { EXIT_CODES } from "./utils.js";
 
 // ============================================================================
 // 設定
@@ -39,14 +40,6 @@ const CONFIG = {
   maxBuffer: 50 * 1024 * 1024, // 50MB
   outputDirPrefix: "codex/assign-codex",
   tempFileName: ".codex-prompt-temp.md",
-};
-
-const EXIT = {
-  SUCCESS: 0,
-  ERROR: 1,
-  ARGS_ERROR: 2,
-  PREREQ_ERROR: 3,
-  CODEX_ERROR: 4,
 };
 
 // ============================================================================
@@ -141,7 +134,7 @@ function parseArguments() {
     return values;
   } catch (error) {
     console.error(`引数エラー: ${error.message}`);
-    process.exit(EXIT.ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 }
 
@@ -380,13 +373,13 @@ async function main() {
 
   if (args.help) {
     showHelp();
-    process.exit(EXIT.SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   if (!args.task) {
     console.error("エラー: --task オプションは必須です");
     showHelp();
-    process.exit(EXIT.ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   // 事前条件チェック
@@ -394,7 +387,7 @@ async function main() {
   if (!prereqResult.passed) {
     console.error("事前条件エラー:");
     prereqResult.errors.forEach((e) => console.error(`  - ${e}`));
-    process.exit(EXIT.PREREQ_ERROR);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   // パラメータ準備
@@ -431,11 +424,11 @@ async function main() {
   console.error("\n=== 完了 ===");
 
   if (!resultJson.success) {
-    process.exit(EXIT.CODEX_ERROR);
+    process.exit(EXIT_CODES.CODEX_ERROR);
   }
 }
 
 main().catch((error) => {
   console.error("予期せぬエラー:", error?.message ?? error);
-  process.exit(EXIT.ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });

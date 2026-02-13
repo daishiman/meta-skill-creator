@@ -28,14 +28,9 @@ import {
 } from "fs";
 import { resolve, dirname, join, basename } from "path";
 import { fileURLToPath } from "url";
+import { EXIT_CODES, getArg } from "./utils.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_FILE_NOT_FOUND = 3;
-const EXIT_UPDATE_FAILED = 4;
 
 function showHelp() {
   console.log(`
@@ -65,11 +60,6 @@ Categories:
   delete  - ファイル削除
   rename  - ファイルリネーム
 `);
-}
-
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
 }
 
 function createBackup(filePath, backupDir) {
@@ -220,7 +210,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   const planPath = getArg(args, "--plan");
@@ -230,13 +220,13 @@ async function main() {
 
   if (!planPath) {
     console.error("Error: --plan は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const resolvedPlan = resolve(process.cwd(), planPath);
   if (!existsSync(resolvedPlan)) {
     console.error(`Error: 計画ファイルが存在しません: ${resolvedPlan}`);
-    process.exit(EXIT_FILE_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   // 計画読み込み
@@ -245,12 +235,12 @@ async function main() {
     plan = JSON.parse(readFileSync(resolvedPlan, "utf-8"));
   } catch (err) {
     console.error(`Error: JSONの解析に失敗しました: ${err.message}`);
-    process.exit(EXIT_ERROR);
+    process.exit(EXIT_CODES.ERROR);
   }
 
   if (!plan.skillPath || !plan.updates || !Array.isArray(plan.updates)) {
     console.error("Error: 計画JSONの形式が不正です（skillPath, updates が必須）");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   // バックアップディレクトリ
@@ -305,13 +295,13 @@ async function main() {
   console.log(`結果出力: ${outputPath}`);
 
   if (failCount > 0) {
-    process.exit(EXIT_UPDATE_FAILED);
+    process.exit(EXIT_CODES.APPLY_FAILED);
   }
 
-  process.exit(EXIT_SUCCESS);
+  process.exit(EXIT_CODES.SUCCESS);
 }
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });

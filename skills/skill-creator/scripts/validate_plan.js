@@ -17,17 +17,12 @@
  */
 
 import { readFileSync, existsSync } from "fs";
-import { resolve, dirname, join, basename } from "path";
+import { dirname, join, basename } from "path";
 import { fileURLToPath } from "url";
+import { EXIT_CODES, getArg, resolvePath } from "./utils.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SKILL_DIR = join(__dirname, "..");
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_FILE_NOT_FOUND = 3;
-const EXIT_VALIDATION_FAILED = 4;
 
 function showHelp() {
   console.log(`
@@ -53,16 +48,6 @@ Examples:
   node scripts/validate_plan.js --input .tmp/structure-plan.json
   node scripts/validate_plan.js --input .tmp/structure-plan.json --verbose
 `);
-}
-
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
-}
-
-function resolvePath(p) {
-  if (p.startsWith("/")) return p;
-  return resolve(process.cwd(), p);
 }
 
 function validatePlan(plan) {
@@ -185,7 +170,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   const verbose = args.includes("--verbose");
@@ -193,14 +178,14 @@ async function main() {
 
   if (!inputPath) {
     console.error("Error: --input は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const resolvedInput = resolvePath(inputPath);
 
   if (!existsSync(resolvedInput)) {
     console.error(`Error: ファイルが存在しません: ${resolvedInput}`);
-    process.exit(EXIT_FILE_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   try {
@@ -226,22 +211,22 @@ async function main() {
       console.log("\n✗ エラー:");
       errors.forEach((e) => console.log(`  - ${e}`));
       console.log(`\n結果: ✗ 検証失敗`);
-      process.exit(EXIT_VALIDATION_FAILED);
+      process.exit(EXIT_CODES.VALIDATION_FAILED);
     }
 
     console.log(`\n✓ 構造計画検証成功: ${inputPath}`);
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   } catch (err) {
     if (err instanceof SyntaxError) {
       console.error(`Error: JSONの解析に失敗しました: ${err.message}`);
     } else {
       console.error(`Error: ${err.message}`);
     }
-    process.exit(EXIT_ERROR);
+    process.exit(EXIT_CODES.ERROR);
   }
 }
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });

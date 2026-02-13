@@ -4,6 +4,130 @@
 
 ---
 
+## [2026-02-13 - UT-9B-H-003 セキュリティ教訓・パターン記録]
+
+- **Agent**: skill-creator (update)
+- **Phase**: Phase 12 (lessons learned & patterns sync)
+- **Result**: ✓ 成功
+- **Notes**: UT-9B-H-003 SkillCreator IPCセキュリティ強化の教訓とパターンを4ファイルに反映。lessons-learned.md（苦戦箇所5件）、architecture-implementation-patterns.md（L3ドメイン検証パターン）、patterns.md（成功2+失敗1パターン）、SKILL.md変更履歴更新。TDDセキュリティテスト分類体系、YAGNI共通化判断記録、正規表現Prettier干渉の3知見をパターン化。
+
+---
+
+## [2026-02-13 - TASK-FIX-11-1 patterns refinement]
+
+- **Agent**: skill-creator (update)
+- **Phase**: save-patterns
+- **Result**: ✓ 成功
+- **Notes**: TASK-FIX-11-1-SDK-TEST-ENABLEMENTのPhase 12再監査で得た知見をpatterns.mdに反映。成功パターン「未タスク2段階判定（raw→精査）」と失敗パターン「未タスクraw検出の誤読」を追加。`docs/30-workflows/unassigned-task/` への配置要否を、raw件数ではなく精査後件数で判断する運用を明文化。
+
+---
+
+## [2026-02-12 - Phase 12 unassigned-link integrity improvement]
+
+- **Agent**: skill-creator (update)
+- **Phase**: cross-skill-improvement
+- **Result**: ✓ 成功
+- **Notes**: Phase 12で発生した未タスク参照切れの再発防止として、patterns.mdに実在チェックパターンを追加。phase-completion-checklist.mdに `verify-unassigned-links.js` 実行を完了条件として追加し、チェックを機械化。
+
+---
+
+## [2026-02-12 - UT-9B-H-003 Phase 12再監査 knowledge sync]
+
+- **Agent**: skill-creator (update)
+- **Phase**: Phase 12 (patterns update)
+- **Result**: ✓ 成功
+- **Notes**: Phase 12の再監査知見をpatterns.mdに反映。成果物名を `documentation-changelog.md` に統一し、完了済み未タスク指示書の移管（`completed-tasks/unassigned-task/`）と参照パス同期、artifacts最終整合チェックをパターン化。
+
+---
+## [2026-02-12 - TASK-9B-H-SKILL-CREATOR-IPC completion]
+
+- **Agent**: skill-creator (update)
+- **Phase**: Phase 12 (task completion record)
+- **Result**: ✓ 成功
+- **Notes**: TASK-9B-H-SKILL-CREATOR-IPC完了記録。SkillCreatorService IPCハンドラー登録（6チャンネル、85テスト全PASS）。registerSkillCreatorHandlers実装、Preload API統合、3層セキュリティモデル適用。成果物: registerSkillCreatorHandlers（6チャンネルのIPCハンドラー登録関数）、Preload API統合（skillCreatorAPI経由でRenderer→Main通信）、3層セキュリティモデル（ホワイトリスト・バリデーション・サニタイズの3層防御）。
+
+---
+
+## [2026-02-10 - UT-FIX-5-3 patterns knowledge transfer]
+
+- **Agent**: skill-creator (update)
+- **Phase**: save-patterns
+- **Result**: ✓ 成功
+- **Notes**: UT-FIX-5-3-PRELOAD-AGENT-ABORTタスクからの知見をpatterns.mdに反映。2パターン追加: (1) [IPC/Electron] 横断的セキュリティバイパス検出パターン（ipcRenderer直接呼び出しのgrep検出→safeInvoke移行→未タスク化）、(2) [Phase12] 横断的問題の追加検証パターン（Phase 10検出問題のプロジェクト全体grep→関連問題の追加検出）。クイックナビゲーションテーブル2カテゴリ更新（IPC・アーキテクチャ、Phase 12）。
+
+---
+
+## [2026-02-01 - unassigned task specs creation session]
+
+- **Agent**: skill-creator (update)
+- **Phase**: detect-unassigned → generate-unassigned-task
+- **Result**: ✓ 成功
+- **Notes**: システム仕様書（aiworkflow-requirements references/）とコードベースTODOからの未タスク検出・仕様書作成セッション。3エージェント並列探索（system-spec-gap, codebase-todo, toolMetadata-gap）→5件の新規未タスク仕様書を9セクションテンプレート準拠で作成。task-specification-creator/LOGS・EVALS、aiworkflow-requirements/EVALS、skill-creator/LOGS・EVALS更新。
+
+---
+
+## [2026-02-01 - task-imp-permission-tool-metadata-001 spec-gap-fix session]
+
+- **Agent**: skill-creator (update)
+- **Phase**: spec-gap-analysis → spec-update
+- **Result**: ✓ 成功
+- **Notes**: task-imp-permission-tool-metadata-001の仕様カバレッジ85%→95%改善。interfaces-agent-sdk-ui.md v1.5.0（RiskLevel/ToolMetadata型定義追加）、security-skill-execution.md v1.3.0（toolMetadataクロスリファレンス追加）、ui-ux-agent-execution.md v1.7.0（RISK_LEVEL_STYLES/PermissionDialog統合/ツールカバレッジマッピング追加）。topic-map.md 8エントリ・7キーワード追加。task-specification-creator patterns.md 3件・EVALS更新。
+
+---
+
+## [2026-01-31 - task-imp-permission-tool-metadata-001 completion]
+
+- **Agent**: skill-creator (update)
+- **Phase**: Phase 12 (documentation + skill improvement)
+- **Result**: ✓ 成功
+- **Notes**: task-imp-permission-tool-metadata-001（Issue #606）完了記録。システム仕様書（ui-ux-agent-execution.md v1.6.0→v1.7.0）にRISK_LEVEL_STYLES定数・PermissionDialog統合・ツールカバレッジマッピング追記。未タスク指示書3件作成（risk-level-dynamic-change, risk-level-auto-deny, settings-risk-display）。aiworkflow-requirements・task-specification-creator連携更新。
+
+---
+
+## [2026-01-31 - multi-skill optimization session]
+
+- **Agent**: skill-creator (optimize-session)
+- **Phase**: cross-skill-improvement
+- **Result**: ✓ 成功
+- **Notes**: TASK-7D完了を受けた包括的スキル改善セッション。task-specification-creator（patterns最適化・EVALS拡張）、aiworkflow-requirements（4仕様書追記・トピックマップ再生成）、skill-creator自身（LOGS・EVALS更新）を並列更新。
+
+---
+
+## [2026-01-31T03:00:00.000Z]
+
+- **Agent**: skill-creator
+- **Phase**: update (最終整合性修正)
+- **Result**: ✓ 成功
+- **Notes**: 3スキル横断の最終整合性修正。(1) task-specification-creator: SKILL.md v9.15.0バージョンバンプ、resource-map.md assets/9更新（documentation-changelog-template.md追加）、LOGS.md改善セッション記録追加。(2) aiworkflow-requirements: ui-ux-agent-execution.md完了タスク・関連ドキュメント・変更履歴v1.3.0追記、topic-map.md行番号・セクション名更新。
+
+---
+
+## [2026-01-31T02:00:00.000Z]
+
+- **Agent**: skill-creator
+- **Phase**: update (Phase 12 テンプレート最適化)
+- **Result**: ✓ 成功
+- **Notes**: task-specification-creator テンプレート最適化。3つの成果物: (1) `documentation-changelog-template.md` 新規作成（Phase 12 Task 2の更新履歴テンプレート、よくある漏れパターン表、品質チェックリスト）、(2) `implementation-guide-template.md` にUIコンポーネント実装パターンセクション追加（定数マッピング/引数フォーマット/アクセシビリティ）、(3) `spec-update-workflow.md` に具体例（TASK-IMP-permission-tool-icons-001）と参照リソーステーブル拡充。
+
+---
+
+## [2026-01-31T00:00:00.000Z]
+
+- **Agent**: skill-creator
+- **Phase**: update (TASK-IMP-permission-tool-icons Phase 12 改善)
+- **Result**: ✓ 成功
+- **Notes**: task-specification-creator スキル改善。Phase 12 Task 2実行時の漏れパターン分析に基づき、SKILL.md（Task 1/2境界明確化、Step 1-C追加、よくある漏れテーブル）とspec-update-workflow.md（フローチャートにStep 1-C/完了チェック追加、確認すべきファイル表拡張、Grepヒント追加、誤判断パターン拡張）を更新。
+
+---
+## [2026-01-30T01:30:00.000Z]
+
+- **Agent**: skill-creator
+- **Phase**: Phase 12 (TASK-7C PermissionDialog)
+- **Result**: ✓ 成功
+- **Notes**: TASK-7C Phase 12実行支援。未タスク4件検出・正式フォーマット作成。システム仕様書（ui-ux-agent-execution.md）3ボタン実装反映。task-specification-creator連携でunassigned-task作成。
+
+---
+
 ## [2025-12-31T09:01:59.373Z]
 
 - **Agent**: skill-creator
@@ -695,6 +819,15 @@ Phase 1〜6: 従来フロー（分析→設計→構造→生成→検証）
 
 ---
 
+## [2026-01-30 - TASK-7D patterns update]
+
+- **Agent**: skill-creator (update)
+- **Phase**: pattern-save
+- **Result**: ✓ 成功
+- **Notes**: TASK-7D ChatPanel統合からのフィードバック反映。task-specification-creator patterns.mdに成功パターン4件追加（forwardRef+useImperativeHandleテスト、Exclude型設定マップ、Store個別セレクタ最適化、並列バックグラウンドエージェント）。EVALS.json使用カウント更新。
+
+---
+
 ## [2026-01-30 - v8.1.0]
 
 - **Agent**: skill-creator (refactoring)
@@ -730,5 +863,126 @@ Phase 1〜6: 従来フロー（分析→設計→構造→生成→検証）
 
 - ステータス: success
 - バージョン: v8.0.0 → v8.1.0
+
+---
+
+## [2026-02-02T13:10:16.254Z]
+
+- **Agent**: unknown
+- **Phase**: update
+- **Result**: ✓ 成功
+- **Notes**: aiworkflow-requirements v8.29.0: TASK-WCE-WORKSPACE-001完了反映
+
+---
+
+## [2026-02-04T03:37:55.004Z]
+
+- **Agent**: unknown
+- **Phase**: update
+- **Result**: ✓ 成功
+- **Notes**: なし
+
+---
+
+## [2026-02-05 - v8.4.0]
+
+- **Agent**: skill-creator (pattern-save)
+- **Phase**: Phase 12
+- **Result**: ✓ 成功
+- **Notes**: TASK-FIX-GOOGLE-LOGIN-001からの知見反映
+
+### 追加パターン
+
+| パターン名                             | 説明                                                               |
+| -------------------------------------- | ------------------------------------------------------------------ |
+| OAuthコールバックエラーパラメータ抽出  | URLフラグメント（#）からerror/error_descriptionを正しく抽出        |
+| Zustandリスナー二重登録防止            | モジュールスコープフラグでsubscribe重複実行を防止                  |
+| IPC経由のエラー情報伝達設計            | AUTH_STATE_CHANGEDイベントにerror/errorCodeフィールド追加          |
+
+### 苦戦した箇所・知見
+
+| 課題                           | 原因                                        | 解決策                                    |
+| ------------------------------ | ------------------------------------------- | ----------------------------------------- |
+| URLフラグメントのパラメータ抽出 | OAuth Implicit Flowでは`?`でなく`#`を使用   | `url.hash`から`URLSearchParams`でパース   |
+| リスナー二重登録               | React StrictModeで2回実行される             | モジュールスコープの`let flag = false`    |
+| テストでのフラグリセット       | モジュールスコープ変数はテスト間で共有      | `resetAuthListenerFlag()`エクスポート     |
+| エラー情報がRendererに届かない | IPC経由でerror情報が伝達されていなかった    | ペイロードにerror/errorCodeフィールド追加 |
+
+### 結果
+
+- ステータス: success
+- バージョン: v8.3.0 → v8.4.0
+- 追加ファイル: patterns.mdに3パターン追加
+
+---
+
+## [2026-02-06T01:41:22.869Z]
+
+- **Agent**: unknown
+- **Phase**: update
+- **Result**: ✓ 成功
+- **Notes**: なし
+
+---
+
+## [2026-02-12 - UT-STORE-HOOKS-COMPONENT-MIGRATION-001 テンプレート準拠最適化]
+
+- **Agent**: skill-creator (update)
+- **Phase**: optimize-documentation
+- **Result**: ✓ 成功
+- **Notes**: aiworkflow-requirements/references/lessons-learned.md のファイルパス・セレクタ名を実装と整合させる修正、patterns.md P31セクションのProgressive Disclosure最適化（73行→30行に圧縮、詳細はarch-state-management.mdに委譲）。skill-creator品質基準「重複回避」原則に準拠。
+
+---
+
+## [2026-02-12 - UT-STORE-HOOKS-COMPONENT-MIGRATION-001スキル更新（第2回）]
+
+- **Agent**: skill-creator (update mode)
+- **Phase**: Phase 12 スキル改善（補完）
+- **Result**: ✓ 成功
+- **Notes**:
+  - aiworkflow-requirements/references/lessons-learned.md: UT-STORE-HOOKS-COMPONENT-MIGRATION-001教訓追加（個別セレクタ参照安定性、Phase 12チェックリスト管理の2苦戦箇所、コード例付き）、変更履歴v1.2.0、目次更新
+  - task-specification-creator/SKILL.md: Phase 12セクションに「苦戦防止Tips」テーブル追加（事前チェックリスト作成、spec-update-workflow.md参照、4ファイル更新、topic-map.md再生成トリガー）
+  - skill-creator/LOGS.md: 改善記録補完
+
+---
+
+## [2026-02-12 - UT-STORE-HOOKS-COMPONENT-MIGRATION-001スキル更新]
+
+- **Agent**: skill-creator (update mode)
+- **Phase**: Phase 12 スキル改善
+- **Result**: ✓ 成功
+- **Duration**: -
+- **Notes**:
+  - aiworkflow-requirements: Triggerキーワード追加（個別セレクタ、コンポーネント移行、useEffect依存配列、再レンダー最適化）、patterns.md成功パターン1件＋失敗パターン1件追加
+  - task-specification-creator: patterns.md Phase 12全Step逐次実行パターン追加
+  - arch-state-management.md: 個別セレクタHookパターン推奨セクション追加、変更履歴追加
+
+---
+
+## [2026-02-12 - TASK-9B-I patterns knowledge transfer]
+
+- **Agent**: skill-creator (update)
+- **Phase**: save-patterns
+- **Result**: ✓ 成功
+- **Notes**: TASK-9B-I-SDK-FORMAL-INTEGRATIONタスクからの知見をpatterns.mdに反映。3パターン追加: (1) [SDK] TypeScriptモジュール解決による型安全統合（`as any`除去、SDKQueryOptions内部型定義、compile-timeテスト）、(2) [SDK] カスタムdeclare moduleとSDK実型の共存（失敗パターン: SDK実型優先によるカスタム.d.ts無効化）、(3) [Phase12] 未タスク配置ディレクトリの混同（失敗パターン: unassigned-task/への配置漏れ）。クイックナビゲーションテーブルに「SDK統合」ドメイン行を新規追加。
+
+---
+
+
+## [2026-02-10T07:18:55.442Z]
+
+- **Agent**: unknown
+- **Phase**: Phase update
+- **Result**: ✓ 成功
+- **Notes**: TASK-FIX-6-1知見によりtask-specification-creator更新: spec-update-workflow.md判断基準拡張、Slice統合パターン追加
+
+---
+
+## [2026-02-12T22:25:38.829Z]
+
+- **Agent**: unknown
+- **Phase**: update
+- **Result**: ✓ 成功
+- **Notes**: UT-9B-H-003 security lessons and patterns recorded in lessons-learned.md, architecture-implementation-patterns.md, patterns.md
 
 ---

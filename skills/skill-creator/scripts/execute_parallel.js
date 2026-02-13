@@ -7,6 +7,7 @@
 import { parseArgs } from 'node:util';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { EXIT_CODES } from './utils.js';
 
 // ====================
 // 引数解析
@@ -32,7 +33,7 @@ Options:
   -v, --verbose         詳細ログを出力
   -h, --help            ヘルプを表示
 `);
-  process.exit(0);
+  process.exit(EXIT_CODES.SUCCESS);
 }
 
 // ====================
@@ -256,7 +257,7 @@ class ParallelExecutor {
 async function main() {
   if (!args.config) {
     console.error('Error: --config is required');
-    process.exit(1);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   // 設定を読み込み
@@ -276,5 +277,5 @@ async function main() {
 
 main().catch(err => {
   console.error(JSON.stringify({ success: false, error: err.message }));
-  process.exit(1);
+  process.exit(EXIT_CODES.ERROR);
 });

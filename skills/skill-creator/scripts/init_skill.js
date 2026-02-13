@@ -18,11 +18,7 @@
 
 import { mkdirSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_PATH_NOT_FOUND = 3;
+import { EXIT_CODES } from "./utils.js";
 
 const DEFAULT_RESOURCES = ["agents", "scripts", "references", "assets"];
 const ALLOWED_RESOURCES = new Set(DEFAULT_RESOURCES);
@@ -442,7 +438,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   // 引数解析
@@ -460,7 +456,7 @@ async function main() {
   const validation = validateSkillName(skillName);
   if (!validation.valid) {
     console.error(`Error: ${validation.error}`);
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   if (
@@ -468,13 +464,13 @@ async function main() {
     (!resourcesValue || resourcesValue.startsWith("-"))
   ) {
     console.error("Error: --resources の値が指定されていません");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const resourcesResult = parseResources(resourcesValue);
   if (!resourcesResult.valid) {
     console.error(`Error: ${resourcesResult.error}`);
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const resources = resourcesResult.resources;
@@ -483,7 +479,7 @@ async function main() {
   // ベースパス存在確認
   if (!existsSync(basePath)) {
     console.error(`Error: ベースパスが存在しません: ${basePath}`);
-    process.exit(EXIT_PATH_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   const skillDir = join(basePath, skillName);
@@ -492,7 +488,7 @@ async function main() {
   if (existsSync(skillDir)) {
     console.log(`ℹ スキルディレクトリは既に存在します: ${skillDir}`);
     console.log("  既存のファイルは上書きされません（冪等性）");
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   // ディレクトリ作成
@@ -584,14 +580,14 @@ ${createdItems.map((item) => `  - ${item}`).join("\n")}
 ${nextSteps.map((step, index) => `  ${index + 1}. ${step}`).join("\n")}
 `);
 
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   } catch (err) {
     console.error(`Error: ディレクトリ作成に失敗しました: ${err.message}`);
-    process.exit(EXIT_ERROR);
+    process.exit(EXIT_CODES.ERROR);
   }
 }
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });

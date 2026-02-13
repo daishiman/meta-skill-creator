@@ -16,12 +16,8 @@
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
-import { resolve, dirname, join } from "path";
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_FILE_NOT_FOUND = 3;
+import { dirname, join } from "path";
+import { EXIT_CODES, getArg, resolvePath } from "./utils.js";
 
 function showHelp() {
   console.log(`
@@ -38,15 +34,6 @@ Options:
 `);
 }
 
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
-}
-
-function resolvePath(p) {
-  if (p.startsWith("/")) return p;
-  return resolve(process.cwd(), p);
-}
 
 // LOGS.mdをパース
 function parseLogs(logsContent) {
@@ -214,7 +201,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   const skillPath = getArg(args, "--skill-path");
@@ -223,7 +210,7 @@ async function main() {
 
   if (!skillPath) {
     console.error("Error: --skill-path は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const resolvedSkillPath = resolvePath(skillPath);
@@ -232,7 +219,7 @@ async function main() {
     console.error(
       `Error: スキルディレクトリが存在しません: ${resolvedSkillPath}`
     );
-    process.exit(EXIT_FILE_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   const logsPath = join(resolvedSkillPath, "LOGS.md");
@@ -301,14 +288,14 @@ async function main() {
       console.log(output);
     }
 
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   } catch (err) {
     console.error(`Error: ${err.message}`);
-    process.exit(EXIT_ERROR);
+    process.exit(EXIT_CODES.ERROR);
   }
 }
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });

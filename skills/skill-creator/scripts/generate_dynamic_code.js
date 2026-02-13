@@ -17,13 +17,8 @@
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
-import { resolve, dirname } from "path";
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_FILE_NOT_FOUND = 3;
-const EXIT_VALIDATION_FAILED = 4;
+import { dirname } from "path";
+import { EXIT_CODES, getArg, resolvePath } from "./utils.js";
 
 function showHelp() {
   console.log(`
@@ -42,15 +37,6 @@ Options:
 `);
 }
 
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
-}
-
-function resolvePath(p) {
-  if (p.startsWith("/")) return p;
-  return resolve(process.cwd(), p);
-}
 
 // 変換フィルター
 function applyFilter(value, filter) {
@@ -164,7 +150,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   const templatePath = getArg(args, "--template");
@@ -175,17 +161,17 @@ async function main() {
 
   if (!templatePath) {
     console.error("Error: --template は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   if (!variablesPath) {
     console.error("Error: --variables は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   if (!outputPath) {
     console.error("Error: --output は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const resolvedTemplate = resolvePath(templatePath);
@@ -194,12 +180,12 @@ async function main() {
 
   if (!existsSync(resolvedTemplate)) {
     console.error(`Error: テンプレートが存在しません: ${resolvedTemplate}`);
-    process.exit(EXIT_FILE_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   if (!existsSync(resolvedVariables)) {
     console.error(`Error: 変数ファイルが存在しません: ${resolvedVariables}`);
-    process.exit(EXIT_FILE_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   try {
@@ -224,14 +210,14 @@ async function main() {
 
     writeFileSync(resolvedOutput, result, "utf-8");
     console.log(`✓ 生成完了: ${outputPath}`);
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   } catch (err) {
     console.error(`Error: ${err.message}`);
-    process.exit(EXIT_ERROR);
+    process.exit(EXIT_CODES.ERROR);
   }
 }
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });

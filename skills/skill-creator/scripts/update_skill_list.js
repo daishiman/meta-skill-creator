@@ -20,15 +20,10 @@
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname, join, basename } from "path";
 import { fileURLToPath } from "url";
+import { EXIT_CODES, getArg } from "./utils.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_SKILL_LIST_PATH = ".claude/skills/skill_list.md";
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_FILE_NOT_FOUND = 3;
-const EXIT_UPDATE_FAILED = 4;
 
 function showHelp() {
   console.log(`
@@ -47,11 +42,6 @@ Examples:
   node update_skill_list.js --skill-path .claude/skills/my-skill
   node update_skill_list.js --skill-path .claude/skills/my-skill --dry-run
 `);
-}
-
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
 }
 
 /**
@@ -234,7 +224,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   const skillPath = getArg(args, "--skill-path");
@@ -244,7 +234,7 @@ async function main() {
   if (!skillPath) {
     console.error("Error: --skill-path は必須です");
     showHelp();
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   // スキルパスの解決
@@ -253,14 +243,14 @@ async function main() {
 
   if (!existsSync(skillMdPath)) {
     console.error(`Error: SKILL.mdが存在しません: ${skillMdPath}`);
-    process.exit(EXIT_FILE_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   // skill_list.mdの解決
   const resolvedSkillListPath = resolve(process.cwd(), skillListPath);
   if (!existsSync(resolvedSkillListPath)) {
     console.error(`Error: skill_list.mdが存在しません: ${resolvedSkillListPath}`);
-    process.exit(EXIT_FILE_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   // SKILL.mdを読み込み
@@ -269,7 +259,7 @@ async function main() {
 
   if (!frontmatter || !frontmatter.name) {
     console.error("Error: SKILL.mdのfrontmatterからnameを取得できません");
-    process.exit(EXIT_ERROR);
+    process.exit(EXIT_CODES.ERROR);
   }
 
   const skillName = frontmatter.name;
@@ -297,21 +287,21 @@ async function main() {
     console.log("\n[DRY-RUN] 以下の行が追加/更新されます:");
     const skillMdLink = `**.claude/skills/${skillName}/SKILL.md**`;
     console.log(`| ${skillMdLink} | \`.claude/skills/${skillName}/SKILL.md\` | ${summary} |`);
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   // 実際に更新
   try {
     writeFileSync(resolvedSkillListPath, finalContent, "utf-8");
     console.log("\n✓ skill_list.mdを更新しました");
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   } catch (err) {
     console.error(`Error: ファイルの書き込みに失敗しました: ${err.message}`);
-    process.exit(EXIT_UPDATE_FAILED);
+    process.exit(EXIT_CODES.UPDATE_FAILED);
   }
 }
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });

@@ -17,13 +17,8 @@
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
-import { resolve, dirname, basename } from "path";
-
-const EXIT_SUCCESS = 0;
-const EXIT_ERROR = 1;
-const EXIT_ARGS_ERROR = 2;
-const EXIT_FILE_NOT_FOUND = 3;
-const EXIT_VALIDATION_FAILED = 4;
+import { dirname, basename } from "path";
+import { EXIT_CODES, getArg, resolvePath } from "./utils.js";
 
 function showHelp() {
   console.log(`
@@ -59,15 +54,6 @@ Examples:
 `);
 }
 
-function getArg(args, name) {
-  const index = args.indexOf(name);
-  return index !== -1 && args[index + 1] ? args[index + 1] : null;
-}
-
-function resolvePath(p) {
-  if (p.startsWith("/")) return p;
-  return resolve(process.cwd(), p);
-}
 
 function generateAgentMd(task) {
   const name = task.name || "unknown";
@@ -206,7 +192,7 @@ async function main() {
 
   if (args.includes("-h") || args.includes("--help")) {
     showHelp();
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   }
 
   const taskPath = getArg(args, "--task");
@@ -214,12 +200,12 @@ async function main() {
 
   if (!taskPath) {
     console.error("Error: --task は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   if (!outputPath) {
     console.error("Error: --output は必須です");
-    process.exit(EXIT_ARGS_ERROR);
+    process.exit(EXIT_CODES.ARGS_ERROR);
   }
 
   const resolvedTask = resolvePath(taskPath);
@@ -227,7 +213,7 @@ async function main() {
 
   if (!existsSync(resolvedTask)) {
     console.error(`Error: Task定義ファイルが存在しません: ${resolvedTask}`);
-    process.exit(EXIT_FILE_NOT_FOUND);
+    process.exit(EXIT_CODES.FILE_NOT_FOUND);
   }
 
   try {
@@ -236,7 +222,7 @@ async function main() {
     // 必須フィールドの検証
     if (!task.name) {
       console.error("Error: Task定義にnameが含まれていません");
-      process.exit(EXIT_VALIDATION_FAILED);
+      process.exit(EXIT_CODES.VALIDATION_FAILED);
     }
 
     const content = generateAgentMd(task);
@@ -249,18 +235,18 @@ async function main() {
 
     writeFileSync(resolvedOutput, content, "utf-8");
     console.log(`✓ agents/${basename(resolvedOutput)}を生成しました`);
-    process.exit(EXIT_SUCCESS);
+    process.exit(EXIT_CODES.SUCCESS);
   } catch (err) {
     if (err instanceof SyntaxError) {
       console.error(`Error: JSONの解析に失敗しました: ${err.message}`);
     } else {
       console.error(`Error: ${err.message}`);
     }
-    process.exit(EXIT_ERROR);
+    process.exit(EXIT_CODES.ERROR);
   }
 }
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(EXIT_ERROR);
+  process.exit(EXIT_CODES.ERROR);
 });
